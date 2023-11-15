@@ -1,8 +1,8 @@
 import java.util.*;
 
+// 2차원 좌표 클래스
 class Pair {
-    int x;
-    int y;
+    int x, y;
 
     public Pair(int x, int y) {
         this.x = x;
@@ -14,7 +14,7 @@ public class Main {
     static int n, k, u, d;
     static int[][] cityHight;
     static boolean[][] visited;
-    static ArrayList<Integer> hights = new ArrayList<>();
+    static ArrayList<Integer> numbers = new ArrayList<>(); // 갈 수 있는 도시의 수
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -31,27 +31,28 @@ public class Main {
             }
         }
 
-        int selectCount = 0;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 bfs(i, j);
             }
         }
 
-        hights.sort(Comparator.reverseOrder());
+        numbers.sort(Comparator.reverseOrder());
         int sum = 0;
         for (int i = 0; i < k; i++) {
-            sum += hights.get(i);
+            sum += numbers.get(i);
         }
 
         System.out.println(sum);
     }
 
+    // [x,y] 에서 갈 수 있는 도시의 수를 구한다.
     public static void bfs(int x, int y) {
         if (visited[x][y]) {
             return;
         }
 
+        // 갈 수 있는 방향
         int[] dx = {0, 1, 0, -1};
         int[] dy = {1, 0, -1, 0};
 
@@ -59,6 +60,7 @@ public class Main {
         Queue<Pair> q = new LinkedList<>();
         visited[x][y] = true;
         q.add(new Pair(x, y));
+        
         while (!q.isEmpty()) {
             Pair p = q.poll();
             for (int i = 0; i < 4; i++) {
@@ -72,7 +74,7 @@ public class Main {
                 }
             }
         }
-        hights.add(count);
+        numbers.add(count);
     }
 
     public static boolean canMove(int x, int y, int hight) {
