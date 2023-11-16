@@ -24,6 +24,10 @@ public class Main {
     }
 
     public static int fibb_tab(int num) {
+        if (num == 1 || num == 2) {
+            return 1;
+        }
+        
         int[] fibNum = new int[num + 1];
         fibNum[1] = 1;
         fibNum[2] = 1;
