@@ -5,10 +5,10 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
 
-        // int result = tabulation(n);
+        int result = tabulation(n);
 
-        int[] memo = new int[n + 1];
-        int result = memoization(memo, n);
+        // int[] memo = new int[n + 1];
+        // int result = memoization(memo, n);
 
         System.out.println(result % 10007);
     }
@@ -23,7 +23,7 @@ public class Main {
         memo[3] = 1;
 
         for (int i = 4; i <= n; i++) {
-            memo[i] = memo[i - 2] + memo[i - 3];
+            memo[i] = (memo[i - 2] + memo[i - 3]) % 10007;
         }
 
         return memo[n];
@@ -34,11 +34,11 @@ public class Main {
             return memo[n];
         }
         if (n == 2 || n == 3) {
-            return 1;
+            memo[n] = 1;
         } else if (n < 2) {
-            return 0;
+            memo[n] = 0;
         } else {
-            memo[n] = memoization(memo, n - 2) + memoization(memo, n - 3);
+            memo[n] = (memoization(memo, n - 2) + memoization(memo, n - 3)) % 10007;
         }
 
         return memo[n];
