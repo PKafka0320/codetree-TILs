@@ -35,6 +35,8 @@ public class Main {
         }
         if (n == 2 || n == 3) {
             return 1;
+        } else if (n < 2) {
+            return 0;
         } else {
             memo[n] = memoization(memo, n - 2) + memoization(memo, n - 3);
         }
