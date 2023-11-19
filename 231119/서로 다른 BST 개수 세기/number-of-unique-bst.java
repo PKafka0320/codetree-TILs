@@ -22,7 +22,7 @@ public class Main {
 
         for (int i = 3; i <= n; i++) {
             for (int j = 0; j < i; j++) {
-                memo[i] += memo[j] * memo[i - j];
+                memo[i] += memo[j] * memo[i - j -1];
             }
         }
 
