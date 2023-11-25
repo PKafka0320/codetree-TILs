@@ -1,18 +1,23 @@
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        int n = Integer.parseInt(bf.readLine());
         int[][] grid = new int[n][n];
         for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(bf.readLine());
             for (int j = 0; j < n; j++) {
-                grid[i][j] = sc.nextInt();
+                grid[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        int x = sc.nextInt() - 1;
-        int y = sc.nextInt() - 1;
+        st = new StringTokenizer(bf.readLine());
+        int x = Integer.parseInt(st.nextToken()) - 1;
+        int y = Integer.parseInt(st.nextToken()) - 1;
         bomb(grid, x, y);
         arrange(grid);
 
