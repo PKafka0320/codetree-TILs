@@ -1,5 +1,3 @@
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Main {
@@ -143,8 +141,7 @@ public class Main {
                 numbers_2d[i][j] = temp_2d[i][j];
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
-        System.setIn(new FileInputStream("input.txt"));
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         // 입력:
         n = sc.nextInt();
