@@ -36,6 +36,6 @@ public class Main {
     }
 
     public static boolean outOfRange(int n, int x, int y) {
-        return (x < 0 || x >= n || y < 0 || x >= n);
+        return (x < 0 || x >= n || y < 0 || y >= n);
     }
 }
