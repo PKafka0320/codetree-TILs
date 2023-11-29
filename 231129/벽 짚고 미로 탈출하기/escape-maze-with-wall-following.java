@@ -7,7 +7,7 @@ public class Main {
         int x = sc.nextInt() - 1;
         int y = sc.nextInt() - 1;
         int[][] grid = new int [n][n];
-        boolean[][] visited = new boolean[n][n];
+        int[][] visited = new int[n][n];
         for (int i = 0; i < n; i++) {
             String string = sc.next();
             for (int j = 0; j < n; j++) {
@@ -24,11 +24,11 @@ public class Main {
         int[] dy = {1, 0, -1, 0};
         int dir = 0;
         while (true) {
-            if (visited[x][y]) {
+            if (visited[x][y] > 4) {
                 System.out.println(-1);
                 return;
             }
-            visited[x][y] = true;
+            visited[x][y]++;
             time++;
             // System.out.println("time " + time);
 
