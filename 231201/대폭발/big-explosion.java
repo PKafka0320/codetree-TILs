@@ -21,14 +21,8 @@ public class Main {
                     if (grid[row][col] == 1) {
                         nextGrid[row][col] = 1;
                         for (int dir = 0; dir < 4; dir++) {
-                            int nr = row;
-                            int nc = col;
-                            if (dr[dir] != 0) {
-                                nr += (dr[dir] * nextPos);
-                            }
-                            if (dc[dir] != 0) {
-                                nc += (dc[dir] * nextPos);
-                            }
+                            int nr = row + (dr[dir] * nextPos);
+                            int nc = col + (dc[dir] * nextPos);
                             if (outOfRange(n, nr, nc)) continue;
                             nextGrid[nr][nc] = 1;
                         }
