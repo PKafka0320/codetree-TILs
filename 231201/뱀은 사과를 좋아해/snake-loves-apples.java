@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 class Pair { 
@@ -6,7 +7,18 @@ class Pair {
     public Pair(int x, int y) { 
         this.x = x; 
         this.y = y; 
-    } 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        Pair p = (Pair) o;
+        return (p.x == this.x && p.y == this.y);
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.valueOf(x + y).hashCode();
+    }
 }
 
 public class Main {
@@ -17,6 +29,7 @@ public class Main {
     public static boolean[][] apple = new boolean[MAX_NUM + 1][MAX_NUM + 1];
     
     public static LinkedList<Pair> snake = new LinkedList<>();
+    public static HashSet<Pair> snakePos = new HashSet<>();
     
     public static int[] dx = new int[]{1, -1, 0, 0};
     public static int[] dy = new int[]{0, 0, 1, -1};
@@ -31,19 +44,11 @@ public class Main {
     }
     
     // 뱀이 꼬였는지 확인합니다.
+    // 몸이 꼬였는지 여부는
+    // HashSet에 새로 들어온 머리 위치가
+    // 이미 존재하는지를 확인하면 됩니다.
     public static boolean isTwisted(Pair newHead) {
-        // 뱀이 꼬였는지 여부는
-        // 새로 들어올 머리가 기존 뱀의 몸통과 부딪히는지만 확인하면 됩니다.
-        
-        // 머리와 그 부분이 겹치는 경우에는
-        // true 값을 반환해줍니다.
-        for(Pair part: snake) {
-            if(part.x == newHead.x && part.y == newHead.y)
-                return true;
-        }
-        
-        // 겹치지 않는 경우에는 false를 반환합니다.
-        return false;
+        return snakePos.contains(newHead);
     }
     
     // 새로운 머리를 추가합니다.
@@ -54,7 +59,9 @@ public class Main {
             return false;
         
         // 새로운 머리를 추가합니다.
-        snake.addFirst(newHead);
+        snake.addFirst(newHead);      
+        // HashSet에 새로운 좌표를 기록합니다.
+        snakePos.add(newHead);   
     
         // 정상적으로 머리를 추가헀다는 의미로
         // true를 반환합니다.
@@ -63,6 +70,10 @@ public class Main {
     
     // 꼬리를 지웁니다.
     public static void popBack() {
+        Pair tail = snake.peekLast();
+        // 머리 부분을 HashSet에서도 지우고
+        snakePos.remove(tail);
+        // List에서도 삭제합니다.
         snake.pollLast();
     }
     
@@ -146,6 +157,7 @@ public class Main {
 
         // 뱀은 처음에 (1, 1)에서 길이 1의 상태로 있습니다.
         snake.addFirst(new Pair(1, 1));
+        snakePos.add(new Pair(1, 1));
 
         // K개의 명령을 수행합니다.
         for(int i = 0; i < K; i++) {
