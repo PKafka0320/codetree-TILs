@@ -1,90 +1,54 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class Main {
-    static int RIGHT = 0;
-    static int DOWN = 1;
-    static int LEFT = 2;
-    static int UP = 3;
+    public static final int DIR_NUM = 4;
+    public static final int MAX_N = 100;
+    
+    public static int n;
+    public static int[][] grid = new int[MAX_N][MAX_N];
+    
+    public static boolean inRange(int x, int y) {
+        return 0 <= x && x < n && 0 <= y && y < n;
+    }
+    
+    public static int calc(int x, int y, int moveDir) {    
+        int[] dx = new int[]{-1, 1, 0, 0};
+        int[] dy = new int[]{0, 0, -1, 1};
+        // 1번 블럭에서는 방향이 다음과 같이 변합니다 : 0<->3 1<->2
+        // 2번 블럭에서는 방향이 다음과 같이 변합니다 : 0<->2 1<->3
+        
+        int elapsedTime = 1;
+        
+        while(inRange(x, y)) {
+            if(grid[x][y] == 1)
+                moveDir = 3 - moveDir;
+            else if(grid[x][y] == 2)
+                moveDir = (moveDir < 2) ? (moveDir + 2) : (moveDir - 2);
+            x += dx[moveDir]; y += dy[moveDir];
+            elapsedTime++;
+        }
+        return elapsedTime;
+    }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int N = n + 2;
-        int[][] grid = new int[N][N];
-        for (int row = 1; row <= n; row++) {
-            for (int col = 1; col <= n; col++) {
-                grid[row][col] = sc.nextInt();
-            }
+        n = sc.nextInt();
+        
+        for(int i = 0; i < n; i++)
+            for(int j = 0; j < n; j++)
+                grid[i][j] = sc.nextInt();
+        
+        // 각각의 상하좌우 방향에 대해
+        // 가능한 모든 위치에서 걸리는 시간을 계산한 후,
+        // 그 중 최댓값을 구합니다.
+        int ans = 0;
+        for(int i = 0; i < n; i++) {
+            ans = Math.max(ans, calc(n - 1, i, 0));
+            ans = Math.max(ans, calc(0, i, 1));
+            ans = Math.max(ans, calc(i, n - 1, 2));
+            ans = Math.max(ans, calc(i, 0, 3));
         }
-
-        for (int startR = 0; startR < N; startR++) {
-            for (int startC = 0; startC < N; startC++) {
-                if (notStartPosition(N, startR, startC) || grid[startR][startC] > 0) continue;
-                simulate(grid, startR, startC, N);
-            }
-        }
-
-        int max = 0;
-        for (int row = 0; row < N; row++) {
-            for (int col = 0; col < N; col++) {
-                max = Math.max(max, grid[row][col]);
-            }
-        }
-        System.out.println(max);
-    }
-
-    public static void simulate(int[][] grid, int startR, int startC, int n) {
-        int[] dr = {0, 1, 0, -1};
-        int[] dc = {1, 0, -1, 0};
-        int dir = -1;
-        if (startR == 0) {
-            dir = DOWN;
-        }
-        if (startR == n - 1) {
-            dir = UP;
-        }
-        if (startC == 0) {
-            dir = RIGHT;
-        }
-        if (startC == n - 1) {
-            dir = LEFT;
-        }
-
-        int currentR = startR;
-        int currentC = startC;
-        int time = 0;
-        while (true) {
-            time++;
-            currentR += dr[dir];
-            currentC += dc[dir];
-            if (outOfBoard(n, currentR, currentC)) break;
-            if (grid[currentR][currentC] == 1) {
-                if (dir == LEFT) dir = DOWN;
-                else if (dir == DOWN) dir = LEFT;
-                else if (dir == RIGHT) dir = UP;
-                else if (dir == UP) dir = RIGHT;
-            }
-            else if (grid[currentR][currentC] == 2) {
-                if (dir == LEFT) dir = UP;
-                else if (dir == DOWN) dir = RIGHT;
-                else if (dir == RIGHT) dir = DOWN;
-                else if (dir == UP) dir = LEFT;
-            }
-        }
-        grid[startR][startC] = time;
-        grid[currentR][currentC] = time;
-    }
-
-    public static boolean outOfBoard(int n, int r, int c) {
-        return (r < 1 || r >= n - 1 || c < 1 || c >= n - 1);
-    }
-
-    public static boolean notStartPosition(int n, int r, int c) {
-        if (0 < r && r < n - 1 && 0 < c && c < n - 1) return true;
-        if (r == 0 && c == 0) return true;
-        if (r == 0 && c == n - 1) return true;
-        if (r == n - 1 && c == 0) return true;
-        if (r == n - 1 && c == n - 1) return true;
-        return false;
+        
+        System.out.print(ans);
     }
 }
