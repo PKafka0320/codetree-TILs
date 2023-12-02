@@ -30,8 +30,8 @@ public class Main {
     
     // 그 다음 위치를 찾아 반환합니다.
     public static Pair NextPos(Pair pos) {
-        int[] dx = new int[]{-1, -1, -1,  0, 0,  1, 1, 1};
-        int[] dy = new int[]{ -1, 0,  1, -1, 1, -1, 0, 1};
+        int[] dx = new int[]{-1, -1, -1, 0, 0,  1, 1, 1};
+        int[] dy = new int[]{-1, 0,  1, -1, 1, -1, 0, 1};
         
         int x = pos.x;
         int y = pos.y;
