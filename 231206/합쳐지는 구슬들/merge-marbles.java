@@ -37,6 +37,10 @@ public class Main {
 
         while (T-- > 0) {
             simulate();
+            for (Ball ball : balls) {
+                System.out.printf("#%d : [%d,%d] D%d W%d\n", ball.number, ball.row, ball.col, ball.dir, ball.weight);
+            }
+            System.out.println();
         }
 
         System.out.print(balls.size() + " ");
