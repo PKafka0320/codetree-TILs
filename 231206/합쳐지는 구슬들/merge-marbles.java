@@ -32,15 +32,23 @@ public class Main {
             int col = sc.nextInt();
             int dir = mapping[sc.next().charAt(0)];
             int weight = sc.nextInt();
-            balls.add(new Ball(i, row, col, dir, weight));
+            balls.add(new Ball(i+1, row, col, dir, weight));
         }
 
+
+        // System.out.println("initialize");
+        // for (Ball ball : balls) {
+        //     System.out.printf("#%d : [%d,%d] D%d W%d\n", ball.number, ball.row, ball.col, ball.dir, ball.weight);
+        // }
+        // System.out.println();
+        int t = 1;
         while (T-- > 0) {
+            // System.out.println("time " + (t++));
             simulate();
-            for (Ball ball : balls) {
-                System.out.printf("#%d : [%d,%d] D%d W%d\n", ball.number, ball.row, ball.col, ball.dir, ball.weight);
-            }
-            System.out.println();
+            // for (Ball ball : balls) {
+            //     System.out.printf("#%d : [%d,%d] D%d W%d\n", ball.number, ball.row, ball.col, ball.dir, ball.weight);
+            // }
+            // System.out.println();
         }
 
         System.out.print(balls.size() + " ");
@@ -57,7 +65,7 @@ public class Main {
             int nc = ball.col + dc[ball.dir];
             if (outOfRange(nr, nc)) {
                 if (ball.dir < 2) {
-                    balls.set(idx, new Ball(ball.number, ball.row, ball.col, 2 - ball.dir, ball.weight));
+                    balls.set(idx, new Ball(ball.number, ball.row, ball.col, 1 - ball.dir, ball.weight));
                 } else {
                     balls.set(idx, new Ball(ball.number, ball.row, ball.col, 5 - ball.dir, ball.weight));
                 }
