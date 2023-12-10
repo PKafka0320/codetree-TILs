@@ -1,11 +1,10 @@
 import java.util.*;
 
 class Pair {
-    int row, col, dist;
-    public Pair(int row, int col, int dist) {
+    int row, col;
+    public Pair(int row, int col) {
         this.row = row;
         this.col = col;
-        this.dist = dist;
     }
 }
 
@@ -13,8 +12,8 @@ public class Main {
     static int n, m;
     static int[][] grid;
     static boolean[][] visited;
+    static int[][] step;
     static Queue<Pair> q = new LinkedList<>();
-    static int minDist = -1;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -22,17 +21,24 @@ public class Main {
         m = sc.nextInt();
         grid = new int[n][n];
         visited = new boolean[n][n];
+        step = new int[n][n];
 
+        step[n - 1][n - 1] = -1;
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
                 grid[row][col] = sc.nextInt();
             }
         }
 
-        q.add(new Pair(0, 0, 0));
-        visited[0][0] = true;
+        push(0, 0, 0);
         find();
-        System.out.println(minDist);
+        System.out.println(step[n - 1][n - 1]);
+    }
+
+    public static void push(int row, int col, int dist) {
+        step[row][col] = dist;
+        visited[row][col] = true;
+        q.add(new Pair(row, col));
     }
 
     public static void find() {
@@ -43,19 +49,14 @@ public class Main {
             Pair pair = q.poll();
             int pRow = pair.row;
             int pCol = pair.col;
-            int pDist = pair.dist;
-            if ((pRow == n - 1 && pCol == n - 1)) {
-                minDist = pDist;
-                return;
-            }
 
             for (int dir = 0; dir < 4; dir++) {
                 int nRow = pRow + dr[dir];
                 int nCol = pCol + dc[dir];
 
                 if (inValidPosition(nRow, nCol)) continue;
-                visited[pRow][pCol] = true;
-                q.add(new Pair(nRow, nCol, pDist + 1));
+                push(nRow, nCol, step[pRow][pCol] + 1);
+                if (nRow == n - 1 && nCol == n - 1) return;
             }
         }
     }
