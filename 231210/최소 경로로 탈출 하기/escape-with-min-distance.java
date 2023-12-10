@@ -44,8 +44,9 @@ public class Main {
             int pRow = pair.row;
             int pCol = pair.col;
             int pDist = pair.dist;
-            if ((pRow == n - 1 && pCol == n - 1) && (minDist == -1 || minDist > pDist)) {
+            if ((pRow == n - 1 && pCol == n - 1)) {
                 minDist = pDist;
+                return;
             }
 
             for (int dir = 0; dir < 4; dir++) {
