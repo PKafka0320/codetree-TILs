@@ -19,20 +19,20 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         n = sc.nextInt();
         m = sc.nextInt();
-        grid = new int[n][n];
-        visited = new boolean[n][n];
-        step = new int[n][n];
+        grid = new int[n][m];
+        visited = new boolean[n][m];
+        step = new int[n][m];
 
-        step[n - 1][n - 1] = -1;
+        step[n - 1][m - 1] = -1;
         for (int row = 0; row < n; row++) {
-            for (int col = 0; col < n; col++) {
+            for (int col = 0; col < m; col++) {
                 grid[row][col] = sc.nextInt();
             }
         }
 
         push(0, 0, 0);
         find();
-        System.out.println(step[n - 1][n - 1]);
+        System.out.println(step[n - 1][m - 1]);
     }
 
     public static void push(int row, int col, int dist) {
@@ -56,13 +56,13 @@ public class Main {
 
                 if (inValidPosition(nRow, nCol)) continue;
                 push(nRow, nCol, step[pRow][pCol] + 1);
-                if (nRow == n - 1 && nCol == n - 1) return;
+                if (nRow == n - 1 && nCol == m - 1) return;
             }
         }
     }
 
     public static boolean inValidPosition(int r, int c) {
-        if (r < 0 || r >= n || c < 0 || c >= n) return true;
+        if (r < 0 || r >= n || c < 0 || c >= m) return true;
         if (grid[r][c] == 0 || visited[r][c]) return true;
         return false;
     }
