@@ -1,19 +1,23 @@
 import java.util.*;
+import java.io.*;
 
 public class Main {
     static int N;
     static int[][] grid;
     static int[][] sum;
 
-    public static void main(String[] args) {
-        Scanner sc= new Scanner(System.in);
-        N = sc.nextInt();
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] input;
+
+        N = Integer.parseInt(br.readLine());
         grid = new int[N][N];
         sum = new int[N][N];
 
         for (int row = 0; row < N; row++) {
+            input = br.readLine().split(" ");
             for (int col = 0; col < N; col++) {
-                grid[row][col] = sc.nextInt();
+                grid[row][col] = Integer.parseInt(input[col]);
             }
         }
 
