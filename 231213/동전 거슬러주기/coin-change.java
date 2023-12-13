@@ -32,6 +32,10 @@ public class Main {
             }
         }
 
+        for (int number = 1; number < M + 1; number++) {
+            System.out.println(number + ": " + minCount[number]);
+        }
+
         if (minCount[M] == 0) {
             System.out.println(-1);
         } else {
