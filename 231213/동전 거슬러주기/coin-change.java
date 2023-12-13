@@ -20,21 +20,23 @@ public class Main {
         st = new StringTokenizer(br.readLine());
         for (int idx = 0; idx < N; idx++) {
             coins[idx] = Integer.parseInt(st.nextToken());
+            minCount[coins[idx]] = 1;
         }
 
         for (int number = 1; number < M + 1; number++) {
             for (int coinIdx = 0; coinIdx < N; coinIdx++) {
                 if (number - coins[coinIdx] < 0) continue;
-                int tempCount = minCount[number - coins[coinIdx]] + 1;
+                int tempCount = minCount[number - coins[coinIdx]];
+                if (tempCount == 0) continue;
                 if (minCount[number] == 0 || minCount[number] > tempCount) {
-                    minCount[number] = tempCount;
+                    minCount[number] = tempCount + 1;
                 }
             }
         }
 
-        for (int number = 1; number < M + 1; number++) {
-            System.out.println(number + ": " + minCount[number]);
-        }
+        // for (int number = 1; number < M + 1; number++) {
+        //     System.out.println(number + ": " + minCount[number]);
+        // }
 
         if (minCount[M] == 0) {
             System.out.println(-1);
