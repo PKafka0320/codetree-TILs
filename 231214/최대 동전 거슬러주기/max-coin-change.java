@@ -32,6 +32,6 @@ public class Main {
         if (answer == 0) {
             answer = -1;
         }
-        System.out.println(maxCount[M]);
+        System.out.println(answer);
     }
 }
