@@ -28,6 +28,10 @@ public class Main {
             }
         }
 
+        int answer = maxCount[M];
+        if (answer == 0) {
+            answer = -1;
+        }
         System.out.println(maxCount[M]);
     }
 }
