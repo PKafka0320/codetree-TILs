@@ -35,15 +35,15 @@ public class Main {
 
             for (int weight = M; weight >= 1; weight--) {
                 if (weight < jewel.weight) continue;
-                if (weight == jewel.weight) {
-                    maxValue[weight] = jewel.value;
-                    if (answer < maxValue[weight]) answer = maxValue[weight];
-                }
-                if (maxValue[weight - jewel.weight] == 0) continue;
+                if (maxValue[weight - jewel.weight] == 0 && weight != jewel.weight) continue;
                 maxValue[weight] = Math.max(maxValue[weight], maxValue[weight - jewel.weight] + jewel.value);
                 if (answer < maxValue[weight]) answer = maxValue[weight];
             }
         }
+
+        // for (int weight = 0; weight <= M; weight++) {
+        //     System.out.println(weight + " : " + maxValue[weight]);
+        // }
 
         System.out.println(answer);
     }
