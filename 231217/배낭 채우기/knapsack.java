@@ -37,6 +37,7 @@ public class Main {
                 if (weight < jewel.weight) continue;
                 if (weight == jewel.weight) {
                     maxValue[weight] = jewel.value;
+                    if (answer < maxValue[weight]) answer = maxValue[weight];
                 }
                 if (maxValue[weight - jewel.weight] == 0) continue;
                 maxValue[weight] = Math.max(maxValue[weight], maxValue[weight - jewel.weight] + jewel.value);
