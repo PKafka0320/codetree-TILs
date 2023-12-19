@@ -32,20 +32,24 @@ public class Main {
         }
 
         maxExp = new int[sum + 1];
+        Arrays.fill(maxExp, -1);
+        maxExp[0] = 0;
         for (int idx = 0; idx < n; idx++) {
             for (int t = sum; t >= 1; t--) {
                 if (t < quests[idx].time) continue;
+                if (maxExp[t - quests[idx].time] == -1) continue;
                 maxExp[t] = Math.max(maxExp[t], maxExp[t - quests[idx].time] + quests[idx].exp);
             }
         }
 
-        // for (int t = 0; t <= m; t++) {
+        // for (int t = 0; t <= sum; t++) {
         //     System.out.println(t + " : " + maxExp[t]);
         // }
 
-        int answer = sum;
+        int answer = -1;
         for (int time = 0; time <= sum; time++) {
             if (maxExp[time] >= m) {
+                if (answer == -1) answer = time;
                 answer = Math.min(answer, time);
             }
         }
