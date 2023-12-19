@@ -14,50 +14,42 @@ public class Main {
     static StringTokenizer st;
     static int n, m;
     static Quest[] quests;
-    static int minTime[];
+    static int maxExp[];
 
     public static void main(String[] args) throws Exception {
         st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
 
+        int sum = 0;
         quests = new Quest[n];
         for (int idx = 0; idx < n; idx++) {
             st = new StringTokenizer(br.readLine());
             int e = Integer.parseInt(st.nextToken());
             int t = Integer.parseInt(st.nextToken());
             quests[idx] = new Quest(e, t);
+            sum += t;
         }
 
-        minTime = new int[m + 1];
-        Arrays.fill(minTime, -1);
-        minTime[0] = 0;
+        maxExp = new int[sum + 1];
         for (int idx = 0; idx < n; idx++) {
-            for (int ex = m; ex >= 1; ex--) {
-                if (ex < quests[idx].exp) {
-                    if (minTime[ex] == -1) {
-                        minTime[ex] = quests[idx].time;
-                    }
-                    else {
-                        minTime[ex] = Math.min(minTime[ex], quests[idx].time);
-                    }
-                }
-                else {
-                    if (minTime[ex] == -1) {
-                        if (minTime[ex - quests[idx].exp] == -1) continue;
-                        minTime[ex] = minTime[ex - quests[idx].exp] + quests[idx].time;
-                    }
-                    else {
-                        minTime[ex] = Math.min(minTime[ex], minTime[ex - quests[idx].exp] + quests[idx].time);
-                    }
-                }
+            for (int t = sum; t >= 1; t--) {
+                if (t < quests[idx].time) continue;
+                maxExp[t] = Math.max(maxExp[t], maxExp[t - quests[idx].time] + quests[idx].exp);
             }
         }
 
-        // for (int ex = 0; ex <= m; ex++) {
-        //     System.out.println(ex + " : " + minTime[ex]);
+        // for (int t = 0; t <= m; t++) {
+        //     System.out.println(t + " : " + maxExp[t]);
         // }
 
-        System.out.println(minTime[m]);
+        int answer = sum;
+        for (int time = 0; time <= sum; time++) {
+            if (maxExp[time] >= m) {
+                answer = Math.min(answer, time);
+            }
+        }
+
+        System.out.println(answer);
     }
 }
