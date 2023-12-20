@@ -1,76 +1,99 @@
-// 상태
-// - 구간 총합
-// - 구간 개수
-// - 원소 위치 (몇번째 원소 보는 지)
-// - 구간이 끝나는 위치 ( 마지막 원소가 구간에 포함되면 다음엔 새로운 구간을 만들 수 없고)
-//   그렇지 않다면 새로운 구간을 추가할 수 있음 )
-
-// 1) dp[i][j][0] = i번째 원소를 비교할 때, 구간이 j개이고 마지막 원소가 k 상태인 최대 구간 총합
-// 2) - k = 0인 경우, dp[i][j][0] = dp[i-1][j][1], dp[i-1][j][0]
-//      마지막 원소를 포함하지 않는다는 거니까 이전 원소까지를 봤을때 마지막 원소 포함된 경우, 안된 경우 중 최대
-//    - k = 1인 경우, dp[i][j][1] = dp[i-1][j][1] + i번째 원소 값, dp[i-1][j-1][0] + i번째 원소 값
-//      마지막 원소를 포함하니까 마지막 원소가 구간에 포함되는 경우와 새로운 구간을 만드는 경우 중 최대.
-// 3) 모든 원소에서 구간이 처음 시작가능 -> dp[i][0][0] = 0
-
-
-
-import java.io.*;
+import java.util.Scanner;
 
 public class Main {
-    static final int MIN_VAL = Integer.MIN_VALUE;
-    static final int MAX_N = 500, MAX_M = 500;
-    static int n, m;
-    static int[] grid = new int[MAX_N + 1];
-    static int[][][] dp = new int[MAX_N + 1][MAX_M + 1][2];
+    public static final int NUM_STATE = 2;
+    public static final int MIN_ANS = -500000;
+    public static final int MAX_M = 250;
+    public static final int MAX_N = 500;
 
-    static void initialize() {
-        for (int i = 0; i <= n; i++) {
-            for (int j = 0; j <= m; j++) {
-                for (int k = 0; k < 2; k++) {
-                    if (j == 0 && k == 0) { // 구간의 시작은 어떤 원소든 가능하기에 0으로 설정.
-                        dp[i][j][k] = 0;
-                        continue;
-                    }
-
-                    dp[i][j][k] = MIN_VAL; // 최대값 비교를 위해 나머지 작은 값으로 설정.
-                }
-            }
-        }
+    public static final int NOT_BELONG = 0;
+    public static final int BELONG = 1;
+    
+    public static int n, m;
+    
+    // dp[i][j][k] : i번째 위치까지 잘 고려하여,
+    //               총 j개의 구간을 선택했고
+    //               i번째가 마지막 구간에 속하지 않았다면 k = NOT_BELONG
+    //               i번째가 마지막 구간에 속했다면 k = BELONG 상태라 했을 때
+    //               얻을 수 있는 합의 최대
+    public static int[][][] dp = new int[MAX_N + 1][MAX_M + 1][NUM_STATE];
+    
+    public static int[] a = new int[MAX_N + 1];
+    
+    public static void initialize() {
+        // 최댓값을 구하는 문제이므로, 
+        // 초기에는 전부
+        // 답이 될 수 있는 최솟값인 MIN_ANS 넣어줍니다.
+        for(int i = 0; i <= n; i++)
+            for(int j = 0; j <= m; j++)
+                dp[i][j][NOT_BELONG] = dp[i][j][BELONG] = MIN_ANS;
+        
+        // 선택한 구간의 수가 0개일 때를
+        // 초기 조건으로 설정합니다.
+        // 0에서 n 사이의 모든 위치 i에 대해
+        // 선택한 구간의 수가 0개이고
+        // 해당 원소는 구간에 사용하지 않았으며
+        // 선택한 구간이 없으므로 초기 합은 0이기 때문에
+        // dp[i][0][NOT_BELONG] = 0이 됩니다.
+        for(int i = 0; i <= n; i++)
+            dp[i][0][NOT_BELONG] = 0;
     }
 
-    static void findMaxSum() {
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) {
-                for (int k = 0; k < 2; k++) {
-                    if (k == 0) { // i번째 원소를 선택하지 않는 상태
-                        // i-1번째 원소까지 고려했을 때, 그 원소를 포함하거나 포함하지 않는 상태 중 최대 값.
-                        dp[i][j][k] = Math.max(dp[i-1][j][0], dp[i-1][j][1]);
-                    } else { // i번째 원소를 선택하는 상태
-                        // i번째 원소가 새로운 구간이 되는 경우, i번째 원소가 같은 구간이 되는 경우
-                        if (dp[i-1][j-1][0] == MIN_VAL && dp[i-1][j][1] == MIN_VAL) continue;
-                        dp[i][j][k] = Math.max(dp[i-1][j-1][0], dp[i-1][j][1]) + grid[i];
-                    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        m = sc.nextInt();
 
-                }
-            }
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        String[] str = br.readLine().split(" ");
-        n = Integer.parseInt(str[0]);
-        m = Integer.parseInt(str[1]);
-
-        str = br.readLine().split(" ");
-        for (int i = 0; i < n; i++) {
-            grid[i+1] = Integer.parseInt(str[i]);
-        }
+        for(int i = 1; i <= n; i++)
+            a[i] = sc.nextInt();
 
         initialize();
-        findMaxSum();
 
-        System.out.println(Math.max(dp[n][m][0], dp[n][m][1]));
+        // i번째 위치까지 잘 고려하여,
+        // 총 j개의 구간을 선택했을 때,
+        // 얻을 수 있는 최대 합을 계산합니다.
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= m; j++) {
+                // i번째 숫자를 구간에 포함 시켰는지, 안 시켰는지에 대하여
+                // 각각 점화식을 세워줍니다.
+
+                // Case 1
+                // i번째 숫자를 구간에 포함시킨 경우입니다. (BELONG)
+                // 이때 또 선택지가 2개로 나뉩니다. 다음 2가지 중
+                // 더 좋은 값을 택하면 됩니다.
+                
+                // Case 1 - 1
+                // 만약 i번째 숫자가 새로운 구간의 시작이라면
+                // 이전 구간이랑 인접하지 않아야 하므로 i - 1번째 상태가
+                // NOT_BELONG이어야 하며, 그떄까지 j - 1개의 구간을 
+                // 선택했을 경우에 해당하는 
+                // dp[i - 1][j - 1][NOT_BELONG]에 a[i] 를 더합니다.
+
+                // Case 1 - 2
+                // 만약 i번째 숫자를 이전 j번째 구간에 포함시키려고 한다면
+                // i - 1번째 상태가 BELONG이어야 하며, 그때까지 j개의
+                // 구간을 선택했을 경우에 해당하는
+                // dp[i - 1][j][BELONG]에 a[i]를 더합니다.
+
+                dp[i][j][BELONG] = Math.max(dp[i - 1][j - 1][NOT_BELONG] + a[i],
+                                       dp[i - 1][j][BELONG] + a[i]);
+
+
+                // Case 2
+                // i번째 숫자를 구간에 포함시키지 않은 경우입니다. (NOT_BELONG)
+                // 이때는 i - 1번째 원소를 j번째 구간에 포함시켰는지에 대한 여부가
+                // 크게 중요하지 않으므로
+                // dp[i - 1][j][NOT_BELONG]과 dp[i - 1][j][BELONG] 중
+                // 더 좋은 값을 선택하면 됩니다.
+                dp[i][j][NOT_BELONG] = Math.max(dp[i - 1][j][NOT_BELONG],
+                                           dp[i - 1][j][BELONG]);
+            }
+        }
+
+        // n번째 위치까지 고려했을 때
+        // 정확히 m개의 구간을 선택해야 하며
+        // 마지막 원소가 m번째 구간에 들어갔는지, 들어가지 않았는지 여부는
+        // 크게 상관 없으므로 두 경우 중 값이 더 큰 경우를 선택합니다.
+        System.out.print(Math.max(dp[n][m][NOT_BELONG], dp[n][m][BELONG]));
     }
 }
