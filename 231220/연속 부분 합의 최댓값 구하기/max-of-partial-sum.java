@@ -18,8 +18,8 @@ public class Main {
             numbers[idx] = Integer.parseInt(st.nextToken());
         }
 
-        int answer = -1001;
         maxSum[0] = numbers[0];
+        int answer = maxSum[0];
         for (int idx = 1; idx < n; idx++) {
             maxSum[idx] = Math.max(maxSum[idx - 1] + numbers[idx], numbers[idx]);
             answer = Math.max(answer, maxSum[idx]);
