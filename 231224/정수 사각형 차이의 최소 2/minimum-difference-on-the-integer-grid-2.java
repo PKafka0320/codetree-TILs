@@ -8,7 +8,7 @@ public class Main {
     // 변수 선언
     public static int n;
     public static int[][] num = new int[MAX_N][MAX_N];
-    public static int[][][] dp = new int[MAX_N][MAX_N][MAX_R + 1];
+    public static int[][] dp = new int[MAX_N][MAX_N];
     
     public static int ans = INT_MAX;
     
@@ -16,30 +16,28 @@ public class Main {
         // 전부 INT_MAX로 초기화합니다.
         for(int i = 0; i < n; i++)
             for(int j = 0; j < n; j++)
-                for(int k = 1; k <= MAX_R; k++)
-                    dp[i][j][k] = INT_MAX;
+                dp[i][j] = INT_MAX;
     
-        // 시작점의 경우 dp[0][0][num[0][0]] = num[0][0]으로 초기값을 설정해줍니다
-        dp[0][0][num[0][0]] = num[0][0];
+        // 시작점의 경우 dp[0][0] = num[0][0]으로 초기값을 설정해줍니다
+        dp[0][0] = num[0][0];
     
         // 최좌측 열의 초기값을 설정해줍니다.
         for(int i = 1; i < n; i++)
-            for(int k = 1; k <= MAX_R; k++)
-                dp[i][0][Math.min(k, num[i][0])] = Math.min(
-                    dp[i][0][Math.min(k, num[i][0])],
-                    Math.max(dp[i - 1][0][k], num[i][0])
-                );
+            dp[i][0] = Math.max(dp[i - 1][0], num[i][0]);
     
         // 최상단 행의 초기값을 설정해줍니다.
         for(int j = 1; j < n; j++)
-            for(int k = 1; k <= MAX_R; k++)
-                dp[0][j][Math.min(k, num[0][j])] = Math.min(
-                    dp[0][j][Math.min(k, num[0][j])],
-                    Math.max(dp[0][j - 1][k], num[0][j])
-                );
+            dp[0][j] = Math.max(dp[0][j - 1], num[0][j]);
     }
     
-    public static void solve() {
+    public static int solve(int lowerBound) {
+        // lowerBound 미만의 값은 사용할 수 없도록
+        // num값을 변경해줍니다.
+        for(int i = 0; i < n; i++)
+            for(int j = 0; j < n; j++)
+                if(num[i][j] < lowerBound)
+                    num[i][j] = INT_MAX;
+        
         // DP 초기값 설정
         initialize();
     
@@ -47,13 +45,12 @@ public class Main {
         // 해당 위치의 숫자 중에 최댓값을 구해줍니다.
         for(int i = 1; i < n; i++)
             for(int j = 1; j < n; j++)
-                for(int k = 1; k <= MAX_R; k++) {
-                    dp[i][j][Math.min(k, num[i][j])] = Math.min(
-                        dp[i][j][Math.min(k, num[i][j])],
-                        Math.max(Math.min(dp[i - 1][j][k], dp[i][j - 1][k]), num[i][j])
-                    );
-                }
-    
+                dp[i][j] = Math.max(
+                    Math.min(dp[i - 1][j], dp[i][j - 1]), 
+                    num[i][j]
+                );
+            
+        return dp[n - 1][n - 1];
     }
 
     public static void main(String[] args) {
@@ -65,15 +62,22 @@ public class Main {
             for(int j = 0; j < n; j++)
                 num[i][j] = sc.nextInt();
 
-
-        // DP로 문제를 해결합니다.
-        solve();
-
-        // 가능한 답 중 최적의 답을 계산합니다.
-        int ans = INT_MAX;
-        for(int k = 1; k <= MAX_R; k++)
-            if(dp[n - 1][n - 1][k] != INT_MAX)
-                ans = Math.min(ans, dp[n - 1][n - 1][k] - k);
+        // 최솟값을 lowerBound라고 가정했을 때
+        // lowerBound 이상의 수들만 사용하여 
+        // 이동한다는 조건하에서
+        // 최댓값을 최소로 만드는 DP 문제를 풀어줍니다.
+        for(int lowerBound = 1; lowerBound <= MAX_R; lowerBound++) {
+            int upperBound = solve(lowerBound);
+            
+            // 다 진행했음에도 여전히 INT_MAX라면 
+            // 그러한 이동이 불가능하다는 뜻이므로
+            // 패스합니다.
+            if(upperBound == INT_MAX)
+                continue;
+            
+            // 답을 갱신합니다.
+            ans = Math.min(ans, upperBound - lowerBound);
+        }
 
         System.out.print(ans);
     }
