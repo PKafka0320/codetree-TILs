@@ -1,100 +1,80 @@
-import java.util.*;
-import java.io.*;
-
-class Value {
-    int min, max, sub;
-
-    public Value(int min, int max) {
-        this.min = min;
-        this.max = max;
-        this.sub = max - min;
-    }
-}
+import java.util.Scanner;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static StringTokenizer st;
-    static int n;
-    static int[][] grid;
-    static Value[][] values;
-
-    public static void main(String[] args) throws Exception {
-        n = Integer.parseInt(br.readLine());
-        grid = new int[n][n];
-        values = new Value[n][n];
-
-        for (int row = 0; row < n; row++) {
-            st = new StringTokenizer(br.readLine());
-            for (int col = 0; col < n; col++) {
-                grid[row][col] = Integer.parseInt(st.nextToken());
-            }
-        }
-
-        values[0][0] = new Value(grid[0][0], grid[0][0]);
-        for (int idx = 1; idx < n; idx++) {
-            Value exVal = values[0][idx - 1];
-            int current = grid[0][idx];
-            if (current > exVal.max) {
-                values[0][idx] = new Value(exVal.min, current);
-            }
-            else if (current < exVal.min) {
-                values[0][idx] = new Value(current, exVal.max);
-            }
-            else {
-                values[0][idx] = new Value(exVal.min, exVal.max);
-            }
-        }
-        for (int idx = 1; idx < n; idx++) {
-            Value exVal = values[idx - 1][0];
-            int current = grid[idx][0];
-            if (current > exVal.max) {
-                values[idx][0] = new Value(exVal.min, current);
-            }
-            else if (current < exVal.min) {
-                values[idx][0] = new Value(current, exVal.max);
-            }
-            else {
-                values[idx][0] = new Value(exVal.min, exVal.max);
-            }
-        }
-
-        for (int row = 1; row < n; row++) {
-            for (int col = 1; col < n; col++) {
-                int current = grid[row][col];
-
-                Value exValUp = values[row - 1][col];
-                Value newValUp;
-                if (current > exValUp.max) {
-                    newValUp = new Value(exValUp.min, current);
+    public static final int INT_MAX = Integer.MAX_VALUE;
+    public static final int MAX_R = 100;
+    public static final int MAX_N = 100;
+    
+    // 변수 선언
+    public static int n;
+    public static int[][] num = new int[MAX_N][MAX_N];
+    public static int[][][] dp = new int[MAX_N][MAX_N][MAX_R + 1];
+    
+    public static int ans = INT_MAX;
+    
+    public static void initialize() {
+        // 전부 INT_MAX로 초기화합니다.
+        for(int i = 0; i < n; i++)
+            for(int j = 0; j < n; j++)
+                for(int k = 1; k <= MAX_R; k++)
+                    dp[i][j][k] = INT_MAX;
+    
+        // 시작점의 경우 dp[0][0][num[0][0]] = num[0][0]으로 초기값을 설정해줍니다
+        dp[0][0][num[0][0]] = num[0][0];
+    
+        // 최좌측 열의 초기값을 설정해줍니다.
+        for(int i = 1; i < n; i++)
+            for(int k = 1; k <= MAX_R; k++)
+                dp[i][0][Math.min(k, num[i][0])] = Math.min(
+                    dp[i][0][Math.min(k, num[i][0])],
+                    Math.max(dp[i - 1][0][k], num[i][0])
+                );
+    
+        // 최상단 행의 초기값을 설정해줍니다.
+        for(int j = 1; j < n; j++)
+            for(int k = 1; k <= MAX_R; k++)
+                dp[0][j][Math.min(k, num[0][j])] = Math.min(
+                    dp[0][j][Math.min(k, num[0][j])],
+                    Math.max(dp[0][j - 1][k], num[0][j])
+                );
+    }
+    
+    public static void solve() {
+        // DP 초기값 설정
+        initialize();
+    
+        // 탐색하는 위치의 위에 값과 좌측 값 중에 작은 값과
+        // 해당 위치의 숫자 중에 최댓값을 구해줍니다.
+        for(int i = 1; i < n; i++)
+            for(int j = 1; j < n; j++)
+                for(int k = 1; k <= MAX_R; k++) {
+                    dp[i][j][Math.min(k, num[i][j])] = Math.min(
+                        dp[i][j][Math.min(k, num[i][j])],
+                        Math.max(Math.min(dp[i - 1][j][k], dp[i][j - 1][k]), num[i][j])
+                    );
                 }
-                else if (current < exValUp.min) {
-                    newValUp = new Value(current, exValUp.max);
-                }
-                else {
-                    newValUp = new Value(exValUp.min, exValUp.max);
-                }
+    
+    }
 
-                Value exValLeft = values[row][col - 1];
-                Value newValLeft;
-                if (current > exValLeft.max) {
-                    newValLeft = new Value(exValLeft.min, current);
-                }
-                else if (current < exValLeft.min) {
-                    newValLeft = new Value(current, exValLeft.max);
-                }
-                else {
-                    newValLeft = new Value(exValLeft.min, exValLeft.max);
-                }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        // 입력
+        n = sc.nextInt();
 
-                if (newValLeft.sub < newValUp.sub) {
-                    values[row][col] = newValLeft;
-                }
-                else {
-                    values[row][col] = newValUp;
-                }
-            }
-        }
+        for(int i = 0; i < n; i++)
+            for(int j = 0; j < n; j++)
+                num[i][j] = sc.nextInt();
 
-        System.out.println(values[n - 1][n - 1].sub);
+
+        // DP로 문제를 해결합니다.
+        solve();
+
+        // 가능한 답 중 최적의 답을 계산합니다.
+        int ans = INT_MAX;
+        for(int k = 1; k <= MAX_R; k++)
+            if(dp[n - 1][n - 1][k] != INT_MAX)
+                ans = Math.min(ans, dp[n - 1][n - 1][k] - k);
+
+        System.out.print(ans);
     }
 }
