@@ -20,7 +20,7 @@ public class Main {
 
         Arrays.fill(maxLen, 1);
 
-        int answer = 0;
+        int answer = 1;
         for (int idx = 1; idx < n; idx++) {
             for (int cmp = 0; cmp < idx; cmp++) {
                 if (numbers[idx] < numbers[cmp]) {
