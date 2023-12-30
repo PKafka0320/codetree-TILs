@@ -1,12 +1,17 @@
 import java.io.*;
 import java.util.*;
 
-class Line {
+class Line implements Comparable<Line> {
     int start, end;
 
     public Line(int s, int e) {
         this.start = s;
         this.end = e;
+    }
+
+    @Override
+    public int compareTo(Line line) {
+        return this.start - line.start;
     }
 }
 
@@ -28,6 +33,7 @@ public class Main {
             int end = Integer.parseInt(st.nextToken());
             lines[idx] = new Line(start, end);
         }
+        Arrays.sort(lines);
 
         int answer = 1;
         Arrays.fill(max, 1);
