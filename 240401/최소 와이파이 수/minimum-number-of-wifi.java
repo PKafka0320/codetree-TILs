@@ -35,7 +35,7 @@ public class Main {
                 }
             }
 
-            if (i - start == m) {
+            if (start != -1 && i - start == m) {
                 ans++;
                 start = -1;
                 end = i + m;
