@@ -11,38 +11,14 @@ public class Main {
             arr[i] = sc.nextInt();
         }
 
-        if (m == 0) {
-            int ans = 0;
-            for (int i = 0; i < n; i++) {
-                if (arr[i] == 1) ans++;
-            }
-
-            System.out.println(ans);
-            return;
-        }
-
-        int ans = 0;
-        int start = -1;
-        int end = -1;
-        for (int i = 0; i < n; i++) {
-            if (i <= end) continue;
-
-            if (arr[i] == 1) {
-                if (start == -1) {
-                    start = i;
-                    end = -1;
-                    continue;
-                }
-            }
-
-            if (start != -1 && i - start == m) {
-                ans++;
-                start = -1;
-                end = i + m;
+        int cnt = 0;
+        for(int i = 0; i < n; i++) {
+            if(arr[i] == 1) {
+                cnt++;
+                i += 2 * m;
             }
         }
-        if (start != -1) ans++;
 
-        System.out.println(ans);
+        System.out.print(cnt);
     }
 }
