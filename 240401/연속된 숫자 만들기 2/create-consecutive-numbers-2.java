@@ -26,17 +26,29 @@ public class Main {
         while (Math.max(Math.max(a, b), c) - Math.min(Math.min(a, b), c) > 2) {
             int diff1 = b - a;
             int diff2 = c - b;
-            if (diff1 == 1 || diff1 >= diff2) {
+
+            if (diff1 > 2 && diff2 > 2) {
                 a = b;
-                b += (diff2 / 2);
-
+                b += 2;
             }
-            else if (diff2 == 1 || diff2 >= diff1) {
+            else if (diff1 == 2) {
                 c = b;
-                b -= (diff1 / 2);
+                b -= 1;
             }
-            // System.out.println(a + ", " + b + ", " + c);
+            else if (diff2 == 2) {
+                a = b;
+                b += 1;
+            }
+            else if (diff1 == 1) {
+                a = b;
+                b += 2;
+            }
+            else if (diff2 == 1) {
+                c = b;
+                b -= 2;
+            }
 
+            // System.out.println(a + ", " + b + ", " + c);
             cnt++;
         }
 
