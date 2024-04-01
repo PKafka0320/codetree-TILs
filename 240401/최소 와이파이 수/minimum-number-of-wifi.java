@@ -11,6 +11,16 @@ public class Main {
             arr[i] = sc.nextInt();
         }
 
+        if (m == 0) {
+            int ans = 0;
+            for (int i = 0; i < n; i++) {
+                if (arr[i] == 1) ans++;
+            }
+
+            System.out.println(ans);
+            return;
+        }
+
         int ans = 0;
         int start = -1;
         int end = -1;
