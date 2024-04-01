@@ -1,26 +1,24 @@
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        String str = sc.next();
 
-        ArrayList<Integer> list = new ArrayList<>();
-        int count = 0;
+        int n = sc.nextInt();
+        char[] list = sc.next().toCharArray();
+
+        int max = 0;
+        int min = 1001;
+
+        int last = 0;
         for (int i = 1; i < n; i++) {
-            count++;
-            if (str.charAt(i) == '1') {
-                list.add(count);
-                count = 0;
-            }
+            if (list[i] == '0') continue;
+
+            max = Math.max(max, i - last);
+            min = Math.min(min, i - last);
+            last = i;
         }
 
-        Collections.sort(list);
-
-        int ans = Math.min(list.get(0), list.get(list.size() - 1) / 2);
-        System.out.println(ans);
+        System.out.print(Math.min(min, max / 2));
     }
 }
