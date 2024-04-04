@@ -1,21 +1,27 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
 
 public class Main {
+    public static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static StringTokenizer st;
     public static int n;
     public static int m;
     public static int[][] grid;
     public static int[][] downMax;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
-        m = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
         grid = new int[n][m];
         downMax = new int[n][m];
 
         for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(br.readLine());
             for (int j = 0; j < m; j++) {
-                grid[i][j] = sc.nextInt();
+                grid[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
