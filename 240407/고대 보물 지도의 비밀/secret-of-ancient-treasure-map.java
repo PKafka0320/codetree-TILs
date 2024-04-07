@@ -7,6 +7,7 @@ public class Main {
     static int k;
     static int[] num;
     static int[][] max;
+    static int MIN = -10001;
 
     public static void main(String[] args) {
         //input
@@ -21,13 +22,14 @@ public class Main {
 
         //init
         for (int i = 0; i <= n; i++) {
-            Arrays.fill(max[i], Integer.MIN_VALUE);
+            Arrays.fill(max[i], MIN);
         }
         max[0][0] = 0;
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j <= k; j++) {
-                // if (max[i][j] == -1) continue;
+                if (max[i][j] == MIN) continue;
+                max[i + 1][j] = Math.max(max[i + 1][j], num[i + 1]);
 
                 if (num[i + 1] >= 0) {
                     max[i + 1][j] = Math.max(Math.max(max[i + 1][j], max[i][j] + num[i + 1]), num[i + 1]);
@@ -46,7 +48,7 @@ public class Main {
         //     System.out.println();
         // }
 
-        int ans = Integer.MIN_VALUE;
+        int ans = MIN;
         for (int i = 0; i <= n; i++) {
             for (int j = 0; j <= k; j++) {
                 ans = Math.max(ans, max[i][j]);
