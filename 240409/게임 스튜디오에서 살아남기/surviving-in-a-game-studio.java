@@ -3,11 +3,11 @@ import java.util.Scanner;
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static int n;
-    static int[][][] dp;
+    static long[][][] dp;
 
     public static void main(String[] args) {
         n = sc.nextInt();
-        dp = new int[n + 1][3][3];
+        dp = new long[n + 1][3][3];
 
         dp[1][0][0] = 1;
         dp[1][1][0] = 1;
@@ -29,7 +29,7 @@ public class Main {
             dp[i][2][2] = dp[i - 1][2][1];
         }
 
-        int ans = 0;
+        long ans = 0;
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
                 // System.out.print(dp[n][r][c] + " ");
