@@ -28,12 +28,19 @@ public class Main {
                 if (r < s[i] || e[i] < r) continue;
 
                 for (int j = 1; j <= n; j++) {
-                    if (r < s[j] || e[j] < r) continue;
+                    if (r + 1 < s[j] || e[j] < r + 1) continue;
 
                     dp[r + 1][j] = Math.max(dp[r + 1][j], dp[r][i] + Math.abs(v[i] - v[j]));
                 }
             }
         }
+
+        // for (int r = 0; r <= m; r++) {
+        //     for (int c = 0; c <= n; c++) {
+        //         System.out.print(dp[r][c] + " ");
+        //     }
+        //     System.out.println();
+        // }
 
         int ans = 0;
         for (int i = 1; i <= n; i++) {
