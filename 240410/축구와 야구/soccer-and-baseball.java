@@ -1,51 +1,39 @@
 import java.util.Scanner;
-import java.util.Arrays;
 
 public class Main {
-    static Scanner sc = new Scanner(System.in);
-    static int n;
-    static int[] s;
-    static int[] b;
-    static int[][] max;
+    public static int n;
+    public static int[] soccer = new int[1005];
+    public static int[] baseball = new int[1005];
+    public static int[][][] dp = new int[1005][15][10];
 
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // 축구와 야구 점수를 저장할 배열을 입력받습니다.
         n = sc.nextInt();
-        s = new int[n + 1];
-        b = new int[n + 1];
-
         for (int i = 1; i <= n; i++) {
-            s[i] = sc.nextInt();
-            b[i] = sc.nextInt();
+            soccer[i] = sc.nextInt();
+            baseball[i] = sc.nextInt();
         }
 
-        max = new int[12][10];
-        for (int i = 0; i < 12; i++) {
-            Arrays.fill(max[i], -1);
-        }
-        max[0][0] = 0;
+        // 동적 프로그래밍을 사용하여 최대 점수를 계산합니다.
+        // dp[i][j][k] :: 지금까지 앞 i명의 학생을 보며, 축구부에 j명을, 야구부에 k명을 선택했을 때 나올 수 있는 능력의 합의 최대
+        for (int i = 0; i < n; i++) {
+            for (int s = 0; s <= 11; s++) {
+                for (int b = 0; b <= 9; b++) {
+                    // 현재 상태를 다음 상태로 전이시킵니다.
+                    dp[i + 1][s][b] = Math.max(dp[i + 1][s][b], dp[i][s][b]);
 
-        for (int i = 1; i <= n; i++) {
-            for (int r = 11; r >= 0; r--) { //s
-                for (int c = 9; c >= 0; c--) { //b
-                    if (r > 0 && max[r - 1][c] != -1) {
-                        // if (max[r - 1][c] == -1) continue;
-                        max[r][c] = Math.max(max[r][c], max[r - 1][c] + s[i]);
-                    }
-                    if (c > 0 && max[r][c - 1] != -1) {
-                        // if (max[r][c - 1] == -1) continue;
-                        max[r][c] = Math.max(max[r][c], max[r][c - 1] + b[i]);
-                    }
+                    // 축구 점수를 추가할 수 있는 경우를 고려합니다.
+                    if (s != 11) dp[i + 1][s + 1][b] = Math.max(dp[i + 1][s + 1][b], dp[i][s][b] + soccer[i + 1]);
+
+                    // 야구 점수를 추가할 수 있는 경우를 고려합니다.
+                    if (b != 9) dp[i + 1][s][b + 1] = Math.max(dp[i + 1][s][b + 1], dp[i][s][b] + baseball[i + 1]);
                 }
             }
         }
 
-        // for (int r = 0; r < 12; r++) {
-        //     for (int c = 0; c < 10; c++) {
-        //         System.out.print(max[r][c] + " ");
-        //     }
-        //     System.out.println();
-        // }
-
-        System.out.println(max[11][9]);
+        // 계산된 최대 점수를 출력합니다.
+        System.out.println(dp[n][11][9]);
     }
 }
