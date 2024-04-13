@@ -53,12 +53,12 @@ public class Main {
         // 결과 계산
         int ans = 0;
         for (int i = 0; i < n; i++) {
-            System.out.print(num[i] + " : ");
+            // System.out.print(num[i] + " : ");
             for (int j = 0; j <= m; j++) {
-                System.out.print(dp[i][j] + " ");
+                // System.out.print(dp[i][j] + " ");
                 ans = Math.max(ans, dp[i][j]);
             }
-            System.out.println();
+            // System.out.println();
         }
 
         System.out.println(ans);
