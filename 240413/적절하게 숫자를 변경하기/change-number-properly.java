@@ -16,20 +16,10 @@ public class Main {
     
     public static int[] a = new int[MAX_N + 1];
     
-    // [startIndex, endIndex] 구간에 전부 k로 채웠진 블록을 하나 넣었을 때
-    // 얻을 수 있는 유사도 값을 계산해 반환합니다.
-    public static int similarity(int startIndex, int endIndex, int k) {
-        int cnt = 0;
-        for(int i = startIndex; i <= endIndex; i++)
-            cnt += (a[i] == k ? 1 : 0);
-        
-        return cnt;
-    }
-    
     public static void initialize() {
         // 최댓값을 구하는 문제이므로, 
         // 초기에는 전부 INT_MIN을 넣어줍니다.
-        for(int i = 1; i <= n; i++)
+        for(int i = 0; i <= n; i++)
             for(int j = 0; j <= m + 1; j++)
                 dp[i][j] = INT_MIN;
         
@@ -57,15 +47,20 @@ public class Main {
             // 가장 마지막으로 놓은 블록의 위치를 [l, i]라 했을 때
             // 해당 구간에 전부 k로 채웠진 블록을 사용한 경우를 고려해봅니다.
             for(int j = 1; j <= m + 1; j++) {
-                for(int l = 1; l <= i; l++) {
-                    for(int k = 1; k <= MAX_K; k++) {
-                        // [l, i] 구간에 전부 k로 채워진 블록을 하나 추가한 경우입니다.
+                for(int k = 1; k <= MAX_K; k++) {
+                    // 각 l에 대해 [l, i] 구간에 전부 k로 채웠을 때 얻을 수 있는 유사도 값을 들고 있습니다.
+                    int similarity = 0;
+
+                    for(int l = i; l >= 1; l--) {
+                        similarity += (a[l] == k ? 1 : 0);
+
+                        // [l, i] 구간에 전부 k로 채웠진 블록을 하나 추가한 경우입니다.
                         // 지금까지의 사용한 블록의 수가 j가 되기 위해서는
                         // l - 1번째까지 사용한 블록의 수가 j - 1이어야 하므로
                         // dp[l - 1][j - 1]에 
-                        // [l, i] 구간에 전부 k로 채웠진 블록을 하나 추가했을 때 
+                        // [l, i] 구간에 전부 k로 채워진 블록을 하나 추가했을 때 
                         // 얻을 수 있는 유사도를 더한 값을 비교해볼 수 있습니다.
-                        dp[i][j] = Math.max(dp[i][j], dp[l - 1][j - 1] + similarity(l, i, k));
+                        dp[i][j] = Math.max(dp[i][j], dp[l - 1][j - 1] + similarity);
                     }
                 }
             }
