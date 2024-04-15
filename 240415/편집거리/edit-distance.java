@@ -9,7 +9,7 @@ public class Main {
         a = " " + sc.next();
         b = " " + sc.next();
         int n = a.length() - 1;
-        int m = a.length() - 1;
+        int m = b.length() - 1;
 
         // dp[i][j] : A의 i번째 문자까지, B의 j번째 문자까지 고려했을때의 최소 편집거리
         dp = new int[n + 1][m + 1];
