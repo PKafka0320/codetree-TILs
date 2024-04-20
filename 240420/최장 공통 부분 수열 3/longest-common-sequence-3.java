@@ -1,117 +1,98 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Main {
-    static Scanner sc = new Scanner(System.in);
-    static int n, m;
-    static int[] a, b;
-    static int[][] dp;
-    static int[][][] path;
+    // 상수 값 정의
+    private static final int INF = 1987654321;
 
     public static void main(String[] args) {
-        n = sc.nextInt();
-        m = sc.nextInt();
-        a = new int[n + 1];
-        b = new int[m + 1];
-        for (int i = 1; i <= n; i++) {
-            a[i] = sc.nextInt();
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt(), m = sc.nextInt();
+        ArrayList<Integer> a = new ArrayList<>();
+        ArrayList<Integer> b = new ArrayList<>();
+        int[][] dp = new int[n + 1][m + 1];
+        Pair[][] path = new Pair[n + 1][m + 1];
+        int[][] curBest = new int[n + 1][m + 1];
+
+        a.add(0); // 0번 인덱스를 위한 더미 데이터 추가
+        b.add(0); // 0번 인덱스를 위한 더미 데이터 추가
+
+        // 두 배열의 요소를 입력받습니다.
+        for (int i = 1; i <= n; i++) a.add(sc.nextInt());
+        for (int i = 1; i <= m; i++) b.add(sc.nextInt());
+
+        // 배열을 뒤집습니다.
+        Collections.reverse(a.subList(1, n + 1));
+        Collections.reverse(b.subList(1, m + 1));
+
+        // 초기화
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= m; j++) {
+                curBest[i][j] = INF;
+                path[i][j] = new Pair(0, 0);
+            }
         }
-        for (int i = 1; i <= m; i++) {
-            b[i] = sc.nextInt();
-        }
-        
-        // dp[i][j] : a 수열의 i 번째, b 수열의 j 번째까지 확인했을때 최장 공통 부분 수열의 길이
-        // path[i][j] : 최장 공통 부분 수열에서 이전 수의 위치
-        // path[i][j][0] : 이전 i 정보
-        // path[i][j][1] : 이전 j 정보
-        dp = new int[n + 1][m + 1];
-        path = new int[n + 1][m + 1][2];
+        curBest[0][0] = 0;
+
+        // 최장 공통 부분 수열을 찾기 위한 동적 프로그래밍을 수행합니다.
+        // dp[i][j], cur_best[i][j], path[i][j]의 정의는 C++ 코드의 주석을 참조
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= m; j++) {
-                if (dp[i][j] < dp[i - 1][j]) {
+                // 각 단계에서 최적의 해를 찾습니다.
+                if (dp[i - 1][j] > dp[i][j] || (dp[i - 1][j] == dp[i][j] && curBest[i - 1][j] < curBest[i][j])) {
                     dp[i][j] = dp[i - 1][j];
-                    path[i][j][0] = i - 1;
-                    path[i][j][1] = j;
+                    path[i][j] = new Pair(i - 1, j);
+                    curBest[i][j] = curBest[i - 1][j];
                 }
 
-                if (dp[i][j] < dp[i][j - 1]) {
+                if (dp[i][j - 1] > dp[i][j] || (dp[i][j - 1] == dp[i][j] && curBest[i][j - 1] < curBest[i][j])) {
                     dp[i][j] = dp[i][j - 1];
-                    path[i][j][0] = i;
-                    path[i][j][1] = j - 1;
-                }
-                else if (dp[i][j] == dp[i][j - 1]) {
-                    int[] tmpa = new int[dp[i][j] + 1];
-                    int cur = dp[i][j];
-                    for (int tmpi = i, tmpj = j; tmpi > 0 && tmpj > 0;) {
-                        if (a[tmpi] == b[tmpj]) {
-                            tmpa[cur--] = a[tmpi];
-                        }
-                        int ntmpi = path[tmpi][tmpj][0];
-                        int ntmpj = path[tmpi][tmpj][1];
-                        tmpi = ntmpi;
-                        tmpj = ntmpj;
-                    }
-                    int[] tmpb = new int[dp[i][j] + 1];
-                    cur = dp[i][j];
-                    for (int tmpi = i, tmpj = j - 1; tmpi > 0 && tmpj > 0;) {
-                        if (a[tmpi] == b[tmpj]) {
-                            tmpa[cur--] = a[tmpi];
-                        }
-                        int ntmpi = path[tmpi][tmpj][0];
-                        int ntmpj = path[tmpi][tmpj][1];
-                        tmpi = ntmpi;
-                        tmpj = ntmpj;
-                    }
-
-                    boolean isA = false;
-                    for (int tmpi = 1; tmpi <= dp[i][j]; tmpi++) {
-                        if (tmpa[tmpi] == tmpb[tmpi]) continue;
-                        if (tmpa[tmpi] > tmpb[tmpi]) break;
-                        isA = true;
-                        break;
-                    }
-
-                    if (!isA) {
-                        path[i][j][0] = i;
-                        path[i][j][1] = j - 1;
-                    }
+                    path[i][j] = new Pair(i, j - 1);
+                    curBest[i][j] = curBest[i][j - 1];
                 }
 
-                if (a[i] == b[j] && dp[i][j] < dp[i - 1][j - 1] + 1) {
+                if (a.get(i).equals(b.get(j)) && (dp[i - 1][j - 1] + 1 > dp[i][j] || (dp[i - 1][j - 1] + 1 == dp[i][j] && a.get(i) < curBest[i][j]))) {
                     dp[i][j] = dp[i - 1][j - 1] + 1;
-                    path[i][j][0] = i - 1;
-                    path[i][j][1] = j - 1;
+                    path[i][j] = new Pair(i - 1, j - 1);
+                    curBest[i][j] = a.get(i);
                 }
             }
         }
 
-        // for (int i = 0; i <= n; i++) {
-        //     for (int j = 0; j <= m; j++) {
-        //         System.out.print(dp[i][j] + " ");
-        //     }
-        //     System.out.println();
-        // }
-
-        // for (int i = 0; i <= n; i++) {
-        //     for (int j = 0; j <= m; j++) {
-        //         System.out.printf("(%d,%d) ", path[i][j][0], path[i][j][1]);
-        //     }
-        //     System.out.println();
-        // }
-
-        int cnt = dp[n][m];
-        int[] ans = new int[cnt + 1];
+        // 최장 공통 부분 수열을 추적합니다.
+        ArrayList<Integer> lcs = new ArrayList<>();
         for (int i = n, j = m; i > 0 && j > 0;) {
-            if (a[i] == b[j]) {
-                ans[cnt--] = a[i];
+            if (path[i][j].equals(new Pair(i - 1, j - 1)) && a.get(i).equals(b.get(j))) {
+                lcs.add(a.get(i));
+                i--; j--;
+            } else {
+                Pair p = path[i][j];
+                i = p.x;
+                j = p.y;
             }
-            int ni = path[i][j][0];
-            int nj = path[i][j][1];
-            i = ni;
-            j = nj;
         }
 
-        for (int i = 1; i <= dp[n][m]; i++) {
-            System.out.print(ans[i] + " ");
+        // 최장 공통 부분 수열을 출력합니다.
+        for (int i = 0; i < lcs.size(); i++) {
+            System.out.print(lcs.get(i) + " ");
+        }
+    }
+
+    // 좌표를 저장하기 위한 간단한 Pair 클래스
+    static class Pair {
+        int x, y;
+        Pair(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Pair)) return false;
+            Pair pair = (Pair) o;
+            return x == pair.x && y == pair.y;
         }
     }
 }
