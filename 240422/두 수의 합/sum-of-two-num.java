@@ -4,14 +4,15 @@ import java.util.*;
 public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringTokenizer st;
-    static int n, k;
+    static int n;
+    static long k;
     static long[] nums;
     static HashMap<Long, Integer> hm = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(st.nextToken());
+        k = Long.parseLong(st.nextToken());
 
         nums = new long[n];
         st = new StringTokenizer(br.readLine());
