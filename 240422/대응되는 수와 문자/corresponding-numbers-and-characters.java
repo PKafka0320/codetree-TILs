@@ -24,11 +24,12 @@ public class Main {
             String s = br.readLine();
             
             if (sti.containsKey(s)) {
-                sb.append(sti.get(s) + "\n");
+                sb.append(sti.get(s));
             }
             else {
-                sb.append(its.get(Integer.parseInt(s)) + "\n");
+                sb.append(its.get(Integer.parseInt(s)));
             }
+            sb.append("\n");
         }
         System.out.println(sb);
     }
