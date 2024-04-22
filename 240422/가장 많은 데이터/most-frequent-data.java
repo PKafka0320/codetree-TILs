@@ -1,17 +1,21 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
 import java.util.HashMap;
 
 public class Main {
-    static Scanner sc = new Scanner(System.in);
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer st;
     static HashMap<String, Integer> hm = new HashMap<>();
     static int n;
 
-    public static void main(String[] args) {
-        n = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        n = Integer.parseInt(br.readLine());
 
         int max = 0;
         for (int i = 0; i < n; i++) {
-            String s = sc.next();
+            String s = br.readLine();
 
             int cnt = hm.getOrDefault(s, 0);
             hm.put(s, cnt + 1);
