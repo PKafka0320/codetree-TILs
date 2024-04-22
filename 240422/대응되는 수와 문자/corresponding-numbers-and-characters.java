@@ -19,15 +19,17 @@ public class Main {
             its.put(i, s);
         }
 
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < m; i++) {
             String s = br.readLine();
             
             if (sti.containsKey(s)) {
-                System.out.println(sti.get(s));
+                sb.append(sti.get(s) + "\n");
             }
             else {
-                System.out.println(its.get(Integer.parseInt(s)));
+                sb.append(its.get(Integer.parseInt(s)) + "\n");
             }
         }
+        System.out.println(sb);
     }
 }
