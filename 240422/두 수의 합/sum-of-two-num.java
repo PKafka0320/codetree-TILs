@@ -20,13 +20,14 @@ public class Main {
             nums[i] = Long.parseLong(st.nextToken());
         }
 
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = i + 1; j < n; j++) {
-                long sum = nums[i] + nums[j];
-                hm.put(sum, hm.getOrDefault(sum, 0) + 1);
-            }
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            long diff = k - nums[i];
+
+            ans += hm.getOrDefault(diff, 0);
+            hm.put(nums[i], hm.getOrDefault(nums[i], 0) + 1);
         }
 
-        System.out.println(hm.getOrDefault(k, 0));
+        System.out.println(ans);
     }
 }
