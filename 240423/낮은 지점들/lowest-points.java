@@ -23,7 +23,7 @@ public class Main {
             }
         }
 
-        int sum = 0;
+        long sum = 0;
         for (int x : hm.keySet()) {
             sum += hm.get(x);
         }
