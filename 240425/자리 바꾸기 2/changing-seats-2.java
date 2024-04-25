@@ -26,8 +26,10 @@ public class Main {
         }
 
         for (int i = 0; i < 3 * k; i++) {
-            int idx1 = pos[i % 4][0];
-            int idx2 = pos[i % 4][1];
+            // System.out.println(i + " | " + Arrays.toString(num));
+            int idx1 = pos[i % k][0];
+            int idx2 = pos[i % k][1];
+            // System.out.printf("change %d(%d), %d(%d)\n", idx1, num[idx1], idx2, num[idx2]);
 
             hs[num[idx1]].add(idx2);
             hs[num[idx2]].add(idx1);
