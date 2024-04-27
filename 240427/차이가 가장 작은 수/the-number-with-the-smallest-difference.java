@@ -13,7 +13,7 @@ public class Main {
         TreeSet<Integer> ts = new TreeSet<>();
         ts.add(Integer.parseInt(br.readLine()));
 
-        int ans = -1;
+        int ans = Integer.MAX_VALUE;
         for (int i = 1; i < n; i++) {
             int num = Integer.parseInt(br.readLine());
 
@@ -22,14 +22,14 @@ public class Main {
 
             if (floor != null) {
                 int diff = num - floor;
-                if (ans == -1 || diff < ans) {
+                if (diff < ans) {
                     ans = diff;
                 }
             }
 
             if (ceiling != null) {
                 int diff = ceiling - num;
-                if (ans == -1 || diff < ans) {
+                if (diff < ans) {
                     ans = diff;
                 }
             }
