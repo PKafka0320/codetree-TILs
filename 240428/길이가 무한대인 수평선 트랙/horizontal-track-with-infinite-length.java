@@ -14,6 +14,11 @@ class Person implements Comparable<Person> {
     public int compareTo(Person p) {
         return this.x - p.x;
     }
+
+    @Override
+    public String toString() {
+        return "[" + x + "," + v + "]";
+    }
 }
 
 class Event implements Comparable<Event> {
@@ -37,6 +42,11 @@ class Event implements Comparable<Event> {
         else
             return 1;
     }
+
+    @Override
+    public String toString() {
+        return "[" + currT + "/" + x + "/" + v + "]";
+    }
 }
 
 public class Main {    
@@ -56,9 +66,12 @@ public class Main {
     // 정보를 얻어 사건 정보를 추가합니다. 
     public static void addEvent(int x1, int v1, int x2, int v2) {
         // 절대 따라잡을 수 없는 경우라면 무시합니다.
-        if(v1 <= v2)
+        if(v1 <= v2) {
+            // System.out.println("event ignored");
             return;
+        }
         
+        // System.out.println("add event : " + new Event(1.0 * (x2 - x1) / (v1 - v2), x1, v1));
         eventT.add(new Event(1.0 * (x2 - x1) / (v1 - v2), x1, v1));
     }
     
@@ -66,9 +79,12 @@ public class Main {
     // 정보를 얻어 해당 사건 정보를 제거합니다.
     public static void removeEvent(int x1, int v1, int x2, int v2) {
         // 절대 따라잡을 수 없는 경우라면 무시합니다.
-        if(v1 <= v2)
+        if(v1 <= v2) {
+            // System.out.println("event ignored");
             return;
+        }
         
+        // System.out.println("remove event : " + new Event(1.0 * (x2 - x1) / (v1 - v2), x1, v1));
         eventT.remove(new Event(1.0 * (x2 - x1) / (v1 - v2), x1, v1));
     }
 
@@ -96,20 +112,34 @@ public class Main {
 
         // 앞지르는 사건이 존재한다면 반복합니다.
         while(!eventT.isEmpty()) {
+            // System.out.println("\npeople list :");
+            // System.out.println(peopleX);
+            // System.out.println("\nevent list :");
+            // System.out.println(eventT);
+            // System.out.println();
+
             Event e = eventT.first();
+
+            // System.out.println("event : " + e);
+
             double currT = e.currT; 
             int x = e.x, v = e.v;
 
             // 이미 t분이 넘었다면 종료합니다.
-            if(currT > t)
+            if(currT > t) {
+                // System.out.println("timeout");
                 break;
+            }
 
             // 해당 사람과 사건을 삭제합니다.
+            // System.out.println("remove person : " + new Person(x, v));
             peopleX.remove(new Person(x, v));
+            // System.out.println("remove event : " + new Event(currT, x, v));
             eventT.remove(new Event(currT, x, v));
             
             // 바로 앞 사람 위치를 구합니다.
             Person np = peopleX.higher(new Person(x, v));
+            // System.out.println("forward people : " + np);
             int nx = np.x, nv = np.v;
 
             // 바로 뒤에 사람이 있다면 
@@ -117,8 +147,11 @@ public class Main {
             // 새로운 사건을 추가합니다.
             if(peopleX.lower(np) != null) {
                 Person pp = peopleX.lower(np);
+                // System.out.println("lower people : " + pp);
                 int px = pp.x, pv = pp.v;
+                // System.out.printf("try remove event : [%d,%d], [%d,%d]\n", px, pv, x, v);
                 removeEvent(px, pv, x, v);
+                // System.out.printf("try add event : [%d,%d], [%d,%d]\n", px, pv, nx, nv);
                 addEvent(px, pv, nx, nv);
             }
         }
