@@ -11,28 +11,23 @@ public class Main {
         int m = Integer.parseInt(st.nextToken());
 
         TreeSet<Integer> ts = new TreeSet<>();
-        for (int i = 0; i <= n; i++) {
-            ts.add(i);
-        }
+        ts.add(-1);
+        ts.add(n + 1);
 
         StringBuilder sb = new StringBuilder();
         st = new StringTokenizer(br.readLine());
         for (int M = 0; M < m; M++) {
             int num = Integer.parseInt(st.nextToken());
-            ts.remove(num);
+            ts.add(num);
 
-            int len = 0;
-            int tmp = 0;
-            for (int i = 0; i <= n; i++) {
-                if (ts.contains(i)) tmp++;
-                else {
-                    len = Math.max(tmp, len);
-                    tmp = 0;
-                }
+            int max = 0;
+            for (int tmp : ts) {
+                if (tmp == n + 1) break;
+                int higher = ts.higher(tmp);
+                int diff = higher - tmp - 1;
+                max = Math.max(max, diff);
             }
-            len = Math.max(tmp, len);
-
-            sb.append(len).append("\n");
+            sb.append(max).append("\n");
         }
 
         System.out.println(sb);
