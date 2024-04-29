@@ -11,7 +11,10 @@ class Point implements Comparable<Point> {
 
     @Override
     public int compareTo(Point p) {
-        return (Math.abs(this.x) + Math.abs(this.y)) - (Math.abs(p.x) + Math.abs(p.y));
+        if ((Math.abs(this.x) + Math.abs(this.y)) != (Math.abs(p.x) + Math.abs(p.y))) 
+            return (Math.abs(this.x) + Math.abs(this.y)) - (Math.abs(p.x) + Math.abs(p.y));
+        if (this.x != p.x) return this.x - p.x;
+        return this.y - p.y;
     }
 }
 
