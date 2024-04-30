@@ -17,7 +17,6 @@ public class Main {
         }
 
         while (pq.size() > 1) {
-            System.out.println(pq);
             int poll1 = pq.poll();
             int poll2 = pq.poll();
 
@@ -25,7 +24,7 @@ public class Main {
             pq.add(poll1 - poll2);
         }
 
-        if (pq.size() == 0) System.out.println(pq.peek());
-        else System.out.println(-1);
+        if (pq.size() == 0) System.out.println(-1);
+        else System.out.println(pq.peek());
     }
 }
