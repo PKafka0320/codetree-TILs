@@ -126,20 +126,17 @@ public class Main {
             }
         }
 
-        StringBuilder sb = new StringBuilder();
         for (int k = 1; k <= K; k++) {
             Node node = shelf[k][0];
             int cnt = 0;
-            StringBuilder tmpsb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             while (node != null) {
                 cnt++;
-                tmpsb.append(node.n).append(" ");
+                sb.append(node.n).append(" ");
                 node = node.next;
             }
-            sb.append(cnt).append(" ").append(tmpsb.toString()).append("\n");
+            System.out.println(cnt + " " + sb.toString());
         }
-
-        System.out.println(sb);
     }
 
     static void connect(Node prev, Node next) {
