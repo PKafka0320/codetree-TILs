@@ -46,15 +46,16 @@ public class Main {
                 // i 번 책꽂이의 맨 앞 책 선택
                 Node fnode = shelf[from][0];
                 if (fnode == null) continue; // i 번 책꽂이가 비어있는 경우
+                if (shelf[from][0] == shelf[to][1]) continue; // 책꽂이에 책이 1개만 있는 경우
                 
-                // j 번 책꽂이의 맨 뒷 책 선택
-                Node tnode = shelf[to][1];
-
                 // i 번 책꽂이에서 맨 앞 책 제거
                 shelf[from][0] = fnode.next;
                 if (shelf[from][0] == null) shelf[from][1] = null; // i 번 책꽂이가 비게 되는 경우
                 connect(fnode.prev, fnode.next);
                 fnode.prev = fnode.next = null;
+
+                // j 번 책꽂이의 맨 뒷 책 선택
+                Node tnode = shelf[to][1];
 
                 // j 번 책꽂이에의 맨 뒤에 추가
                 shelf[to][1] = fnode;
@@ -65,6 +66,7 @@ public class Main {
                 // i 번 책꽂이의 맨 앞 책 선택
                 Node fnode = shelf[from][1];
                 if (fnode == null) continue; // i 번 책꽂이가 비어있는 경우
+                if (shelf[from][0] == shelf[to][1]) continue; // 책꽂이에 책이 1개만 있는 경우
 
                 // j 번 책꽂이의 맨 뒷 책 선택
                 Node tnode = shelf[to][0];
@@ -126,17 +128,19 @@ public class Main {
             }
         }
 
+        StringBuilder sb = new StringBuilder();
         for (int k = 1; k <= K; k++) {
             Node node = shelf[k][0];
             int cnt = 0;
-            StringBuilder sb = new StringBuilder();
+            StringBuilder tmpsb = new StringBuilder();
             while (node != null) {
                 cnt++;
-                sb.append(node.n).append(" ");
+                tmpsb.append(node.n).append(" ");
                 node = node.next;
             }
-            System.out.println(cnt + " " + sb.toString());
+            sb.append(cnt).append(" ").append(tmpsb.toString()).append("\n");
         }
+        System.out.println(sb);
     }
 
     static void connect(Node prev, Node next) {
