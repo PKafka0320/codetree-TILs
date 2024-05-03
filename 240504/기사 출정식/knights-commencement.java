@@ -22,12 +22,15 @@ public class Main {
 
         // Doubly-LinkedList 생성
         Knight[] knights = new Knight[N + 1];
+        HashMap<Integer, Knight> hm = new HashMap<>();
         st = new StringTokenizer(br.readLine());
-        knights[1] = new Knight(Integer.parseInt(st.nextToken())); // 처음 기사
-        for (int i = 2; i <= N; i++) {
-            knights[i] = new Knight(Integer.parseInt(st.nextToken()));
+        for (int i = 1; i <= N; i++) {
+            int num = Integer.parseInt(st.nextToken());
+            knights[i] = new Knight(num);
+            hm.put(num, knights[i]);
 
             // 앞 뒤의 기사 연결
+            if (i == 1) continue;
             knights[i].prev = knights[i - 1];
             knights[i - 1].next = knights[i];
         }
@@ -37,7 +40,7 @@ public class Main {
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < M; i++) {
-            Knight call = knights[Integer.parseInt(br.readLine())];
+            Knight call = hm.get(Integer.parseInt(br.readLine()));
 
             // 양 옆의 기사 번호 확인
             Knight next = call.next;
