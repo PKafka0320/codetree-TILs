@@ -21,7 +21,6 @@ public class Main {
 
         // 초기화
         Student initS = new Student(1);
-        initS.prev = initS.next = initS;
         hm.put(1, initS);
         int curNum = 1;
 
@@ -39,7 +38,7 @@ public class Main {
                     Student newS = new Student(curNum + i);
                     newS.prev = a;
                     newS.next = a.next;
-                    a.next.prev = newS;
+                    if (a.next != null) a.next.prev = newS;
                     a.next = newS;
                     hm.put(curNum + i, newS);
                 }
@@ -56,7 +55,7 @@ public class Main {
                     Student newS = new Student(curNum + i);
                     newS.next = a;
                     newS.prev = a.prev;
-                    a.prev.next = newS;
+                    if (a.prev != null) a.prev.next = newS;
                     a.prev = newS;
                     hm.put(curNum + i, newS);
                 }
@@ -70,7 +69,7 @@ public class Main {
                 Student prev = a.prev;
                 Student next = a.next;
 
-                if (prev == next) sb.append("-1\n");
+                if (prev == null || next == null) sb.append("-1\n");
                 else sb.append(prev.num).append(" ").append(next.num).append("\n");
             }
         }
