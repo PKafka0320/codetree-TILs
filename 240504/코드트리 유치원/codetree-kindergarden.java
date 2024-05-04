@@ -43,6 +43,9 @@ public class Main {
                     a.next = newS;
                     hm.put(curNum + i, newS);
                 }
+
+                // 번호 갱신
+                curNum += num;
             }
             else if (op == 2) {
                 Student a = hm.get(Integer.parseInt(st.nextToken()));
@@ -57,6 +60,9 @@ public class Main {
                     a.prev = newS;
                     hm.put(curNum + i, newS);
                 }
+
+                // 번호 갱신
+                curNum += num;
             }
             else if (op == 3) {
                 Student a = hm.get(Integer.parseInt(st.nextToken()));
