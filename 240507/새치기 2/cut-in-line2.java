@@ -66,6 +66,7 @@ public class Main {
 
                 if (jumper.next != null) jumper.next.prev = jumper.prev;
                 if (jumper.prev != null) jumper.prev.next = jumper.next;
+                if (victim.prev != null) victim.prev.next = jumper;
                 jumper.prev = victim.prev;
                 jumper.next = victim;
                 victim.prev = jumper;
@@ -106,6 +107,7 @@ public class Main {
 
                 if (jumperTo.next != null) jumperTo.next.prev = jumperFrom.prev;
                 if (jumperFrom.prev != null) jumperFrom.prev.next = jumperTo.next;
+                if (victim.prev != null) victim.prev.next = jumperFrom;
                 jumperFrom.prev = victim.prev;
                 jumperTo.next = victim;
                 victim.prev = jumperTo;
