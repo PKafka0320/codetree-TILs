@@ -27,7 +27,9 @@ public class Main {
             int start = Integer.parseInt(token.nextToken());
             int end = Integer.parseInt(token.nextToken());
 
-            answer.append(prefixSum[end] - prefixSum[start - 1]).append("\n");
+            int count = prefixSum[end] - prefixSum[start];
+            if (positions[start] == 1) count++;
+            answer.append(count).append("\n");
         }
 
         System.out.println(answer);
