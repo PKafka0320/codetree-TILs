@@ -9,9 +9,17 @@ public class Main {
         int totalPos = Integer.parseInt(token.nextToken());
         int totalQuery = Integer.parseInt(token.nextToken());
 
-        HashSet<Integer> positions = new HashSet<>();
         token = new StringTokenizer(reader.readLine());
-        for (int posCount = 0; posCount < totalPos; posCount++) positions.add(Integer.parseInt(token.nextToken()));
+        int[] positions = new int[1_000_001];
+        for (int posCount = 0; posCount < totalPos; posCount++) {
+            int number = Integer.parseInt(token.nextToken());
+            positions[number] = 1;
+        }
+
+        int[] prefixSum = new int[1_000_001];
+        for (int number = 1; number <= 1_000_000; number++) {
+            prefixSum[number] = prefixSum[number - 1] + positions[number];
+        }
 
         StringBuilder answer = new StringBuilder();
         for (int queryCount = 0; queryCount < totalQuery; queryCount++) {
@@ -19,10 +27,7 @@ public class Main {
             int start = Integer.parseInt(token.nextToken());
             int end = Integer.parseInt(token.nextToken());
 
-            int count = 0;
-            for (int number = start; number <= end; number++) count += positions.contains(number) ? 1 : 0;
-
-            answer.append(count).append("\n");
+            answer.append(prefixSum[end] - prefixSum[start - 1]).append("\n");
         }
 
         System.out.println(answer);
