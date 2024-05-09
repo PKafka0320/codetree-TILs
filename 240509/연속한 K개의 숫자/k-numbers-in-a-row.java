@@ -17,7 +17,7 @@ public class Main {
         }
 
         int min = seqNumber;
-        for (int start = 1; start <= totalNumbers - seqNumber; start++) {
+        for (int start = 1; start <= totalNumbers - seqNumber + 1; start++) {
             int count = 0;
             for (int seq = 0; seq < seqNumber; seq++) count += blanks[start + seq];
             min = Math.min(min, count);
