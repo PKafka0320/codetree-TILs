@@ -1,55 +1,75 @@
-import java.io.*;
-import java.util.*;
+import java.util.Scanner;
 
 public class Main {
-    static int n, m, k;
-    static int[][][] grid;
-    static int[][][] prefixSum;
+    public static final int MAX_NUM = 1000;
+    public static final int MAX_C = 3;
+    
+    // 변수 선언
+    public static int[][] arr = new int[MAX_NUM + 1][MAX_NUM + 1];
+    public static int[][][] prefixSum = new int[MAX_C + 1][MAX_NUM + 1][MAX_NUM + 1];
+    
+    public static int n, m, k;
+    
+    // 특정 숫자 c에 대해 
+    // (x1, y1), (x2, y2) 직사각형 구간 내의 원소의 합을 반환합니다.
+    public static int getSum(int c, int x1, int y1, int x2, int y2) {
+        return prefixSum[c][x2][y2]     - prefixSum[c][x1 - 1][y2] -
+               prefixSum[c][x2][y1 - 1] + prefixSum[c][x1 - 1][y1 - 1];
+    }
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer token = new StringTokenizer(reader.readLine());
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        // 입력:
+        n = sc.nextInt();
+        m = sc.nextInt();
+        k = sc.nextInt();
+        for(int i = 1; i <= n; i++) {
+            String input = sc.next();
+            for(int j = 1; j <= m; j++) {
+                // 편의를 위해 
+                // 입력받은 문자 a, b, c를 각각 
+                // 1, 2, 3으로 바꿔서 저장해줍니다.
+                char c = input.charAt(j - 1);
 
-        n = Integer.parseInt(token.nextToken());
-        m = Integer.parseInt(token.nextToken());
-        k = Integer.parseInt(token.nextToken());
-
-        prefixSum = new int[n + 1][m + 1][3];
-        // 각 위치마다 있는 알파벳의 개수 (a, b, c)
-        grid = new int[n + 1][m + 1][3];
-
-        for (int row = 1; row <= n; row++) {
-            String line = reader.readLine();
-            for (int col = 1; col <= m; col++) {
-                grid[row][col][line.charAt(col - 1) - 'a'] += 1; // 해당하는 알파벳의 수 + 1
+                if(c == 'a')
+                    arr[i][j] = 1;
+                else if(c == 'b')
+                    arr[i][j] = 2;
+                else
+                    arr[i][j] = 3;
             }
         }
+        
+        // 누적합 배열을 만들어줍니다.
+        // prefixSum[c][i][j] : 숫자가 c인 경우에 대한 누적합을 저장합니다.
+        for(int c = 1; c <= 3; c++) {
+            for(int i = 1; i<= n; i++)
+                for(int j = 1; j <= m; j++) {
+                    int additionalValue = 0;
 
-        // prefixSum 계산
-        for (int row = 1; row <= n; row++) {
-            for (int col = 1; col <= m; col++) {
-                for (int ch = 0; ch < 3; ch++) {
-                    prefixSum[row][col][ch] = grid[row][col][ch] + prefixSum[row - 1][col][ch] 
-                        + prefixSum[row][col - 1][ch] - prefixSum[row - 1][col - 1][ch];
+                    // (i, j) 위치에 적혀있는 숫자가 c인 경우에만
+                    // 값을 1 증가시켜줍니다.
+                    if(arr[i][j] == c)
+                        additionalValue = 1;
+
+                    prefixSum[c][i][j] = prefixSum[c][i - 1][j] + 
+                                    prefixSum[c][i][j - 1] -
+                                    prefixSum[c][i - 1][j - 1] +
+                                    additionalValue;
                 }
-            }
         }
+        
+        // k개의 질의에 대한
+        // 답을 출력합니다.
+        while(k-- > 0) {
+            int x1 = sc.nextInt();
+            int y1 = sc.nextInt();
+            int x2 = sc.nextInt();
+            int y2 = sc.nextInt();
 
-        StringBuilder answer = new StringBuilder();
-        for (int query = 0; query < k; query++) {
-            token = new StringTokenizer(reader.readLine());
-            int r1 = Integer.parseInt(token.nextToken());
-            int c1 = Integer.parseInt(token.nextToken());
-            int r2 = Integer.parseInt(token.nextToken());
-            int c2 = Integer.parseInt(token.nextToken());
-
-            for (int ch = 0; ch < 3; ch++) {
-                int sum = prefixSum[r2][c2][ch] - prefixSum[r2][c1 - 1] [ch]
-                    - prefixSum[r1 - 1][c2][ch] + prefixSum[r1 - 1][c1 - 1][ch];
-                answer.append(sum).append(" ");
-            }
-            answer.append("\n");
+            System.out.print(getSum(1, x1, y1, x2, y2) + " ");
+            System.out.print(getSum(2, x1, y1, x2, y2) + " ");
+            System.out.println(getSum(3, x1, y1, x2, y2));
         }
-        System.out.println(answer);
     }
 }
