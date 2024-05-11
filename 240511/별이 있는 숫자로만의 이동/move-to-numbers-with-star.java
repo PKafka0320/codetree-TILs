@@ -1,54 +1,44 @@
-import java.io.*;
-import java.util.*;
+import java.util.Scanner;
 
 public class Main {
-    static int N, K;
-    static int[][] grid;
-    static int[][] prefixSum;
+    public static final int MAX_N = 400;
+    
+    // 변수 선언
+    public static int n, k;
+    public static int[][] board = new int[MAX_N + 1][MAX_N + 1];
+    public static int[][] board2 = new int[MAX_N * 2 + 1][MAX_N * 2 + 1];
+    public static int[][] s = new int[MAX_N * 2 + 1][MAX_N * 2 + 1];
+    public static int ans = 0;
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        k = sc.nextInt();
+        for(int i = 1; i <= n; i++)
+            for(int j = 1; j <= n; j++) board[i][j] = sc.nextInt();
+
+        // 2차원 배열을 45도 회전시킵니다.
+        // 배열을 회전시키면 정사각형 부분합을 구하는 문제로
+        // 바뀌기 때문에 훨씬 접근하기 쉬워집니다.        
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                board2[i + j - 1][n - i + j] = board[i][j];
+            }
+        }
+
+        // 2차원 배열의 누적합을 구합니다.
+        for(int i = 1; i <= 2 * n; i++)
+            for(int j = 1; j <= 2 * n; j++)
+                s[i][j] = s[i][j - 1] + s[i - 1][j] - s[i - 1][j - 1] + board2[i][j];
         
-        StringTokenizer token = new StringTokenizer(reader.readLine());
-        N = Integer.parseInt(token.nextToken()); // 격자 크기
-        K = Integer.parseInt(token.nextToken()); // 이동 가능한 거리
-
-        grid = new int[N + 1][N + 1]; // 격자
-        prefixSum = new int[N + 1][N + 1]; // 각 행의 누적합
-
-        for (int row = 1; row <= N; row++) {
-            token = new StringTokenizer(reader.readLine());
-            for (int col = 1; col <= N; col++) {
-                grid[row][col] = Integer.parseInt(token.nextToken());
-            }
+        // 한 변의 길이가 k2인 정사각형 중 부분합이 최대인 사각형을 찾습니다.
+        int k2 = Math.min(2 * k + 1, 2 * n);
+        for(int i = k2; i <= 2 * n; i++)
+            for(int j = k2; j <= 2 * n; j++) {
+            ans = Math.max(ans, s[i][j] - s[i][j - k2] - s[i - k2][j] + s[i - k2][j - k2]);
         }
-
-        for (int row = 1; row <= N; row++) {
-            for (int col = 1; col <= N; col++) {
-                prefixSum[row][col] = prefixSum[row][col - 1] + grid[row][col];
-            }
-        }
-
-        // 모든 중심에 대한 최댓값 계산
-        int ans = 0;
-        for (int row = 1; row <= N; row++) {
-            for (int col = 1; col <= N; col++) {
-                // 중심이 (row, col)일 때의 숫자 합 계산
-                int sum = 0;
-                for (int r = row - K; r <= row + K; r++) {
-                    // r 행일 때 (col - c ~ col + c)열 까지의 부분합 계산
-                    int c = K - Math.abs(row - r);
-
-                    // r 행이 범위 안에 있을 경우 부분합 계산
-                    if (1 <= r && r <= N) {
-                        sum += prefixSum[r][Math.min(col + c, N)] - prefixSum[r][Math.max(col - c - 1, 0)];
-                    }
-                }
-
-                ans = Math.max(ans, sum);
-            }
-        }
-
-        System.out.println(ans);
+        
+        // 정답을 출력합니다.
+        System.out.print(ans);
     }
 }
