@@ -41,8 +41,13 @@ public class Main {
             if (numberFrom != null) seqFrom = sequence.get(numberFrom);
             Integer numberTo = numbers.floor(Integer.parseInt(token.nextToken()));
             if (numberTo != null) seqTo = sequence.get(numberTo);
-
-            answer.append(seqTo - seqFrom + 1).append("\n");
+            
+            if (numberFrom == null || numberTo == null) {
+                answer.append("0\n");
+            }
+            else {
+                answer.append(seqTo - seqFrom + 1).append("\n");
+            }
         }
         System.out.println(answer);
     }
