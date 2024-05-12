@@ -78,15 +78,33 @@ public class Main {
             int x2 = Integer.parseInt(token.nextToken());
             int y2 = Integer.parseInt(token.nextToken());
 
-            int cnvtX1 = sequence.get(numbers.ceiling(x1));
-            int cnvtY1 = sequence.get(numbers.ceiling(y1));
-            int cnvtX2 = sequence.get(numbers.floor(x2));
-            int cnvtY2 = sequence.get(numbers.floor(y2));
+            int cnvtX1 = getLowerBoundary(x1);
+            int cnvtY1 = getLowerBoundary(y1)
+            int cnvtX2 = getUpperBoundary(x2);
+            int cnvtY2 = getUpperBoundary(y2);
 
             int ans = prefixSum[cnvtX2][cnvtY2] - prefixSum[cnvtX1 - 1][cnvtY2] 
                 - prefixSum[cnvtX2][cnvtY1 - 1] + prefixSum[cnvtX1 - 1][cnvtY1 - 1];
             answer.append(ans).append("\n");
         }
         System.out.println(answer);
+    }
+
+    // x보다 같거나 큰 최초의 숫자를 구해
+    // 이를 좌표압축 했을 때의 결과를 반환합니다.
+    public static int getLowerBoundary(int x) {
+        if(numbers.ceiling(x) != null) {
+            return mapper.get(numbers.ceiling(x));
+        }
+        return (int) numbers.size() + 1;
+    }
+    
+    // x보다 같거나 작은 최초의 숫자를 구해
+    // 이를 좌표압축 했을 때의 결과를 반환합니다.
+    public static int getUpperBoundary(int x) {
+        if(numbers.floor(x) != null) {
+            return mapper.get(numbers.floor(x));
+        }
+        return 0;
     }
 }
