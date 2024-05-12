@@ -34,7 +34,7 @@ public class Main {
             token = new StringTokenizer(reader.readLine());
 
             // 범위 내의 점이 없는 경우 방지
-            int seqFrom = cnt - 1;
+            int seqFrom = cnt;
             int seqTo = 0;
 
             Integer numberFrom = numbers.ceiling(Integer.parseInt(token.nextToken()));
