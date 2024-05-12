@@ -79,7 +79,7 @@ public class Main {
             int y2 = Integer.parseInt(token.nextToken());
 
             int cnvtX1 = getLowerBoundary(x1);
-            int cnvtY1 = getLowerBoundary(y1)
+            int cnvtY1 = getLowerBoundary(y1);
             int cnvtX2 = getUpperBoundary(x2);
             int cnvtY2 = getUpperBoundary(y2);
 
@@ -94,7 +94,7 @@ public class Main {
     // 이를 좌표압축 했을 때의 결과를 반환합니다.
     public static int getLowerBoundary(int x) {
         if(numbers.ceiling(x) != null) {
-            return mapper.get(numbers.ceiling(x));
+            return sequence.get(numbers.ceiling(x));
         }
         return (int) numbers.size() + 1;
     }
@@ -103,7 +103,7 @@ public class Main {
     // 이를 좌표압축 했을 때의 결과를 반환합니다.
     public static int getUpperBoundary(int x) {
         if(numbers.floor(x) != null) {
-            return mapper.get(numbers.floor(x));
+            return sequence.get(numbers.floor(x));
         }
         return 0;
     }
