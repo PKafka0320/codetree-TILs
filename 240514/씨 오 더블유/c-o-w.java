@@ -33,7 +33,7 @@ public class Main {
         }
 
         // 'O'의 위치마다 왼쪽에 있는 'C'의 개수와 오른쪽에 있는 'W'의 개수의 곱을 누적
-        int ans = 0;
+        long ans = 0;
         for (int idx = 1; idx < n - 1; idx++) {
             if (string.charAt(idx) != 'O') continue;
 
