@@ -36,30 +36,45 @@ public class Main {
         
         Collections.sort(points);
         
-        int answer = 0; // 선분 길이의 최댓값
-        for (int except = 0; except < N; except++) {
-            int sum = 0; // 제외한 선분 이외의 길이의 합
-            int count = 0; // 현재 위치에 있는 선분의 개수
-            int startPosition = 0; // 선분의 시작 지점
+        int totalLength = 0; // 하나도 제외하지 않았을 때 전체 길이
+        int prevPosition = -1; // 마지막으로 확인한 위치
+        HashSet<Integer> lineNumbers = new HashSet<>(); // 현재 위치에 있는 선분의 번호
+        int[] weights = new int[N]; // [i]: i번째 선분을 제외했을 때 빠지게 되는 길이 (가중치)
+        
+        for (Tuple tuple : points) {
+            int count = lineNumbers.size();
 
-            for (Tuple tuple : points) {
-                if (tuple.index == except) continue;
-                
-                if (tuple.value == 1) {
-                    if (count == 0) {
-                        startPosition = tuple.position;
-                    }
-                    count++;
-                }
-                else {
-                    count--;
-                    if (count == 0) {
-                        sum += tuple.position - startPosition;
-                    }
-                }
+            // 현재 위치에 선분의 수가 1개 이상이라면 전체 길이의 합 갱신
+            if (count > 0) {
+                totalLength += tuple.position - prevPosition;
             }
-            answer = Math.max(answer, sum);
+
+            // 현재 위치에 선분의 수가 1개라면 해당 선분의 가중치 갱신
+            if (count == 1) {
+                int targetIndex = new ArrayList<>(lineNumbers).get(0);
+                weights[targetIndex] += tuple.position - prevPosition;
+            }
+
+            // 시작점인 경우 선분 번호 추가
+            if (tuple.value == 1) {
+                lineNumbers.add(tuple.index);
+            }
+
+            // 끝점인 경우 선분 번호 제거
+            else {
+                lineNumbers.remove(tuple.index);
+            }
+
+            // 이전 위치 갱신
+            prevPosition = tuple.position;
         }
+
+        // 특정 선분을 제외했을 때 빠지게 되는 길이 중 최댓값 계산
+        int answer = 0;
+        for (int idx = 0; idx < N; idx++) {
+            answer = Math.max(answer, totalLength - weights[idx]);
+        }
+
         System.out.println(answer);
     }
 }
