@@ -32,7 +32,7 @@ public class Main {
         // 각 위치마다 가장 작은 충전 비용과 다음 장소로 가는데 드든 에너지의 곱을 합산
         long answer = 0;
         for (int idx = 0; idx < n - 1; idx++) {
-            answer += L[idx] * energies[idx];
+            answer += (long) L[idx] * energies[idx];
         }
         System.out.println(answer);
     }
