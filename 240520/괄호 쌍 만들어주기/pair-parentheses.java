@@ -28,7 +28,7 @@ public class Main {
 
         // 각 위치마다 마지막 문자부터 닫는 괄호가 2개일 때마다 해당 위치의 여는 괄호 개수를 합산
         prevCh = '-';
-        int answer = 0;
+        long answer = 0;
         for (int idx = string.length() - 1; idx >= 0; idx--) {
             if (arr[idx] == ')') {
                 if (prevCh == ')') {
