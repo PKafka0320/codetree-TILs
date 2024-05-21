@@ -24,6 +24,7 @@ public class Main {
         }
         minIdx[0] = maxIdx[0] = 0;
 
+        // 누적합의 모듈러 연산을 계산하면서 해당 값이 등장한 위치의 최솟값과 최댓값 갱신
         int sumMod = 0;
         for (int idx = 1; idx <= N; idx++) {
             sumMod = (sumMod + numbers[idx]) % 7;
