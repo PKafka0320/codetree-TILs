@@ -36,6 +36,11 @@ public class Main {
             sum -= numbers[startIdx];
         }
         
+        // 만족하는 구간이 없는 경우
+        if (answer == n && sum < s) {
+            answer = -1;
+        }
+        
         System.out.println(answer);
     }
 }
