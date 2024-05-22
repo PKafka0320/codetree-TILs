@@ -21,7 +21,7 @@ public class Main {
         int answer = 0; // 구간 내에 중복되는 숫자가 전혀 없는 최대 구간의 크기
         for (int startIdx = 0; startIdx < n; startIdx++) {
             // 구간 내에 중복되는 숫자가 있을 때까지 구간의 끝 이동
-            while (endIdx + 1 < n && !elements.contains(numbers[endIdx])) {
+            while (endIdx < n && !elements.contains(numbers[endIdx])) {
                 elements.add(numbers[endIdx]);
                 endIdx++;
             }
