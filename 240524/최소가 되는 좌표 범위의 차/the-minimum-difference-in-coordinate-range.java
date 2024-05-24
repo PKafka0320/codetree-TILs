@@ -60,8 +60,6 @@ public class Main {
         
         Arrays.sort(pairs);
         
-        System.out.println(Arrays.toString(pairs));
-        
         int secondIdx = -1; // 두 번째 점의 인덱스
         int min = Integer.MAX_VALUE; // 두 점의 x 좌표의 최소 차이
         
