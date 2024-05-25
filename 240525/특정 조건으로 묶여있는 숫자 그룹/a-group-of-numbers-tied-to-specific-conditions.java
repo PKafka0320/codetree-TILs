@@ -54,7 +54,8 @@ public class Main {
         }
         
         // i번째 위치를 경계로 [1 ~ i], [i + 1 ~ N] 으로 그룹을 만들 영역을 나누었을때
-        // 가능한 최대 원소의 개수 계싼
+        // 가능한 최대 원소의 개수 계산
+        // 단 하나의 그룹만 이용했을 때를 고려해서 초기값을 L[N - 1]로 설정
         int answer = L[N - 1];
         for (int idx = 0; idx < N - 1; idx++) {
             answer = Math.max(answer, L[idx] + R[idx + 1]);
