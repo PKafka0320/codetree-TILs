@@ -4,6 +4,7 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        System.setIn(new FileInputStream("src/input.txt"));
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
@@ -11,11 +12,19 @@ public class Main {
         int k = Integer.parseInt(tokenizer.nextToken()); // 수열에 존재해야 하는 1의 개수의 최솟값
         
         int[] numbers = new int[n]; // [i]: i번째 수
+        int totalCount = 0; // 모든 1의 개수
         
         // 수열 입력
         tokenizer = new StringTokenizer(reader.readLine());
         for (int idx = 0; idx < n; idx++) {
             numbers[idx] = Integer.parseInt(tokenizer.nextToken());
+            if (numbers[idx] == 1) totalCount++;
+        }
+        
+        // 가능한 경우가 없는 경우
+        if (totalCount < k) {
+            System.out.println(-1);
+            return;
         }
         
         int min = n; // 조건을 만족하는 부분 수열의 최소 길이
