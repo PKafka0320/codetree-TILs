@@ -59,7 +59,7 @@ public class Main {
                 }
             }
             
-            if (start > points[startIndex] || end < points[endIndex]) {
+            if (startIndex == endIndex && (start > points[startIndex] || end < points[endIndex])) {
                 answer.append("0\n");
             }
             else {
