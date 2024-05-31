@@ -18,6 +18,8 @@ public class Main {
             points[idx] = Integer.parseInt(tokenizer.nextToken());
         }
         
+        Arrays.sort(points);
+        
         StringBuilder answer = new StringBuilder();
         
         while (m-- > 0) {
