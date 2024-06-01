@@ -7,7 +7,7 @@ public class Main {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         long startNumber = 1; // 범위의 시작
-        long endNumber = Integer.parseInt(reader.readLine()); // 컴퓨터가 선택한 수 (범위의 끝)
+        long endNumber = Long.parseLong(reader.readLine()); // 컴퓨터가 선택한 수 (범위의 끝)
         
         StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
         long startTarget = Long.parseLong(tokenizer.nextToken()); // 목표 숫자 범위의 시작
