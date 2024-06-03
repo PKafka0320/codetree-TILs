@@ -15,10 +15,10 @@ public class Main {
         while (left <= right) {
             long mid = (left + right) / 2; // 중앙값
             
-            // mid보다 작거나 같은 수의 개수 계산
+            // 각 행에서 mid보다 작거나 같은 수의 개수의 합 계산
             long count = 0;
             for (int idx = 1; idx <= n; idx++) {
-                count += Math.min(mid / idx, n);
+                count += Math.min(mid / idx, n); // 개수는 n개를 넘을 수 없음
             }
             
             if (count < k) {
