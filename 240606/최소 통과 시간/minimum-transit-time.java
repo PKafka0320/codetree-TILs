@@ -21,11 +21,11 @@ public class Main {
         
         int low = 1; // 최소 시간 범위의 시작
         int high = paths[m - 1] * n; // 최소 시간 범위의 끝
-        int min = high; // 최소 시간
+        long min = high; // 최소 시간
         
         // Parametric Search
         while (low <= high) {
-            int mid = (low + high) / 2; // 최소 시간 범위의 중앙값
+            mid = (low + high) / 2; // 최소 시간 범위의 중앙값
             long count = 0; // 중앙값에 통과되는 물건의 개수
 
             for (int idx = 0; idx < m; idx++) {
