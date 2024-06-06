@@ -19,8 +19,8 @@ public class Main {
         
         Arrays.sort(paths);
         
-        int low = 1; // 최소 시간 범위의 시작
-        int high = paths[m - 1] * n; // 최소 시간 범위의 끝
+        long low = 1; // 최소 시간 범위의 시작
+        long high = paths[m - 1] * n; // 최소 시간 범위의 끝
         long min = high; // 최소 시간
         
         // Parametric Search
