@@ -20,12 +20,12 @@ public class Main {
         Arrays.sort(paths);
         
         long low = 1; // 최소 시간 범위의 시작
-        long high = paths[m - 1] * n; // 최소 시간 범위의 끝
+        long high = paths[0] * n; // 최소 시간 범위의 끝
         long min = high; // 최소 시간
         
         // Parametric Search
         while (low <= high) {
-            mid = (low + high) / 2; // 최소 시간 범위의 중앙값
+            long mid = (low + high) / 2; // 최소 시간 범위의 중앙값
             long count = 0; // 중앙값에 통과되는 물건의 개수
 
             for (int idx = 0; idx < m; idx++) {
