@@ -26,7 +26,7 @@ public class Main {
         // Parametric Search
         while (low <= high) {
             int mid = (low + high) / 2; // 최소 시간 범위의 중앙값
-            int count = 0; // 중앙값에 통과되는 물건의 개수
+            long count = 0; // 중앙값에 통과되는 물건의 개수
 
             for (int idx = 0; idx < m; idx++) {
                 count += mid / paths[idx];
