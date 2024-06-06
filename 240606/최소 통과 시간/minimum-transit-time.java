@@ -20,7 +20,7 @@ public class Main {
         Arrays.sort(paths);
         
         long low = 1; // 최소 시간 범위의 시작
-        long high = paths[0] * n; // 최소 시간 범위의 끝
+        long high = Integer.MAX_VALUE; // 최소 시간 범위의 끝
         long min = high; // 최소 시간
         
         // Parametric Search
