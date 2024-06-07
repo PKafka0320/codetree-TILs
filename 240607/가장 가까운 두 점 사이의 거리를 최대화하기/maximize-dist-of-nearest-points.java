@@ -35,59 +35,37 @@ public class Main {
         
         Arrays.sort(segments);
         
-        long low = 1;
-        long high = (long) 1e9;
-        long max = 1;
+        long low = 1; // 점 사이의 최소 거리가 될수 있는 범위 시작
+        long high = (long) 1e9; // 점 사이의 최소 거리가 될수 있는 범위 시작
+        long max = 1; // 점 사이의 최소 거리의 최댓값
         
         while (low <= high) {
-            long mid = (low + high) / 2;
-//            System.out.println(mid);
+            long mid = (low + high) / 2; // 중앙값
             boolean cannotBuild = false;
-            boolean isUpper = false;
             
-            for (int startPosition = segments[0].from; startPosition <= segments[0].to; startPosition++) {
-                long currentPosition = startPosition;
-//                System.out.print(currentPosition + " ");
+            // 점 사이의 거리가 최대가 되도록 하기 위해 첫 번째 선분의 가장 왼쪽을 시작 지점으로 설정
+            long currentPosition = segments[0].from; // 시작 위치
+            
+            for (int idx = 1; idx < n; idx++) {
+                long nextPosition = currentPosition + mid;
                 
-                for (int idx = 1; idx < n; idx++) {
-                    long nextPosition = currentPosition + mid;
-                    if (nextPosition < segments[idx].from) {
-//                        System.out.println("\n" + nextPosition + " < " + segments[idx].from);
-                        cannotBuild = true;
-                        isUpper = true;
-                        break;
-                    }
-                    else if (nextPosition > segments[idx].to) {
-//                        System.out.println("\n" + nextPosition + " > " + segments[idx].to);
-                        cannotBuild = true;
-                        isUpper = false;
-                        break;
-                    }
-//                    System.out.print(nextPosition + " ");
-                    currentPosition = nextPosition;
+                if (segments[idx].to < nextPosition) {
+                    cannotBuild = true;
+                    break;
                 }
                 
-                if (cannotBuild) {
-//                    System.out.println();
-                    continue;
+                if (nextPosition < segments[idx].from) {
+                    currentPosition = segments[idx].from;
                 }
                 else {
-                    break;
+                    currentPosition = nextPosition;
                 }
             }
             
             if (cannotBuild) {
-                if (isUpper) {
-//                    System.out.println("need upper");
-                    low = mid + 1;
-                }
-                else {
-//                    System.out.println("need lower");
-                    high = mid - 1;
-                }
+                high = mid - 1;
             }
             else {
-//                System.out.println("can build with " + mid);
                 low = mid + 1;
                 max = Math.max(max, mid);
             }
