@@ -1,21 +1,6 @@
 import java.io.*;
 import java.util.*;
 
-class Person implements Comparable<Person> {
-    int index;
-    long time;
-    
-    public Person(int index, long time) {
-        this.index = index;
-        this.time = time;
-    }
-    
-    @Override
-    public int compareTo(Person other) {
-        return this.time > other.time ? 1 : -1;
-    }
-}
-
 public class Main {
 
     public static void main(String[] args) throws Exception {
@@ -37,52 +22,34 @@ public class Main {
         
         while (min <= max) {
             int mid = (min + max) / 2; // 중앙값
-//            System.out.printf("check %d\n", mid);
+            PriorityQueue<Integer> lapse = new PriorityQueue<>(); // 끝나는 시간
             
-            long time = 0;
-            int nextPersonIndex = 0;
-            boolean cannot = false;
-            TreeSet<Person> onStage = new TreeSet<>();
-            
+            // 맨 처음 올라가있는 사람
             for (int idx = 0; idx < mid; idx++) {
-//                System.out.println("person on stage | index: " + nextPersonIndex + ", time: " + (time + times[nextPersonIndex]));
-                onStage.add(new Person(idx, times[idx]));
-                nextPersonIndex++;
+                lapse.add(times[idx]);
             }
             
-            while (!onStage.isEmpty()) {
-                Person nextPerson = onStage.pollFirst();
-//                System.out.println("current time: " + time);
+            // 시간 경과에 따라 올라가는 사람
+            for(int idx = mid; idx < N; idx++) {
+                int currTime = lapse.poll();
                 
-                if (time < nextPerson.time) {
-//                    System.out.println("time lapse: " + (nextPerson.time - time));
-                    long diff = nextPerson.time - time;
-                    time += diff;
-                }
-                
-//                System.out.println("person out stage | index: " + nextPerson.index);
-                
-                if (time > T) {
-//                    System.out.println("time out: " + time);
-                    cannot = true;
-                    break;
-                }
-                
-                if (nextPersonIndex < N) {
-//                    System.out.println("person on stage | index: " + nextPersonIndex + ", time: " + (time + times[nextPersonIndex]));
-                    onStage.add(new Person(nextPersonIndex, time + times[nextPersonIndex]));
-                    nextPersonIndex++;
-                }
+                lapse.add(currTime + times[idx]);
+            }
+
+            int endTime = 0;
+            
+            // 마지막 사람의 시간 계산
+            while(!lapse.isEmpty()) {
+                endTime = Math.max(endTime, lapse.poll());
             }
             
-            if (cannot) {
-                min = mid + 1;
-            }
-            else {
+            if (endTime <= T) {
                 answer = Math.min(answer, mid);
                 max = mid - 1;
             }
-//            System.out.println();
+            else {
+                min = mid + 1;
+            }
         }
         
         System.out.println(answer);
