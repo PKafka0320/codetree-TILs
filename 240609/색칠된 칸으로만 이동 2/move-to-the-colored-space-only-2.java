@@ -16,9 +16,9 @@ class Point {
 }
 
 public class Main {
-    static int[][] grid; // [i][j]: i행 j열의 숫자
-    static boolean[][] visited; // [i][j]: i행 j열의 탐색 여부
-    static ArrayList<Point> points; // 색칠된 칸의 좌표
+    static int[][] grid; // [i][j]: i행 j열 칸의 숫자
+    static int[][] colored; // [i][j]: i행 j열 칸의 색칠 여부
+    static boolean[][] visited; // [i][j]: i행 j열 칸의 탐색 여부
     static int M, N; // 격자의 가로, 세로 길이
     static int[] dr = new int[] {0, 0, 1, -1}; // [i]: i번째 방향일때 row 가중치
     static int[] dc = new int[] {1, -1, 0, 0}; // [i]: i번째 방향일때 column 가중치
@@ -29,40 +29,42 @@ public class Main {
         StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
         M = Integer.parseInt(tokenizer.nextToken());
         N = Integer.parseInt(tokenizer.nextToken());
+        grid = new int[M][N];
+        colored = new int[M][N];
+        visited = new boolean[M][N];
+        
+        int low = 0; // D 값의 범위 시작
+        int high = 0; // D 값의 범위 끝
+        int answer = 1_000_000_000; // D의 최솟값
+        int startRow = -1; // 탐색 시작 row
+        int startCol = -1; // 탐색 시작 column
         
         // 격자 생성
-        grid = new int[M][N];
-        visited = new boolean[M][N];
         for (int row = 0; row < M; row++) {
             tokenizer = new StringTokenizer(reader.readLine());
             for (int col = 0; col < N; col++) {
                 grid[row][col] = Integer.parseInt(tokenizer.nextToken());
+                high = Math.max(high, grid[row][col]);
             }
         }
-        
-        points = new ArrayList<>();
         
         for (int row = 0; row < M; row++) {
             tokenizer = new StringTokenizer(reader.readLine());
             for (int col = 0; col < N; col++) {
-                if (Integer.parseInt(tokenizer.nextToken()) == 0) {
-                    continue;
+                colored[row][col] = Integer.parseInt(tokenizer.nextToken());
+                
+                if (colored[row][col] == 1) {
+                    startRow = row;
+                    startCol = col;
                 }
-                points.add(new Point(row, col));
             }
         }
-//        System.out.println("points: " + points);
-        
-        int low = 0; // D 값의 범위 시작
-        int high = 1_000_000_000; // D 값의 범위 끝
-        int answer = high; // D의 최솟값
         
         while (low <= high) {
             int mid = (low + high) / 2; // 중앙값
-//            System.out.println("mid: " + mid);
             
             // 중앙값을 d로 했을때 가능한지 확인
-            if (isPossible(mid)) {
+            if (isPossible(startRow, startCol, mid)) {
                 answer = Math.min(answer, mid);
                 high = mid - 1;
             }
@@ -74,37 +76,32 @@ public class Main {
         System.out.println(answer);
     }
     
-    // 시작 위치와 끝 위치를 설정하면서 bfs 시도
-    public static boolean isPossible(int d) {
-        for (int fromIdx = 0; fromIdx < points.size() - 1; fromIdx++) {
-            for (int toIdx = fromIdx + 1;  toIdx < points.size(); toIdx++) {
-//                System.out.print("check: " + points.get(fromIdx) + " -> " + points.get(toIdx));
-                resetVisited();
-                
-                bfs(points.get(fromIdx), d);
-                
-                Point endPoint = points.get(toIdx);
-                if (!visited[endPoint.row][endPoint.col]) {
-//                    System.out.println("result: cannot move\n");
-                    return false;
-                }
+    // 탐색 시작 위치에서 bfs 시도
+    public static boolean isPossible(int startRow, int startCol, int d) {
+        resetVisited();
+        
+        bfs(startRow, startCol, d);
+        
+        // 모든 색칠된 칸으로 이동할 수 있는지 확인
+        for(int i = 0; i < M; i++) {
+            for(int j = 0; j < N; j++) {
+                if(colored[i][j] > 0 && !visited[i][j]) return false;
             }
         }
         
-//        System.out.println("result: can move\n");
         return true;
     }
     
     // bfs 탐색
-    public static void bfs(Point startPoint, int d) {
+    public static void bfs(int startRow, int startCol, int d) {
         Queue<Point> queue = new LinkedList<>();
-        queue.add(startPoint);
+        queue.add(new Point(startRow, startCol));
+        visited[startRow][startCol] = true;
         
         while (!queue.isEmpty()) {
             Point point = queue.poll();
             int r = point.row;
             int c = point.col;
-            visited[r][c] = true;
             
             for (int dir = 0; dir < 4; dir++) {
                 int nr = r + dr[dir];
