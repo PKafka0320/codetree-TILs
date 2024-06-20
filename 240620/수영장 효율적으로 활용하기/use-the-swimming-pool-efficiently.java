@@ -43,6 +43,9 @@ public class Main {
         int time = 0; // 현재 레인의 이용시간 합
         
         for (int idx = 0; idx < n; idx++) {
+            if (times[idx] > t) {
+                return false;
+            }
             
             if (time + times[idx] > t) {
                 count++;
