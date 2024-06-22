@@ -18,14 +18,12 @@ public class Main {
         int ans = -1000;
         int sum = 0;
         for (int idx = 0; idx < n; idx++) {
-            int number = numbers[idx];
-            if (number >= 0) {
-                sum += number;
+            sum += numbers[idx];
+            
+            ans = Math.max(ans, sum);
+            if (sum < 0) {
                 ans = Math.max(ans, sum);
-            }
-            else {
                 sum = 0;
-                ans = Math.max(ans, number);
             }
         }
         
