@@ -47,7 +47,7 @@ public class Main {
         int currentIdx = n - 1; // 현재 확인중인 보석의 인덱스
         double answer = 0; // 얻을 수 있는 최대 가치
         
-        while (m > 0) {
+        while (m > 0 && currentIdx >= 0) {
             if (m >= jewels[currentIdx].weight) {
                 answer += jewels[currentIdx].cost;
             }
