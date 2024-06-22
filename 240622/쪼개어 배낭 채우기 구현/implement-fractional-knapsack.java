@@ -11,8 +11,8 @@ class Jewel implements Comparable<Jewel> {
 
     @Override
     public int compareTo(Jewel other) {
-        double current = this.cost / this.weight;
-        double cmp = other.cost / other.weight;
+        double current = (double) this.cost / this.weight;
+        double cmp = (double) other.cost / other.weight;
         
         if (current > cmp) {
             return 1;
