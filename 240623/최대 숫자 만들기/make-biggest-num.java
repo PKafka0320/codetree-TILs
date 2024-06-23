@@ -17,17 +17,9 @@ public class Main {
         Arrays.sort(numbers, new Comparator<Integer>() {
             @Override
             public int compare(Integer a, Integer b) {
-                String sa = a.toString();
-                String sb = b.toString();
-                
-                String ab = sa + sb;
-                String ba = sb + sa;
-                
-                long lab = Long.parseLong(ab);
-                long lba = Long.parseLong(ba);
-                
-                if (lab < lba) return 1;
-                else return -1;
+                String s1 = Integer.toString(a) + Integer.toString(b);
+                String s2 = Integer.toString(b) + Integer.toString(a);
+                return s2.compareTo(s1);
             }
         });
 
