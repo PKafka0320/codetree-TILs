@@ -8,31 +8,34 @@ public class Main {
 
         int n = Integer.parseInt(reader.readLine()); // 카드의 개수
         
-        int[] b = new int[n]; // [i]: b의 i번째 카드
-        TreeSet<Integer> a = new TreeSet<>();
+        int[] aCards = new int[n]; // [i]: a의 i번째 카드
+        int[] bCards = new int[n]; // [i]: b의 i번째 카드
+        HashSet<Integer> bSet = new HashSet<>(); // b의 카드 집합
         
-        for (int number = 1; number <= 2 * n; number++) {
-            a.add(number);
-        }
-        
+        // b카드 입력
         for (int idx = 0; idx < n; idx++) {
-            b[idx] = Integer.parseInt(reader.readLine());
-            a.remove(b[idx]);
+            bCards[idx] = Integer.parseInt(reader.readLine());
+            bSet.add(bCards[idx]);
         }
         
-        Arrays.sort(b);
-
+        // a카드 생성
+        for (int aIdx = 0, number = 1; number <= 2 * n; number++) {
+            if (bSet.contains(number)) continue;
+            aCards[aIdx++] = number; 
+        }
+        
+        // 카드 정렬
+        Arrays.sort(aCards);
+        Arrays.sort(bCards);
+        
+        // a의 카드를 작은 숫자부터 보며
+        // b카드의 앞에서부터 이길 수 있는 순간에 둘을 매칭하는게 최선임을 이용
         int answer = 0;
         
-        for (int idx = 0; idx < n; idx++) {
-            Integer ceiling = a.ceiling(b[idx]);
-            
-            if (ceiling == null) {
-                a.pollFirst();
-            }
-            else {
-                a.remove(ceiling);
+        for (int aIdx = 0, bIdx = 0; aIdx < n; aIdx++) {
+            if (bIdx < n && aCards[aIdx] > bCards[bIdx]) {
                 answer++;
+                bIdx++;
             }
         }
         
