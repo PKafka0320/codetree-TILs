@@ -11,7 +11,7 @@ class Pair implements Comparable<Pair> {
 
     @Override
     public int compareTo(Pair other) {
-        if (this.a != other.a) return this.a - other.a;
+        if (this.b == other.b) return this.a - other.a;
         return this.b - other.b;
     }
 }
@@ -25,11 +25,11 @@ public class Main {
         int c = Integer.parseInt(st.nextToken());
         int n = Integer.parseInt(st.nextToken());
 
-        int[] red = new int[c]; // [i]: i번째 빨간돌의 T의 값
-        Pair[] black = new Pair[n];  // [i]: i번째 검은돌의 A, B의 값
+        TreeSet<Integer> redS = new TreeSet<>(); // 빨간돌
+        ArrayList<Pair> blackStones = new ArrayList<>(); // 검은돌
 
         for (int idx = 0; idx < c; idx++) {
-            red[idx] = Integer.parseInt(br.readLine());
+            redS.add(Integer.parseInt(br.readLine()));
         }
 
         for (int idx = 0; idx < n; idx++) {
@@ -37,32 +37,22 @@ public class Main {
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
 
-            black[idx] = new Pair(a, b);
+            blackStones.add(new Pair(a, b));
         }
 
-        Arrays.sort(red);
-        Arrays.sort(black);
+        Collections.sort(blackStones);
 
-        int redIdx = 0; // 현재 확인중인 빨간돌의 포인터
-        int blackIdx = 0; // 현재 확인중인 검은돌의 포인터
         int count = 0; // 짝지어지는 빨간돌과 검정돌의 쌍 개수
+        for (int idx = 0; idx < n; idx++) {
+            int a = blackStones.get(idx).a;
+            int b = blackStones.get(idx).b;
 
-        // A, T, B의 값을 비교하면서 포인터 이동
-        while (redIdx < c && blackIdx < n) {
-            int T = red[redIdx];
-            int A = black[blackIdx].a;
-            int B = black[blackIdx].b;
+            if (redS.ceiling(a) == null) continue;
 
-            if (A <= T && T <= B) {
+            int t = redS.ceiling(a);
+            if (t <= b) {
                 count++;
-                redIdx++;
-                blackIdx++;
-            }
-            else if (T < A) {
-                redIdx++;
-            }
-            else if (B < T) {
-                blackIdx++;
+                redS.remove(t);
             }
         }
 
