@@ -11,6 +11,7 @@ public class Main {
 
         n = Integer.parseInt(br.readLine()); // 격자의 크기
         grid = new int[n][n]; // [i][j]: i행 j열의 숫자
+        int count = 0; // 반전 횟수
         
         for (int row = 0; row < n; row++) {
             st = new StringTokenizer(br.readLine());
@@ -25,14 +26,17 @@ public class Main {
             }
         }
 
-        for (int row = 0; row < n; row++) {
-            System.out.println(Arrays.toString(grid[row]));
+        for (int col = 0; col < n; col++) {
+            if (grid[n - 1][col] == 1) continue;
+            System.out.println(-1);
+            return;
         }
+        System.out.println(count);
     }
 
     public static void reverse(int row, int col) {
         int[] dr = {0, 0, 0, 1, -1};
-        int[] dc = {0, 1, -1, 0, 0,};
+        int[] dc = {0, 1, -1, 0, 0};
 
         for (int dir = 0; dir < 5; dir++) {
             int nr = row + dr[dir];
