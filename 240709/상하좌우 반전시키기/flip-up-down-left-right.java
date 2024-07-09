@@ -20,6 +20,7 @@ public class Main {
             }
         }
 
+        // 해당 위치의 위쪽에 0이 있을 경우에만 반전
         for (int row = 1; row < n; row++) {
             for (int col = 0; col < n; col++) {
                 if (grid[row - 1][col] == 1) continue;
@@ -28,6 +29,7 @@ public class Main {
             }
         }
 
+        // 맨 밑에 0이 있을 경우 불가능하다고 판단
         for (int col = 0; col < n; col++) {
             if (grid[n - 1][col] == 1) continue;
             System.out.println(-1);
