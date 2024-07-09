@@ -22,7 +22,9 @@ public class Main {
 
         for (int row = 1; row < n; row++) {
             for (int col = 0; col < n; col++) {
-                if (grid[row - 1][col] == 0) reverse(row, col);
+                if (grid[row - 1][col] == 1) continue;
+                count++;
+                reverse(row, col);
             }
         }
 
