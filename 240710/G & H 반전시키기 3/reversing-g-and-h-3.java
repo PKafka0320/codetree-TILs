@@ -31,10 +31,6 @@ public class Main {
 			}
 		}
 		
-		if (isCounting) {
-			count++;
-		}
-		
 		System.out.println(count);
 	}
 }
