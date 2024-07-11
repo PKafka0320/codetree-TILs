@@ -1,16 +1,6 @@
 import java.io.*;
 import java.util.*;
 
-class Edge {
-	int startNode, endNode, weight;
-	
-	public Edge(int startNode, int endNode, int weight) {
-		this.startNode = startNode;
-		this.endNode = endNode;
-		this.weight = weight;
-	}
-}
-
 public class Main {
 	
 	public static void main(String[] args) throws Exception {
@@ -23,16 +13,14 @@ public class Main {
 		int[][] graph = new int[n + 1][n + 1]; // [i][j]: i번 노드 -> j번 노드의 가중치
 		boolean[] visited = new boolean[n + 1]; // [i]: i번 노드의 탐색 여부
 		int[] dist = new int[n + 1]; // [i]: i번 노드까지의 최단 거리
-		Edge[] edges = new Edge[n + 1]; // [i]: i번째 간선 정보
 		
-		// 그래프, 간선 정보 생성
+		// 그래프 정보 생성
 		for (int idx = 0; idx < m; idx++) {
 			tokenizer = new StringTokenizer(reader.readLine());
 			int startNode = Integer.parseInt(tokenizer.nextToken()); // 시작 노드
 			int endNode = Integer.parseInt(tokenizer.nextToken()); // 끝 노드
 			int weight = Integer.parseInt(tokenizer.nextToken()); // 가중치
 			
-			edges[idx] = new Edge(startNode, endNode, weight);
 			graph[startNode][endNode] = weight;
 		}
 		
