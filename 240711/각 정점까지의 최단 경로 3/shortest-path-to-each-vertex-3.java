@@ -38,7 +38,7 @@ public class Main {
 		
 		// 1번 노드에서 각 노드까지의 최단거리 초기화
 		for (int node = 1; node <= n; node++) {
-			dist[node] = 10 * n;
+			dist[node] = 10 * (n + 1);
 		}
 		dist[1] = 0;
 		
@@ -68,7 +68,7 @@ public class Main {
 		
 		StringBuilder answer = new StringBuilder();
 		for (int node = 2; node <= n; node++) {
-			if (!visited[node]) {
+			if (dist[node] == 10 * (n + 1)) {
 				answer.append("-1\n");
 			}
 			else {
