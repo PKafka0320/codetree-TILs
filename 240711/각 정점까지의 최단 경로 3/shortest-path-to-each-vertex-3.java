@@ -67,7 +67,8 @@ public class Main {
 		}
 		
 		StringBuilder answer = new StringBuilder();
-		for (int node = 2; node <= n; node++) {
+		for (int node = 1; node <= n; node++) {
+			if (node == 1) continue;
 			if (dist[node] == 10 * (n + 1)) {
 				answer.append("-1\n");
 			}
