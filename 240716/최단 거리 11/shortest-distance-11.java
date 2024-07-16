@@ -11,14 +11,20 @@ class Edge implements Comparable<Edge>{
 	
 	@Override
 	public int compareTo(Edge other) {
-		if(this.distance != other.distance) return this.distance - other.distance;
+//		if(this.distance != other.distance) return this.distance - other.distance;
 		return this.destination - other.destination;
+	}
+	
+	@Override
+	public String toString() {
+		return "node:" + destination + "-" + distance;
 	}
 }
 
 public class Main {
 
 	public static void main(String[] args) throws Exception {
+		System.setIn(new FileInputStream("src/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 		
@@ -62,9 +68,9 @@ public class Main {
 		
 		PriorityQueue<Edge> pQueue = new PriorityQueue<>(); // 다음으로 이동할 최단 경로
 		
-		// 시작 정점 설정
-		pQueue.add(new Edge(startNode, 0));
-		minDistance[startNode] = 0;
+		// 끝 정점 설정
+		pQueue.add(new Edge(endNode, 0));
+		minDistance[endNode] = 0;
 		
 		// 갈 수 있는 경로 중 최단 경로 순으로 선택하면서 갱신
 		while(!pQueue.isEmpty()) {
@@ -91,24 +97,19 @@ public class Main {
 		}
 
 		StringBuilder sb = new StringBuilder();
-		sb.append(minDistance[endNode]).append("\n");
+		sb.append(minDistance[startNode]).append("\n");
 		
-		Stack<Integer> stack = new Stack<>();
-		int node = endNode;
-		while (node != startNode) {
+		sb.append(startNode + 1).append(" ");
+		int node = startNode;
+		while (node != endNode) {
 			for (Edge dest : graph[node]) {
 				if (minDistance[dest.destination] + dest.distance == minDistance[node]) {
-					stack.push(node);
 					node = dest.destination;
+					sb.append(node + 1).append(" ");
 					break;
 				}
 			}
 		}
-		stack.push(startNode);
-		while (!stack.isEmpty()) {
-			sb.append(stack.pop() + 1).append(" ");
-		}
-
         System.out.println(sb);
 	}
 }
