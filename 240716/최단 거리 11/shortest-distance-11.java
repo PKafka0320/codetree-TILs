@@ -44,7 +44,7 @@ public class Main {
 			graph[node2].add(new Edge(node1, distance));
 		}
 		
-		// 번호 순으로 경로를 탐색하기 위해 그래프 정렬
+		// 그래프 정렬
 		for (int idx = 0; idx < n; idx++) {
 			Collections.sort(graph[idx]);
 		}
@@ -95,9 +95,8 @@ public class Main {
 		
 		Stack<Integer> stack = new Stack<>();
 		int node = endNode;
-		while (node != 0) {
+		while (node != startNode) {
 			for (Edge dest : graph[node]) {
-				// 최단 경로가 될 수 있는 가장 작은 번호 탐색
 				if (minDistance[dest.destination] + dest.distance == minDistance[node]) {
 					stack.push(node);
 					node = dest.destination;
