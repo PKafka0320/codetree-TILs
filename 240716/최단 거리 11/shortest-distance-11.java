@@ -104,7 +104,7 @@ public class Main {
 				}
 			}
 		}
-		stack.push(0);
+		stack.push(startNode);
 		while (!stack.isEmpty()) {
 			sb.append(stack.pop() + 1).append(" ");
 		}
