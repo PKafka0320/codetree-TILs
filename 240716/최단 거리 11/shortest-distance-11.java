@@ -11,13 +11,15 @@ class Edge implements Comparable<Edge>{
 	
 	@Override
 	public int compareTo(Edge other) {
-		return this.distance - other.distance;
+		if(this.distance != other.distance) return this.distance - other.distance;
+		return this.destination - other.destination;
 	}
 }
 
 public class Main {
 
 	public static void main(String[] args) throws Exception {
+		System.setIn(new FileInputStream("src/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 		
@@ -43,6 +45,11 @@ public class Main {
 			graph[node2].add(new Edge(node1, distance));
 		}
 		
+		// 번호 순으로 경로를 탐색하기 위해 그래프 정렬
+		for (int idx = 0; idx < n; idx++) {
+			Collections.sort(graph[idx]);
+		}
+		
 		int[] minDistance = new int[n]; // [i]: 시작 위치에서 i번 정점까지의 최단거리
 		int[] pathBefore = new int[n]; // [i]: i번 정점을 최단거리로 갈 때 i번 노드의 이전 정점
 		
@@ -58,7 +65,7 @@ public class Main {
 		
 		// 시작 정점 설정
 		pQueue.add(new Edge(startNode, 0));
-		minDistance[startNode] = 0; 
+		minDistance[startNode] = 0;
 		
 		// 갈 수 있는 경로 중 최단 경로 순으로 선택하면서 갱신
 		while(!pQueue.isEmpty()) {
@@ -76,16 +83,10 @@ public class Main {
 				
 				// 최단 경로 갱신이 가능한 경우에만 갱신
 				if (minDistance[nextDestination] == Integer.MAX_VALUE ||
-						minDistance[nextDestination] >= minDistance[currentDestination] + nextDistance) {
-					if (minDistance[nextDestination] > minDistance[currentDestination] + nextDistance) {
-						minDistance[nextDestination] = minDistance[currentDestination] + nextDistance;
-						pathBefore[nextDestination] = currentDestination;
-						pQueue.add(new Edge(nextDestination, minDistance[nextDestination]));
-					}
-					else if (minDistance[nextDestination] == minDistance[currentDestination] + nextDistance &&
-							pathBefore[nextDestination] < currentDestination) {
-						pathBefore[nextDestination] = currentDestination;
-					}
+						minDistance[nextDestination] > minDistance[currentDestination] + nextDistance) {
+					minDistance[nextDestination] = minDistance[currentDestination] + nextDistance;
+					pathBefore[nextDestination] = currentDestination;
+					pQueue.add(new Edge(nextDestination, minDistance[nextDestination]));
 				}
 			}
 		}
@@ -95,10 +96,17 @@ public class Main {
 		
 		Stack<Integer> stack = new Stack<>();
 		int node = endNode;
-		while (node != -1) {
-			stack.push(node);
-			node = pathBefore[node];
+		while (node != 0) {
+			for (Edge dest : graph[node]) {
+				// 최단 경로가 될 수 있는 가장 작은 번호 탐색
+				if (minDistance[dest.destination] + dest.distance == minDistance[node]) {
+					stack.push(node);
+					node = dest.destination;
+					break;
+				}
+			}
 		}
+		stack.push(0);
 		while (!stack.isEmpty()) {
 			sb.append(stack.pop() + 1).append(" ");
 		}
