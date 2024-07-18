@@ -4,9 +4,10 @@ import java.util.*;
 // 그래프 데이터 클래스
 // 데이터: 도착 지점, 버스번호, 비용
 class Path {
-	int destination, busId, fare;
+	int destination, busId;
+	long fare;
 	
-	public Path(int destination, int busId, int fare) {
+	public Path(int destination, int busId, long fare) {
 		this.destination = destination;
 		this.busId = busId;
 		this.fare = fare;
@@ -21,9 +22,10 @@ class Path {
 // 최소 비용으로 이동할 수 있는 다음 위치
 // 데이터: 다음 위치, 버스번호, 다음 위치로 이동할 때의 비용
 class Route implements Comparable<Route> {
-	int destination, busId, fare, time;
+	int destination, busId, time;
+	long fare;
 	
-	public Route(int destination, int busId, int fare, int time) {
+	public Route(int destination, int busId, long fare, int time) {
 		this.destination = destination;
 		this.busId = busId;
 		this.fare = fare;
@@ -32,7 +34,9 @@ class Route implements Comparable<Route> {
 	
 	@Override
 	public int compareTo(Route o) {
-		return this.fare - o.fare;
+		if (this.fare > o.fare) return 1;
+		else if (this.fare == o.fare) return 0;
+		else return -1;
 	}
 	
 	@Override
@@ -83,13 +87,13 @@ public class Main {
     	}
 
     	// 도착 지점에서 각 지점으로 갈 수 있는 최소 비용 배열 생성 및 초기화
-    	int[] minFares = new int[maxStationIdx + 1];
-    	Arrays.fill(minFares, Integer.MAX_VALUE);
+    	long[] minFares = new long[maxStationIdx + 1];
+    	Arrays.fill(minFares, -1);
     	minFares[endStation] = 0;
     	
     	// 도착 지점에서 각 지점으로 갈 수 있는 최단 비용에 따른 시간 배열 생성 및 초기화
     	int[] times = new int[maxStationIdx + 1];
-    	Arrays.fill(times, Integer.MAX_VALUE);
+    	Arrays.fill(times, -1);
     	times[endStation] = 0;
     	
     	// 현재 타고 있는 버스와 비교하면서 다음 위치로의 최소 비용 및 버스 번호 갱신
@@ -100,7 +104,7 @@ public class Main {
     		Route currentRoute = pq.poll();
     		int currentStation = currentRoute.destination;
     		int currentBusId = currentRoute.busId;
-    		int currentFare = currentRoute.fare;
+    		long currentFare = currentRoute.fare;
     		int currentTime = currentRoute.time;
     		
     		if (currentFare != minFares[currentStation]) continue;
@@ -108,9 +112,9 @@ public class Main {
     		for (Path path : graph[currentStation]) {
     			int nextStation = path.destination;
     			int nextBusId = path.busId;
-    			int nextFare = path.fare;
+    			long nextFare = path.fare;
     			
-    			if (minFares[nextStation] == Integer.MAX_VALUE) {
+    			if (minFares[nextStation] == -1) {
     				if (currentBusId == nextBusId) {
     					minFares[nextStation] = currentFare;
     				} else {
