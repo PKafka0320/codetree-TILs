@@ -79,7 +79,7 @@ public class Main {
 				int nextB = currentB + nextL;
 				int nextA = Math.min(currentA, nextC);
 				double nextDistance = nextB + (double) x / nextA;
-				if (minDistance[nextNode] == -1 || minDistance[nextNode] > nextDistance) {
+				if (minDistance[nextNode] == -1 || minDistance[nextNode] >= nextDistance) {
 					minDistance[nextNode] = nextDistance;
 					pq.add(new Route(nextNode, nextB, nextA, x));
 				}
