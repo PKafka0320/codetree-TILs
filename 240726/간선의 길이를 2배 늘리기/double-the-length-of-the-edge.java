@@ -96,8 +96,8 @@ public class Main {
     		
     		graph[x].remove(tempPath1);
     		graph[y].remove(tempPath2);
-    		graph[x].remove(originPath1);
-    		graph[y].remove(originPath2);
+    		graph[x].add(originPath1);
+    		graph[y].add(originPath2);
 		}
     	
     	System.out.println(maxDiff);
