@@ -13,37 +13,31 @@ class Path {
 class Route implements Comparable<Route> {
 	int node, distance, prev;
 	
-	public Route(int node, int distance, int prev) {
+	public Route(int node, int distance) {
 		this.node = node; 
 		this.distance = distance;
-		this.prev = prev;
 	}
 	
 	@Override
 	public int compareTo(Route o) {
-		if (this.distance == o.distance) return this.prev - o.prev;
 		return this.distance - o.distance;
 	}
 }
 
 public class Main {
-	static int n, m;
-	static ArrayList<Path>[] graph;
-	static int[] distance;
 	
     public static void main(String[] args) throws Exception {
     	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     	StringTokenizer st;
     	
     	st = new StringTokenizer(br.readLine());
-    	n = Integer.parseInt(st.nextToken());
-    	m = Integer.parseInt(st.nextToken());
+    	int n = Integer.parseInt(st.nextToken());
+    	int m = Integer.parseInt(st.nextToken());
     	
-    	distance = new int[n];
-    	int[] beforeNodeA = new int[n];
+    	int[] minDistance = new int[n];
     	
     	// 그래프 생성
-    	graph = new ArrayList[n];
+    	List<Path>[] graph = new ArrayList[n];
     	for (int i = 0; i < n; i++) {
     		graph[i] = new ArrayList<>();
     	}
@@ -58,66 +52,82 @@ public class Main {
 			graph[node2].add(new Path(node1, distance));
 		}
 
-    	dijkstra(beforeNodeA);
-    	dijkstraB(beforeNodeA);
+    	dijkstra(graph, minDistance, n - 1);
     	
-    	System.out.println(distance[n - 1]);
-    }
-    
-    public static void dijkstra(int[] beforeNode) {
-    	Arrays.fill(distance, -1);
+    	int[] beforeNode = new int[n];
     	Arrays.fill(beforeNode, -1);
     	
+    	int currentNode = n - 1;
+    	while (currentNode != 0) {
+    		for (Path path : graph[currentNode]) {
+    			int nextNode = path.node;
+    			int nextDistance = path.distance;
+    			
+    			if (minDistance[currentNode] + nextDistance == minDistance[nextNode]) {
+    				beforeNode[currentNode] = nextNode;
+    				currentNode = nextNode;
+    				break;
+    			}
+    		}
+    	}
+    	
+    	int[] minDistanceB = new int[n];
+
+    	dijkstraCustom(graph, minDistanceB, 0, beforeNode);
+    	
+    	System.out.println(minDistanceB[n - 1]);
+    }
+    
+    public static void dijkstra(List<Path>[] graph, int[] minDistance, int startNode) {
+    	Arrays.fill(minDistance, -1);
+    	
     	PriorityQueue<Route> pq = new PriorityQueue<>();
-    	pq.add(new Route(0, 0, -1));
-    	distance[0] = 0;
-    	beforeNode[0] = 0;
+    	pq.add(new Route(startNode, 0));
+    	minDistance[startNode] = 0;
     	
     	while (!pq.isEmpty()) {
     		Route currentRoute = pq.poll();
     		int currentNode = currentRoute.node;
     		int currentDistance = currentRoute.distance;
     		
-    		if (distance[currentNode] != currentDistance) continue;
+    		if (minDistance[currentNode] != currentDistance) continue;
     		
     		for (Path path : graph[currentNode]) {
     			int nextNode = path.node;
     			int nextDistance = path.distance;
     			int sumDistance = currentDistance + nextDistance;
     			
-    			if (distance[nextNode] == -1 || distance[nextNode] > sumDistance) {
-    				distance[nextNode] = sumDistance;
-    				beforeNode[nextNode] = currentNode;
-    				pq.add(new Route(nextNode, sumDistance, currentNode));
+    			if (minDistance[nextNode] == -1 || minDistance[nextNode] > sumDistance) {
+    				minDistance[nextNode] = sumDistance;
+    				pq.add(new Route(nextNode, sumDistance));
     			}
     		}
     	}
     }
     
-    public static void dijkstraB(int[] beforeNode) {
-    	Arrays.fill(distance, -1);
+    public static void dijkstraCustom(List<Path>[] graph, int[] minDistance, int startNode, int[] check) {
+    	Arrays.fill(minDistance, -1);
     	
     	PriorityQueue<Route> pq = new PriorityQueue<>();
-    	pq.add(new Route(0, 0, -1));
-    	distance[0] = 0;
+    	pq.add(new Route(startNode, 0));
+    	minDistance[startNode] = 0;
     	
     	while (!pq.isEmpty()) {
     		Route currentRoute = pq.poll();
     		int currentNode = currentRoute.node;
     		int currentDistance = currentRoute.distance;
     		
-    		if (distance[currentNode] != currentDistance) continue;
+    		if (minDistance[currentNode] != currentDistance) continue;
     		
-    		for (Path path : graph[currentNode]) {
+    		for (Path path : graph[currentNode]) {    			
     			int nextNode = path.node;
     			int nextDistance = path.distance;
     			int sumDistance = currentDistance + nextDistance;
     			
-    			if (beforeNode[nextNode] == currentNode) continue;
-    			
-    			if (distance[nextNode] == -1 || distance[nextNode] > sumDistance) {
-    				distance[nextNode] = sumDistance;
-    				pq.add(new Route(nextNode, sumDistance, currentNode));
+    			if (check[nextNode] == currentNode) continue;
+    			if (minDistance[nextNode] == -1 || minDistance[nextNode] > sumDistance) {
+    				minDistance[nextNode] = sumDistance;
+    				pq.add(new Route(nextNode, sumDistance));
     			}
     		}
     	}
