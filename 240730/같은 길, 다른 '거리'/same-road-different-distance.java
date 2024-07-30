@@ -65,9 +65,6 @@ public class Main {
     	dijkstra(graphA, routesA, n - 1, n);
     	dijkstra(graphB, routesB, n - 1, n);
     	
-    	System.out.println(Arrays.toString(routesA));
-    	System.out.println(Arrays.toString(routesB));
-    	
         // A, B 경로를 dfs로 확인
     	minCount = n;
     	dfs(0, n - 1, 0);
