@@ -32,9 +32,7 @@ public class Main {
         for (int k = 0; k < n; k++) {
             for (int from = 0; from < n; from++) {
                 for (int to = 0; to < n; to++) {
-                    if (dist[from][to] > dist[from][k] + dist[k][to]) {
-                        dist[from][to] = dist[from][k] + dist[k][to];
-                    }
+                    dist[from][to] = Math.min(dist[from][to], dist[from][k] + dist[k][to]);
                 }
             }
         }
@@ -48,7 +46,7 @@ public class Main {
             
             int distance = (int)1e9;
             // 모든 빨간 점에 대해 이동 가능 여부 확인
-            for(int stopover = 1; stopover <= p; stopover++) {
+            for(int stopover = 0; stopover < p; stopover++) {
                 distance = Math.min(distance, dist[from][stopover] + dist[stopover][to]);
             }
 
