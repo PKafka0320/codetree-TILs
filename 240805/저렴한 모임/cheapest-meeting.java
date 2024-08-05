@@ -45,6 +45,9 @@ public class Main {
         for (int i = 0; i < n; i++) {
             result = Math.min(result, dist[v1][i] + dist[v2][i] + dist[i][e]);
         }
+        if (result >= (int) 1e9) {
+            result = -1;
+        }
         System.out.println(result);
     }
 
