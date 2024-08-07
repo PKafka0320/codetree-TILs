@@ -12,7 +12,7 @@ public class Main {
         
         int[] parents = new int[n];
         
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < n - 1; i++) {
             st = new StringTokenizer(br.readLine());
             int parent = Integer.parseInt(st.nextToken()) - 1;
             int child = Integer.parseInt(st.nextToken()) - 1;
