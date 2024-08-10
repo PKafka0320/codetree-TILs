@@ -7,7 +7,6 @@ public class Main {
 	static List<Integer> root;
 
 	public static void main(String[] args) throws Exception {
-		System.setIn(new FileInputStream("res/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 		
@@ -44,8 +43,8 @@ public class Main {
 	public static void dfs(int nodeIdx) {
 		if (nodeIdx == deleteIdx) return; // 삭제한 노드라면 종료
 		
-        // 자식 노드가 없다면 cnt + 1;
-		if (tree[nodeIdx].isEmpty()) {
+        // 자식 노드가 없거나 유일한 자식 노드가 삭제한 노드라면 cnt + 1;
+		if (tree[nodeIdx].isEmpty() || (tree[nodeIdx].size() == 1 && tree[nodeIdx].get(0) == deleteIdx)) {
 			cnt++;
 			return;
 		}
