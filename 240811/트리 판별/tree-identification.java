@@ -40,7 +40,6 @@ public class Main {
 		if (rootCnt == 1) {
 			System.out.println(1);
 		} else {
-			System.out.println(rootCnt);
 			System.out.println(0);
 		}
 	}
