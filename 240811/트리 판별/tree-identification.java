@@ -11,6 +11,7 @@ public class Main {
 		int n = Integer.parseInt(br.readLine()); // 노드의 개수
 		List<Integer>[] reverseTree = new ArrayList[10_000]; // [i]: i번 노드의 부모 노드 리스트
 		Set<Integer> nodeSet = new HashSet<>(); // 언급된 노드 번호
+		Set<Integer> visited = new HashSet<>(); // 방문한 노드 번호
 		
 		for (int idx = 0; idx < N; idx++) {
 			reverseTree[idx] = new ArrayList<>();
@@ -32,6 +33,13 @@ public class Main {
 				System.out.println(0);
 				return;
 			}
+			
+			visited.add(nodeIdx);
+			if (reverseTree[nodeIdx].size() == 1 && visited.contains(reverseTree[nodeIdx].get(0))) {
+				System.out.println(0);
+				return;
+			}
+			
 			if (reverseTree[nodeIdx].size() == 0 && nodeSet.contains(nodeIdx)) {
 				rootCnt++;
 			}
