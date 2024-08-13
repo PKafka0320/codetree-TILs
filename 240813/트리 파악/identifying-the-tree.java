@@ -42,6 +42,7 @@ public class Main {
         for (int child : tree[node]) {
             if (visited[child]) continue;
             sum++;
+            visited[child] = true;
             dfs(child);
         }
     }
