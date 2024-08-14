@@ -84,3 +84,56 @@ public class Main {
     }
     
 }
+
+// import java.util.Scanner;
+
+// public class Main {
+//     public static final int MAX_N = 1000;
+    
+//     // 변수 선언:
+//     public static int n, k;
+//     public static int[] a = new int[MAX_N + 1];
+//     public static int[] par = new int[MAX_N + 1];
+//     public static int findingNode;
+//     public static int ans;
+
+//     public static void main(String[] args) {
+//         Scanner sc = new Scanner(System.in);
+//         // 입력:
+//         n = sc.nextInt();
+//         k = sc.nextInt();
+//         // n개의 수열 원소를 입력받습니다.
+//         for(int i = 1; i <= n; i++) {
+//             a[i] = sc.nextInt();
+//             if(a[i] == k) 
+//                 findingNode = i;
+//         }
+
+//         // n개의 원소를 바탕으로 트리를 만들어줍니다.
+//         int parNode = 0;
+//         for(int i = 2; i <= n; i++) {
+//             // 두 원소가 연속하지 않는다면
+//             // 부모 노드 index를 1 증가시킵니다.
+//             if(a[i] > a[i - 1] + 1)
+//                 parNode++;
+            
+//             // i번 노드의 부모 노드는 parNode(index)가 됩니다.
+//             par[i] = parNode;
+//         }
+
+//         // 부모 노드는 다르면서 
+//         // 부모의 부모 노드가 같은 경우를 찾습니다.
+//         // 해당 노드들은 사촌이 됩니다.
+//         for(int i = 1; i <= n; i++) {
+//             // 부모의 부모 노드가 존재하지 않는 경우에는 패스합니다.
+//             if(par[par[i]] == 0 || par[par[findingNode]] == 0)
+//                 continue;
+
+//             if(par[i] != par[findingNode] && par[par[i]] == par[par[findingNode]])
+//                 ans++;
+//         }
+
+//         // 사촌 노드의 개수를 출력합니다.
+//         System.out.print(ans);
+//     }
+// }
