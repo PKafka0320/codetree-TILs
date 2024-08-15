@@ -4,7 +4,7 @@ import java.util.*;
 public class Main {
 	static List<Integer>[] map;
 	static boolean visited[];
-	static int answer, tmpans;
+	static int startNode, answer;
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -26,16 +26,21 @@ public class Main {
         	map[node2].add(node1);
         }
         
-        answer = Integer.MAX_VALUE;
-        for (int i = 0; i < n; i++) {
-        	tmpans = 0;
-        	visited = new boolean[n];
-        	visited[i] = true;
-        	dfs(i, 0);
-        	answer = Math.min(answer, tmpans);
-        }
+        // DFS를 통해 가장 먼 노드 탐색
+        startNode = 0;
+        answer = 0;
+        visited = new boolean[n];
+        visited[startNode] = true;
+        dfs(startNode, 0);
         
-        System.out.println(answer);
+        // 가장 먼 노드에서 시작해 다시 한번 DFS를 돌려 트리의 가장 긴 거리 계산
+        answer = 0;
+        visited = new boolean[n];
+        visited[startNode] = true;
+        dfs(startNode, 0);
+        
+        // 거리의 중간값 출력
+        System.out.println((answer + 1) / 2);
 	}
 	
 	public static void dfs(int node, int dist) {
@@ -49,8 +54,9 @@ public class Main {
 		}
 		
 		if (isLeaf) {
-			if (tmpans < dist) {
-				tmpans = dist;
+			if (answer < dist) {
+				answer = dist;
+				startNode = node;
 			}
 		}
 	}
