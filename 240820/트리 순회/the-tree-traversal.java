@@ -1,68 +1,97 @@
 import java.io.*;
 import java.util.*;
 
+class Node {
+	char value;
+	Node leftChild, rightChild;
+	
+	public Node(char value) {
+		this.value = value;
+	}
+}
+
 public class Main {
 	static int n;
-	static char[] tree;
-	static Map<Character, Integer> nti;
+	static List<Node> tree;
+	static Map<Character, Integer> vti;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 		
 		n = Integer.parseInt(br.readLine());
-		tree = new char[1000];
-		nti = new HashMap<>(); // node to index
+		tree = new ArrayList<>();
+		vti = new HashMap<>(); // node to index
 		
-		nti.put('A', 1);
-		tree[1] = 'A';
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
 			char parent = st.nextToken().charAt(0);
 			char leftChild = st.nextToken().charAt(0);
 			char rightChild = st.nextToken().charAt(0);
 			
-			int index = nti.get(parent);
-			int leftIndex = index * 2;
-			int rightIndex = index * 2 + 1;
+			int index = vti.getOrDefault(parent, tree.size());
+			if (index == tree.size()) {
+				vti.put(parent, index);
+				tree.add(new Node(parent));
+			}
 			
-			nti.put(leftChild, leftIndex);
-			tree[leftIndex] = leftChild;
-		
-			nti.put(rightChild, rightIndex);
-			tree[rightIndex] = rightChild;
+			Node parentNode = tree.get(index);
+			
+			if (leftChild != '.') {
+				int leftIndex = vti.getOrDefault(leftChild, tree.size());
+				if (leftIndex == tree.size()) {
+					vti.put(leftChild, leftIndex);
+					tree.add(new Node(leftChild));
+				}
+				
+				Node leftNode = tree.get(leftIndex);
+				parentNode.leftChild = leftNode;
+			}
+			if (rightChild != '.') {
+				int rightIndex = vti.getOrDefault(rightChild, tree.size());
+				if (rightIndex == tree.size()) {
+					vti.put(rightChild, rightIndex);
+					tree.add(new Node(rightChild));
+				}
+				
+				Node rightNode = tree.get(rightIndex);
+				parentNode.rightChild = rightNode;
+			}
 		}
 		
-		preorder(1);
+		preorder('A');
 		System.out.println();
-		inorder(1);
+		inorder('A');
 		System.out.println();
-		postorder(1);
+		postorder('A');
 		System.out.println();
 	}
 	
-	public static void preorder(int index) {
-		if (tree[index] == '.') return;
+	public static void preorder(char value) {
+		int index = vti.get(value);
+		Node node = tree.get(index);
 		
-		System.out.print(tree[index]);
-		preorder(index * 2);
-		preorder(index * 2 + 1);
+		System.out.print(value);
+		if (node.leftChild != null) preorder(node.leftChild.value);
+		if (node.rightChild != null) preorder(node.rightChild.value);
 	}
 	
-	public static void inorder(int index) {
-		if (tree[index] == '.') return;
+	public static void inorder(char value) {
+		int index = vti.get(value);
+		Node node = tree.get(index);
 		
-		inorder(index * 2);
-		System.out.print(tree[index]);
-		inorder(index * 2 + 1);
+		if (node.leftChild != null) inorder(node.leftChild.value);
+		System.out.print(value);
+		if (node.rightChild != null) inorder(node.rightChild.value);
 	}
 	
-	public static void postorder(int index) {
-		if (tree[index] == '.') return;
+	public static void postorder(char value) {
+		int index = vti.get(value);
+		Node node = tree.get(index);
 		
-		postorder(index * 2);
-		postorder(index * 2 + 1);
-		System.out.print(tree[index]);
+		if (node.leftChild != null) postorder(node.leftChild.value);
+		if (node.rightChild != null) postorder(node.rightChild.value);
+		System.out.print(value);
 	}
 
 }
