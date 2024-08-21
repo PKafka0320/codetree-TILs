@@ -14,10 +14,6 @@ public class Main {
 		int q = Integer.parseInt(st.nextToken());
 		
 		tree = new int[n + 1];
-		for (int i = 0; i < n; i++) {
-			tree[i] = 1;
-		}
-		
 		currentNode = 1;
 		StringBuilder answer = new StringBuilder();
 		for (int i = 0; i < q; i++) {
@@ -34,20 +30,19 @@ public class Main {
 		System.out.println(answer);
 	}
 	
-    // 타겟 노드부터 루트 노드로 이동하면서 이동했던 노드의 번호 갱신
 	public static int tryMove(int target) {
 		int blockBy = -1;
 		int tmp = target;
 		while (tmp > 1) {
-			if (tree[tmp / 2] == 0) {
-				blockBy = tmp / 2;
+			if (tree[tmp] == 1) {
+				blockBy = tmp;
 			}
 			
 			tmp /= 2;
 		}
 		
 		if (blockBy == -1) {
-			tree[target] = 0;
+			tree[target] = 1;
 		}
 		
 		return blockBy;
