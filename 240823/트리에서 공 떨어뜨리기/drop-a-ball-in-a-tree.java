@@ -6,13 +6,12 @@ public class Main {
 	static int lastNode;
 	
     public static void main(String[] args) throws Exception {
-    	System.setIn(new FileInputStream("res/input.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
      
         int n = Integer.parseInt(br.readLine());
-        int[] leftNode = new int[n];
-        int[] rightNode = new int[n];
+        leftNode = new int[n];
+        rightNode = new int[n];
         
         for (int i = 0; i < n; i++) {
         	st = new StringTokenizer(br.readLine());
@@ -37,14 +36,11 @@ public class Main {
     	int left = leftNode[node];
     	int right = rightNode[node];
     	
-    	int leftCount = ballCount[left];
-    	int rightCount = ballCount[right];
-    	
-    	if (left == -1 && right == -1) {
+    	if (left == -2 && right == -2) {
     		lastNode = node;
     		return;
     	}
-    	else if (left == -1 || right == -1) {
+    	else if (left == -2 || right == -2) {
     		if (left == -1) {
     			ballCount[right]++;
     			dropBall(right);
@@ -53,6 +49,8 @@ public class Main {
     			dropBall(left);
     		}
     	} else {
+    		int leftCount = ballCount[left];
+    		int rightCount = ballCount[right];
     		if (leftCount <= rightCount) {
     			ballCount[left]++;
     			dropBall(left);
