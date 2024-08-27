@@ -44,7 +44,7 @@ public class Main {
 		dp[index][1] = 1;
 		for (int nextIndex : tree[index]) {
 			dp[index][0] += dp[nextIndex][1];
-			dp[index][1] += dp[nextIndex][0];
+			dp[index][1] += Math.min(dp[nextIndex][0], dp[nextIndex][1]);
 		}
 	}
 	
