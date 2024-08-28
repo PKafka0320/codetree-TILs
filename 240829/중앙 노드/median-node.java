@@ -43,9 +43,10 @@ public class Main {
 		
 		int max = 0;
 		int min = Integer.MAX_VALUE;
-		for (int child : edges[central]) {
-			max = Math.max(max, dp[child]);
-			min = Math.min(min, dp[child]);
+		for (int ad : edges[central]) {
+			if (ad == parents[central]) continue;
+			max = Math.max(max, dp[ad]);
+			min = Math.min(min, dp[ad]);
 		}
 		System.out.println(max - min);
 	}
