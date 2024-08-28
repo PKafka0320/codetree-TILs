@@ -39,7 +39,7 @@ public class Main {
 		for (int i = 0; i < q; i++) {
 			int root = Integer.parseInt(br.readLine()) - 1;
 			result = 0;
-			visited = new boolean[n];
+			Arrays.fill(visited, false);
 			visited[root] = true;
 			dfs(root);
 			answer.append(result).append("\n");
