@@ -3,9 +3,8 @@ import java.util.*;
 
 public class Main {
 	static List<Integer>[] edges;
-	static int[] parent;
+	static int[] parent, dp;
 	static boolean[] visited;
-	static int result;
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -18,6 +17,7 @@ public class Main {
 		
 		parent = new int[n];
 		visited = new boolean[n];
+		dp = new int[n];
 		edges = new ArrayList[n];
 		for (int i = 0; i < n; i++) {
 			edges[i] = new ArrayList<>();
@@ -33,35 +33,28 @@ public class Main {
 		}
 		
 		visited[r] = true;
-		makeParent(r);
+		dfs(r);
 		
 		StringBuilder answer = new StringBuilder();
 		for (int i = 0; i < q; i++) {
 			int root = Integer.parseInt(br.readLine()) - 1;
-			result = 0;
-			Arrays.fill(visited, false);
-			visited[root] = true;
-			dfs(root);
-			answer.append(result).append("\n");
+			answer.append(dp[root]).append("\n");
 		}
 		System.out.println(answer);
 	}
 	
 	public static void dfs(int node) {
-		result++;
 		for (int next : edges[node]) {
 			if (visited[next] || parent[node] == next) continue;
 			visited[next] = true;
+			parent[next] = node;
 			dfs(next);
 		}
-	}
-	
-	public static void makeParent(int node) {
+		
+		dp[node] = 1;
 		for (int next : edges[node]) {
-			if (visited[next]) continue;
-			visited[next] = true;
-			parent[next] = node;
-			makeParent(next);
+			if (parent[node] == next) continue;
+			dp[node] += dp[next];
 		}
 	}
 }
