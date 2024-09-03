@@ -52,12 +52,11 @@ public class Main {
 			dfs(ad);
 		}
 		
-		// 정점을 선택하지 않은 경우 다른 인접한 정점들은 선택하지 않아야 하고,
-		// 정점을 선택하는 경우 다른 인접한 정점들은 선택되어야 한다.
+		// 정점을 선택하는 경우 다른 인접한 정점들은 무조건 선택되지 않아야 한다.
 		dp[node][1] = numbers[node]; // 정점을 선택한 경우의 숫자를 초기화
 		for (int ad : edges[node]) {
 			if (parents[node] == ad) continue;
-			dp[node][0] += dp[ad][1];
+			dp[node][0] += Math.max(dp[ad][1], dp[ad][0]);
 			dp[node][1] += dp[ad][0];
 		}
 	}
