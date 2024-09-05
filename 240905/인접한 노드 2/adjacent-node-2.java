@@ -50,14 +50,23 @@ public class Main{
         }
     }
     
-    public static void dfsSelect(int node, int print) {
-    	if (print == 1) {
+    public static void dfsSelect(int node, int tp) {
+    	if (tp == 1) {
     		select.add(node);
     	}
     	
     	for (int ad : edges[node]) {
     		if (parents[node] == ad) continue;
-    		dfsSelect (ad, 1- print);
+    		
+    		if (tp == 1) {
+    			dfsSelect(ad, 0);
+    		} else {
+    			if (dp[ad][0] > dp[ad][1]) {
+    				dfsSelect(ad, 0);
+    			} else {
+    				dfsSelect(ad, 1);
+    			}
+    		}
     	}
     }
     
