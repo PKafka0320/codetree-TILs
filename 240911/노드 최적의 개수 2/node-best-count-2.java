@@ -54,8 +54,8 @@ public class Main {
 		
 		for (int ad : edges[node]) {
 			if (parents[node] == ad) continue;
-			dp[node][0] += isSelected[ad] ? dp[ad][0] : dp[ad][1];
-			dp[node][1] += dp[ad][0];
+			dp[node][0] += dp[ad][1];
+			dp[node][1] += Math.min(dp[ad][0], dp[ad][1]);
 		}
 	}
 }
