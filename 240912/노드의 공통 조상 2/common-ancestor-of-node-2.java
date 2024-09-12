@@ -30,6 +30,7 @@ public class Main {
 		depth[1] = 1;
 		maxDepth = 1;
 		dfs(1);
+		maxDepth = (int) (Math.log(maxDepth) / Math.log(2));
 		
 		for (int depth = 1; depth <= maxDepth; depth++) {
 			for (int node = 1; node <= N; node++) {
