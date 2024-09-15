@@ -96,6 +96,12 @@ public class Main {
 				node2 = parent[node2][0];
 				node3 = parent[node3][0];
 			}
+			
+			if (parent[node2][0] != parent[node3][0]) {
+				node1 = parent[node1][0];
+				node2 = parent[node2][0];
+				node3 = parent[node3][0];
+			}
 		}
 		
 		if (node1 == node2 && node1 == node3) {
