@@ -44,23 +44,7 @@ public class Main {
 			int node2 = Integer.parseInt(st.nextToken());
 			int node3 = Integer.parseInt(st.nextToken());
 			
-			int topNode = -1;
-			int lowerNode1 = -1;
-			int lowerNode2 = -1;
-			if (depth[node1] <= depth[node2] && depth[node1] <= depth[node3]) {
-				topNode = node1;
-				lowerNode1 = node2;
-				lowerNode2 = node3;
-			} else if (depth[node2] <= depth[node1] && depth[node2] <= depth[node3]) {
-				topNode = node2;
-				lowerNode1 = node1;
-				lowerNode2 = node3;
-			} else if (depth[node3] <= depth[node1] && depth[node3] <= depth[node2]) {
-				topNode = node3;
-				lowerNode1 = node1;
-				lowerNode2 = node2;
-			}
-			System.out.println(lca(topNode, lowerNode1, lowerNode2));
+			System.out.println(lca(lca(node1, node2), node3));
 		}
 	}
 	
@@ -73,32 +57,25 @@ public class Main {
 		}
 	}
 	
-	public static int lca(int node1, int node2, int node3) {
+	public static int lca(int node1, int node2) {
+		if (depth[node1] < depth[node2]) {
+			return lca(node2, node1);
+		}
+		
 		for (int d = D; d >= 0; d--) {
-			if (depth[node2] - depth[node1] >= (1 << d)) {
-				node2 = parent[node2][d];
-			}
-			
-			if (depth[node3] - depth[node1] >= (1 << d)) {
-				node3 = parent[node3][d];
+			if (depth[node1] - depth[node2] >= (1 << d)) {
+				node1 = parent[node1][d];
 			}
 		}
 		
 		for (int d = D; d >= 0; d--) {
 			if (parent[node1][d] != parent[node2][d]) {
-				node1 = parent[node1][0];
-				node2 = parent[node2][0];
-				node3 = parent[node3][0];
-			}
-			
-			if (parent[node1][d] != parent[node3][d]) {
-				node1 = parent[node1][0];
-				node2 = parent[node2][0];
-				node3 = parent[node3][0];
+				node1 = parent[node1][d];
+				node2 = parent[node2][d];
 			}
 		}
 		
-		if (node1 == node2 && node1 == node3) {
+		if (node1 == node2) {
 			return node1;
 		}
 		
