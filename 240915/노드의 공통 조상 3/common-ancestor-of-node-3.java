@@ -34,13 +34,14 @@ public class Main {
 		visited[1] = true;
 		dfs(1);
 		
-		for (int node = 1; node <= N; node++) {
-			for (int d = 1; d <= D; d++) {
+		for (int d = 1; d <= D; d++) {
+			for (int node = 1; node <= N; node++) {
 				parent[node][d] = parent[parent[node][d-1]][d-1];
 			}
 		}
 		
 		Q = Integer.parseInt(br.readLine());
+		StringBuilder answer = new StringBuilder();
 		while (Q-- > 0) {
 			st = new StringTokenizer(br.readLine());
 			
@@ -48,8 +49,9 @@ public class Main {
 			int node2 = Integer.parseInt(st.nextToken());
 			int node3 = Integer.parseInt(st.nextToken());
 			
-			System.out.println(lca(lca(node1, node2), node3));
+			answer.append(lca(lca(node1, node2), node3)).append("\n");
 		}
+		System.out.println(answer);
 	}
 	
 	public static void dfs(int node) {
