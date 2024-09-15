@@ -3,6 +3,7 @@ import java.util.*;
 
 public class Main {
 	static int N, Q, D, parent[][], depth[];
+	static boolean visited[];
 	static List<Integer>[] edges;
 	
 	public static void main(String[] args) throws Exception {
@@ -14,6 +15,7 @@ public class Main {
 		D = (int) (Math.log(N) / Math.log(2)) + 1;
 		parent = new int[N+1][D+1];
 		depth = new int[N+1];
+		visited = new boolean[N+1];
 		
 		for (int i = 1; i <= N; i++) {
 			edges[i] = new ArrayList<>();
@@ -29,6 +31,7 @@ public class Main {
 		}
 		
 		depth[1] = 1;
+		visited[1] = true;
 		dfs(1);
 		
 		for (int node = 1; node <= N; node++) {
@@ -51,7 +54,8 @@ public class Main {
 	
 	public static void dfs(int node) {
 		for (int ad : edges[node]) {
-			if (parent[node][0] == ad) continue;
+			if (visited[ad]) continue;
+			visited[ad] = true;
 			parent[ad][0] = node;
 			depth[ad] = depth[node] + 1;
 			dfs(ad);
@@ -59,12 +63,18 @@ public class Main {
 	}
 	
 	public static int lca(int node1, int node2) {
+		if (depth[node1] < depth[node2]) {
+			return lca(node2, node1);
+		}
+		
 		for (int d = D; d >= 0; d--) {
 			if (depth[node1] - depth[node2] >= (1 << d)) {
 				node1 = parent[node1][d];
-			} else if (depth[node2] - depth[node1] >= (1 << d)) {
-				node2 = parent[node2][d];
 			}
+		}
+		
+		if (node1 == node2) {
+			return node1;
 		}
 		
 		for (int d = D; d >= 0; d--) {
@@ -74,7 +84,6 @@ public class Main {
 			}
 		}
 		
-		if (node1 == node2) return node1;
 		return parent[node1][0];
 	}
 
