@@ -11,7 +11,7 @@ public class Main {
 		
 		N = Integer.parseInt(br.readLine());
 		edges = new ArrayList[N+1];
-		D = (int) (Math.log(N) / Math.log(2));
+		D = (int) (Math.log(N) / Math.log(2)) + 1;
 		parent = new int[N+1][D+1];
 		depth = new int[N+1];
 		
