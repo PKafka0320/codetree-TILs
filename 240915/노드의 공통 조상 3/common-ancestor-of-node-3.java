@@ -68,15 +68,15 @@ public class Main {
 			}
 		}
 		
+		if (node1 == node2) {
+			return node1;
+		}
+		
 		for (int d = D; d >= 0; d--) {
 			if (parent[node1][d] != parent[node2][d]) {
 				node1 = parent[node1][d];
 				node2 = parent[node2][d];
 			}
-		}
-		
-		if (node1 == node2) {
-			return node1;
 		}
 		
 		return parent[node1][0];
