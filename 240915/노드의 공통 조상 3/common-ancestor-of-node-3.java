@@ -28,6 +28,7 @@ public class Main {
 			edges[node2].add(node1);
 		}
 		
+		depth[1] = 1;
 		dfs(1);
 		
 		for (int node = 1; node <= N; node++) {
