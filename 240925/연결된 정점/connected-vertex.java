@@ -44,8 +44,8 @@ public class Main {
 		
 		if (root1 == root2) return;
 		
-		counts[root1] += counts[root2];
 		roots[root2] = root1;
+		counts[root1] += counts[root2];
 	}
 	
 	public static int find(int node) {
