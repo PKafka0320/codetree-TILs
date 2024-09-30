@@ -2,21 +2,21 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static class Edge implements Comparable<Edge> {
-		int node1, node2, distance;
+	static class Pair implements Comparable<Pair> {
+		int index, minNumber;
 
-		public Edge(int node1, int node2, int distance) {
-			this.node1 = node1;
-			this.node2 = node2;
-			this.distance = distance;
+		public Pair(int index, int minNumber) {
+			this.index = index;
+			this.minNumber = minNumber;
 		}
 		
-		public int compareTo(Edge e) {
-			return this.distance - e.distance;
+		@Override
+		public int compareTo(Pair o) {
+			return this.minNumber - o.minNumber;
 		}
 	}
-	static int N, M, K, A, B, roots[], numbers[];
-	static List<Edge> edges;
+	static int N, M, K, A, B, roots[], minNumbers[];
+	static boolean isRoots[];
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,16 +28,17 @@ public class Main {
 		K = Integer.parseInt(st.nextToken());
 		
 		roots = new int[N+1];
-		numbers = new int[N+1];
-		edges = new ArrayList<>();
+		minNumbers = new int[N+1];
+		isRoots = new boolean[N+1];
 		
 		for (int i = 1; i <= N; i++) {
 			roots[i] = i;
+			isRoots[i] = true;
 		}
 		
 		st = new StringTokenizer(br.readLine());
 		for (int i = 1; i <= N; i++) {
-			numbers[i] = Integer.parseInt(st.nextToken());
+			minNumbers[i] = Integer.parseInt(st.nextToken());
 		}
 
 		for (int i = 1; i <= M; i++) {
@@ -48,24 +49,18 @@ public class Main {
 			union(node1, node2);
 		}
 		
-		for (int i = 1; i <= N-1; i++) {
-			for (int j = i+1; j <= N; j++) {
-				if (find(i) == find(j)) continue;
-				edges.add(new Edge(i, j, numbers[i] + numbers[j]));
+		List<Pair> roots = new ArrayList<>();
+		for (int i = 1; i <= N; i++) {
+			if (isRoots[i]) {
+				roots.add(new Pair(i, minNumbers[i]));
 			}
 		}
-		
-		Collections.sort(edges);
+		Collections.sort(roots);
 		
 		long result = 0;
-		for (Edge edge : edges) {
-			int node1 = edge.node1;
-			int node2 = edge.node2;
-			int distance = edge.distance;
-			
-			if (union(node1, node2)) {
-				result += distance;
-			}
+		int minNumber = roots.get(0).minNumber;
+		for (int i = 1; i < roots.size(); i++) {
+			result += minNumber + roots.get(i).minNumber;
 		}
 		
 		System.out.println(result > K ? "NO" : result);
@@ -77,6 +72,8 @@ public class Main {
 		
 		if (root1 == root2) return false;
 		
+		isRoots[root1] = false;
+		minNumbers[root2] = Math.min(minNumbers[root1], minNumbers[root2]);
 		roots[root1] = root2;
 		return true;
 	}
