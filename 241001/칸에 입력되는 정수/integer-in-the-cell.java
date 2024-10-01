@@ -31,7 +31,7 @@ public class Main {
 			insertPositions[nextMaxPosition] = updateMaxPosition;
 		}
 
-        System.out.println(answer)
+        System.out.println(answer);
 	}
 	
 	public static int find(int node) {
