@@ -17,18 +17,21 @@ public class Main {
 			insertPositions[i] = i;
 		}
 		
+        int answer = M;
 		for (int i = 1; i <= M; i++) {
 			int num = Integer.parseInt(br.readLine());
 			
 			int nextMaxPosition = find(num);
 			if (nextMaxPosition == 0) {
-				System.out.println(i - 1);
-				return;
+                answer = i - 1;
+				break;
 			}
 			
 			int updateMaxPosition = find(nextMaxPosition - 1);
 			insertPositions[nextMaxPosition] = updateMaxPosition;
 		}
+
+        System.out.println(answer)
 	}
 	
 	public static int find(int node) {
