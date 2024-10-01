@@ -84,23 +84,23 @@ public class Main {
 
 }
 
-import java.util.Scanner;
-import java.util.Arrays;
+// import java.util.Scanner;
+// import java.util.Arrays;
 
-class Tuple implements Comparable<Tuple> {
-    int x, y, cost;
+// class Tuple implements Comparable<Tuple> {
+//     int x, y, cost;
 
-    public Tuple(int x, int y, int cost) {
-        this.x = x;
-        this.y = y;
-        this.cost = cost;
-    }
+//     public Tuple(int x, int y, int cost) {
+//         this.x = x;
+//         this.y = y;
+//         this.cost = cost;
+//     }
 
-    @Override
-    public int compareTo(Tuple t) {
-        return this.cost - t.cost; // 비용 기준 오름차순 정렬을 진행합니다.
-    }
-}
+//     @Override
+//     public int compareTo(Tuple t) {
+//         return this.cost - t.cost; // 비용 기준 오름차순 정렬을 진행합니다.
+//     }
+// }
 
 // public class Main {
 //     public static final int MAX_M = 100000;
