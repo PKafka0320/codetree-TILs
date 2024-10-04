@@ -25,8 +25,8 @@ public class Main {
 			int node2 = Integer.parseInt(st.nextToken());
 			int dist = Integer.parseInt(st.nextToken());
 			
-			graph[node1][node2] = graph[node1][node2] == 0 ? dist : Math.min(node1, node2);
-			graph[node2][node1] = graph[node2][node1] == 0 ? dist : Math.min(node2, node1);
+			graph[node1][node2] = graph[node1][node2] == 0 ? dist : Math.min(graph[node1][node2], dist);
+			graph[node2][node1] = graph[node2][node1] == 0 ? dist : Math.min(graph[node2][node1], dist);
 		}
 		
 		dists[1] = 0;
