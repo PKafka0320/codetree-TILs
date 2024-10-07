@@ -48,12 +48,23 @@ public class Main {
 		}
 		
 		distances[1] = 0;
-		visited[1] = false;
+		visited[1] = true;
 		int answer = 0;
 		int k = 0;
 		
 		Queue<Path> queue = new PriorityQueue<>();
-		queue.add(new Path(1, 0));
+		
+		for (Path ad : edges[1]) {
+			int adNode = ad.node;
+			int adDist = ad.distance;
+			
+			if (visited[adNode]) continue;
+			if (distances[adNode] > adDist) {
+				distances[adNode] = adDist;
+				queue.add(new Path(adNode, adDist));
+			}
+		}
+		
 		while (!queue.isEmpty()) {
 			Path curPath = queue.poll();
 			int curNode = curPath.node;
@@ -62,9 +73,7 @@ public class Main {
 			if (visited[curNode]) continue;
 			visited[curNode] = true;
 			answer += curDist + k;
-			if (curDist != 0) {
-				k += K;
-			}
+			k += K;
 			
 			for (Path ad : edges[curNode]) {
 				int adNode = ad.node;
