@@ -2,20 +2,15 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static class Work implements Comparable<Work> {
+	static class Work {
 		int node, time;
 
 		public Work(int node, int time) {
 			this.node = node;
 			this.time = time;
 		}
-		
-		@Override
-		public int compareTo(Work o) {
-			return this.time - o.time;
-		}
 	}
-	static int N, times[], indegree[];
+	static int N, times[], indegree[], maxPreTimes[];
 	static List<Integer> edges[];
 	
 	public static void main(String[] args) throws Exception {
@@ -25,6 +20,7 @@ public class Main {
 		N = Integer.parseInt(br.readLine());
 		times = new int[N+1];
 		indegree = new int[N+1];
+		maxPreTimes = new int[N+1];
 		edges = new ArrayList[N+1];
 
 		for (int i = 1; i <= N; i++) {
@@ -43,36 +39,23 @@ public class Main {
 			}
 		}
 		
-		Queue<Work> queue = new PriorityQueue<>();
-		Queue<Work> nextQueue = new PriorityQueue<>();
+		Queue<Integer> queue = new LinkedList<>();
 		for (int i = 1; i <= N; i++) {
-			if (indegree[i] == 0) queue.add(new Work(i, times[i]));
+			if (indegree[i] == 0) queue.add(i);
 		}
 		
 		int answer = 0;
-		while (!queue.isEmpty() || !nextQueue.isEmpty()) {
-			Work curWork = queue.poll();
-			int curNode = curWork.node;
-			int curTime = curWork.time;
-			answer += curTime;
+		while (!queue.isEmpty()) {
+			int curNode = queue.poll();
+			times[curNode] += maxPreTimes[curNode];
+			answer = Math.max(answer, times[curNode]);
 			
-			for (int ad : edges[curNode]) {
-				if (--indegree[ad] == 0) {
-					nextQueue.add(new Work(ad, times[ad]));
+			for (int adNode : edges[curNode]) {
+				maxPreTimes[adNode] = Math.max(maxPreTimes[adNode], times[curNode]);
+				if (--indegree[adNode] == 0) {
+					queue.add(adNode);
 				}
 			}
-			
-			while (!queue.isEmpty()) {
-				Work remainWork = queue.poll();
-				int remainNode = remainWork.node;
-				int remainTime = remainWork.time;
-				
-				nextQueue.add(new Work(remainNode, remainTime - curTime));
-			}
-			
-			Queue<Work> temp = queue;
-			queue = nextQueue;
-			nextQueue = temp;
 		}
 		System.out.println(answer);
 	}
