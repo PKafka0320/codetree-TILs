@@ -38,13 +38,13 @@ public class Main {
 			
 			for (int j = 0; j < preceedCount; j++) {
 				int node = Integer.parseInt(st.nextToken());
-				edges[i].add(node);
-				indegree[node]++;
+				edges[node].add(i);
+				indegree[i]++;
 			}
 		}
 		
-		Queue<Work> queue = new LinkedList<>();
-		Queue<Work> nextQueue = new LinkedList<>();
+		Queue<Work> queue = new PriorityQueue<>();
+		Queue<Work> nextQueue = new PriorityQueue<>();
 		for (int i = 1; i <= N; i++) {
 			if (indegree[i] == 0) queue.add(new Work(i, times[i]));
 		}
