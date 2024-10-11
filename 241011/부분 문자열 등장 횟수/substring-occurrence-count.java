@@ -43,11 +43,11 @@ public class Main {
             }
 
             if(parent.charAt(i) == pattern.charAt(j)) {
-                if(j == patternSize - 1) {
+                j += 1;
+
+                if(j == patternSize) {
                     answer++;
-                    j = table[j];
-                } else {
-                    j += 1;
+                    j = table[j-1];
                 }
             }
         }
