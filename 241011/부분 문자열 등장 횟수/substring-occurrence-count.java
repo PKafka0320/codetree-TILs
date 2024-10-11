@@ -22,8 +22,8 @@ public class Main {
             }
             
             if(str.charAt(j) == str.charAt(i)) {
-                table[i] = j+1;
                 j += 1;
+                table[i] = j;
             }
         }
 
@@ -44,7 +44,6 @@ public class Main {
 
             if(parent.charAt(i) == pattern.charAt(j)) {
                 j += 1;
-
                 if(j == patternSize) {
                     answer++;
                     j = table[j-1];
