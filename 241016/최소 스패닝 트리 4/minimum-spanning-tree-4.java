@@ -62,7 +62,7 @@ public class Main {
 			
 			if (count == N-1) break;
 		}
-		System.out.println(sum);
+		System.out.println(count == N-1 ? sum : -1);
 		
 	}
 	
