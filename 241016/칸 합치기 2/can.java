@@ -21,27 +21,22 @@ public class Main {
 		StringBuilder answer = new StringBuilder();
 		while (M-- > 0) {
 			st = new StringTokenizer(br.readLine());
-			int start = Integer.parseInt(st.nextToken());
-			int end = Integer.parseInt(st.nextToken());
+			int x = Integer.parseInt(st.nextToken());
+			int y = Integer.parseInt(st.nextToken());
 
-			for (int idx = start+1; idx <= end; idx++) {
-				union(start, idx);
+			while (true) {
+				x = find(x);
+				if (x >= y) {
+					break;
+				}
+				
+				root[x] = x + 1;
+				x = x + 1;
+				remains--;
 			}
 			answer.append(remains).append("\n");
 		}
 		System.out.println(answer.toString());
-	}
-	
-	public static void union(int node1, int node2) {
-		int root1 = find(node1);
-		int root2 = find(node2);
-		
-		if (root1 == root2) return;
-		
-		if (root2 == node2) {
-			remains--;
-		}
-		root[root2] = root1;
 	}
 	
 	public static int find(int node) {
