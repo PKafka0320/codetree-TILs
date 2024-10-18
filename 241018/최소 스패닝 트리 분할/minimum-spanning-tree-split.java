@@ -22,6 +22,11 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 		root = new int[N+1];
 		
+		if (N == 2) {
+			System.out.println(0);
+			return;
+		}
+		
 		Queue<Edge> queue = new PriorityQueue<>(new Comparator<Edge>() {
 			@Override
 			public int compare(Edge o1, Edge o2) {
