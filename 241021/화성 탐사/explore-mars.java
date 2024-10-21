@@ -12,24 +12,22 @@ public class Main {
 		}
 	}
 	static class Route implements Comparable<Route> {
-		Position position1, position2;
+		int node1, node2;
 		int distance;
 		
-		public Route(Position position1, Position position2, int distance) {
-			this.position1 = position1;
-			this.position2 = position2;
+		public Route(int node1, int node2, int distance) {
+			this.node1 = node1;
+			this.node2 = node2;
 			this.distance = distance;
 		}
-		
+
 		@Override
 		public int compareTo(Route o) {
 			return this.distance - o.distance;
 		}
 	}
-	static int N, totalCount, count, map[][];
+	static int N, map[][], root[], number[][];
 	static int dr[] = {-1,1,0,0}, dc[] = {0,0,-1,1};
-	static boolean isActivate[][];
-	static Queue<Position> base;
 	static Queue<Route> route;
 	
 	public static void main(String[] args) throws Exception {
@@ -38,82 +36,64 @@ public class Main {
 		
 		N = Integer.parseInt(br.readLine());
 		map = new int[N][N];
-		isActivate = new boolean[N][N];
-		base = new LinkedList<>();
+		number = new int[N][N];
 		route = new PriorityQueue<>();
-		count = 1;
-		totalCount = 0;
-		int answer = 0;
+		int totalCount = 0;
 		
 		for (int r = 0; r < N; r++) {
 			st = new StringTokenizer(br.readLine());
 			for (int c = 0; c < N; c++) {
 				map[r][c] = Integer.parseInt(st.nextToken());
-				if (map[r][c] == 1) {
-					base.add(new Position(r, c, 0));
-					isActivate[r][c] = true;
-					totalCount++;
-				} else if (map[r][c] == 2) {
+				if (map[r][c] == 1 || map[r][c] == 2) {
+					number[r][c] = ++totalCount;
 					totalCount++;
 				}
 			}
 		}
 		
-		while (!base.isEmpty()) {
-			dfs(base.poll());
-			
-			if (route.isEmpty()) break;
-			
-			Route selectRoute = route.poll();
-			Position from = selectRoute.position1;
-			Position to = selectRoute.position2;
-			int dist = selectRoute.distance;
-			
-			if (!isActivate[from.row][from.col]) {
-				isActivate[from.row][from.col] = true;
-				count++;
-				answer += dist;
-				base.add(from);
-			} else if (!isActivate[to.row][to.col]) {
-				isActivate[to.row][to.col] = true;
-				count++;
-				answer += dist;
-				base.add(to);
-			}
-			
-			if (count == totalCount) break;
+		root = new int[totalCount+1];
+		for (int i = 1; i <= totalCount; i++) {
+			root[i] = i;
 		}
 		
-		if (count < totalCount) {
-			while (!route.isEmpty()) {
-				Route selectRoute = route.poll();
-				Position from = selectRoute.position1;
-				Position to = selectRoute.position2;
-				int dist = selectRoute.distance;
-				
-				if (!isActivate[from.row][from.col]) {
-					isActivate[from.row][from.col] = true;
-					count++;
-					answer += dist;
-				} else if (!isActivate[to.row][to.col]) {
-					isActivate[to.row][to.col] = true;
-					count++;
-					answer += dist;
+		for (int r = 0; r < N; r++) {
+			for (int c = 0; c < N; c++) {
+				if (map[r][c] == 1 || map[r][c] == 2) {
+					bfs(r, c);
 				}
-				
-				if (count == totalCount) break;
 			}
 		}
 		
-		System.out.println(count == totalCount ? answer : -1);
+		System.out.println(mst(totalCount));
 	}
 	
-	public static void dfs(Position position) {
+	public static int mst(int totalCount) {
+		int answer = 0;
+		int count = 0;
+		
+		while (!route.isEmpty()) {
+			Route current = route.poll();
+			int dist = current.distance;
+			int node1 = current.node1;
+			int node2 = current.node2;
+			
+			if (union(node1, node2)) {
+				count++;
+				answer += dist;
+			}
+			
+			if (count == totalCount-1) break;
+		}
+		
+		return answer;
+	}
+	
+	public static void bfs(int row, int col) {
 		Queue<Position> queue = new LinkedList<>();
 		boolean visited[][] = new boolean[N][N];
 		
-		visited[position.row][position.col] = true;
-		queue.add(position);
+		visited[row][col] = true;
+		queue.add(new Position(row, col, 0));
 		
 		while (!queue.isEmpty()) {
 			Position current = queue.poll();
@@ -127,17 +107,32 @@ public class Main {
 				
 				if (outOfMap(nr, nc) || cannotMove(nr, nc, visited)) continue;
 				visited[nr][nc] = true;
-				if (map[nr][nc] == 2 && !isActivate[nr][nc]) {
-					route.add(new Route(position, new Position(nr, nc, 0), dist+1));
-				} else {
-					queue.add(new Position(nr, nc, dist+1));
+				queue.add(new Position(nr, nc, dist+1));
+				
+				if (map[nr][nc] == 1 || map[nr][nc] == 2) {
+					route.add(new Route(number[row][col], number[nr][nc], dist+1));
 				}
 			}
 		}
 	}
 	
+	public static boolean union(int node1, int node2) {
+		int root1 = find(node1);
+		int root2 = find(node2);
+		
+		if (root1 == root2) return false;
+		
+		root[root1] = root2;
+		return true;
+	}
+	
+	public static int find(int node) {
+		if (root[node] == node) return node;
+		return root[node] = find(root[node]);
+	}
+	
 	public static boolean cannotMove(int r, int c, boolean[][] visited) {
-		return (visited[r][c] || map[r][c] == -1 || map[r][c] == 1);
+		return (visited[r][c] || map[r][c] == -1);
 	}
 	
 	public static boolean outOfMap(int r, int c) {
