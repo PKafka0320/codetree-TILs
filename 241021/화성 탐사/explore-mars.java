@@ -46,7 +46,6 @@ public class Main {
 				map[r][c] = Integer.parseInt(st.nextToken());
 				if (map[r][c] == 1 || map[r][c] == 2) {
 					number[r][c] = ++totalCount;
-					totalCount++;
 				}
 			}
 		}
@@ -85,7 +84,7 @@ public class Main {
 			if (count == totalCount-1) break;
 		}
 		
-		return answer;
+		return count == totalCount-1 ? answer : -1;
 	}
 	
 	public static void bfs(int row, int col) {
