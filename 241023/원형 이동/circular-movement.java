@@ -71,7 +71,7 @@ public class Main {
 			}
 		}
 		
-		System.out.println(answer <= K ? 1 : -1);
+		System.out.println(answer <= K ? 1 : 0);
 	}
 	
 	public static boolean allChecked() {
