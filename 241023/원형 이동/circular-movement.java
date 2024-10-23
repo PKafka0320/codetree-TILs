@@ -2,9 +2,24 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int N, M, K, cost[][], dist[];
+	static class Edge implements Comparable<Edge> {
+		int node, distance;
+
+		public Edge(int node, int distance) {
+			this.node = node;
+			this.distance = distance;
+		}
+		
+		@Override
+		public int compareTo(Edge o) {
+			return this.distance - o.distance;
+		}
+	}
+	static int N, M, K, dist[];
 	static boolean visited[];
 	static int INF = (int)1e9;
+	static List<Edge> edges[];
+	static List<Integer> remove[];
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -15,28 +30,22 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 		K = Integer.parseInt(st.nextToken());
 		
-		cost = new int[N+1][N+1];
 		dist = new int[N+1];
 		visited = new boolean[N+1];
+		edges = new ArrayList[N+1];
+		remove = new ArrayList[N+1];
 		
 		for (int i = 0; i <= N; i++) {
 			dist[i] = INF;
-			for (int j = 0; j <= N; j++) {
-				cost[i][j] = INF;
-			}
-			cost[i][i] = 0;
+			edges[i] = new ArrayList<>();
+			remove[i] = new ArrayList<>();
 		}
-		
-		for (int i = 1; i < N; i++) {
-			cost[i][(i+1)%(N+1)] = 0;
-			cost[(i+1)%(N+1)][i] = 0;
-		}
-		cost[1][N] = 0;
-		cost[N][1] = 0;
 		
 		st = new StringTokenizer(br.readLine());
 		for (int i = 1; i <= N; i++) {
-			cost[0][i] = cost[i][0] = Integer.parseInt(st.nextToken());
+			int distance = Integer.parseInt(st.nextToken());
+			edges[0].add(new Edge(i, distance));
+			edges[i].add(new Edge(0, distance));
 		}
 		
 		for (int i = 0; i < M; i++) {
@@ -44,30 +53,47 @@ public class Main {
 			int node1 = Integer.parseInt(st.nextToken());
 			int node2 = Integer.parseInt(st.nextToken());
 			
-			cost[node1][node2] = cost[node2][node1] = INF;
+			remove[node1].add(node2);
+			remove[node2].add(node1);
+		}
+		
+		for (int i = 1; i < N; i++) {
+			if (!remove[i].contains((i+1)%(N+1))) {
+				edges[i].add(new Edge((i+1)%(N+1), 0));
+			}
+			if (!remove[(i+1)%(N+1)].contains(i)) {
+				edges[(i+1)%(N+1)].add(new Edge(i, 0));
+			}
+		}
+		if (!remove[1].contains(N)) {
+			edges[1].add(new Edge(N, 0));
+		}
+		if (!remove[N].contains(1)) {
+			edges[N].add(new Edge(1, 0));
 		}
 		
 		dist[1] = 0;
 		int answer = 0;
 		
-		for (int i = 0; i <= N; i++) {
-			int minIndex = -1;
+		Queue<Edge> queue = new PriorityQueue<>();
+		queue.add(new Edge(1, 0));
+		
+		while (!queue.isEmpty()) {
+			Edge current = queue.poll();
 			
-			for (int j = 0; j <= N; j++) {
-				if (visited[j]) continue;
-				
-				if (minIndex == -1 || dist[minIndex] > dist[j]) {
-					minIndex = j;
-				}
-			}
-			
-			visited[minIndex] = true;
-			answer += dist[minIndex];
+			if (visited[current.node]) continue;
+			if (dist[current.node] != current.distance) continue;
+
+			visited[current.node] = true;
+			answer += dist[current.node];
 			
 			if (allChecked()) break;
 			
-			for (int j = 0; j <= N; j++) {
-				dist[j] = Math.min(dist[j], cost[minIndex][j]);
+			for (Edge edge : edges[current.node]) {
+				if (visited[edge.node]) continue;
+				dist[edge.node] = Math.min(dist[edge.node], edge.distance);
+				
+				queue.add(new Edge(edge.node, dist[edge.node]));
 			}
 		}
 		
