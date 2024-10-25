@@ -65,9 +65,10 @@ public class Main {
 			answer.append(its.get(root)).append(" ");
 		}
 		answer.append("\n");
-		for (int i = 0; i < N; i++) {
-			answer.append(its.get(i)).append(" ").append(childs[i].size()).append(" ");
-			for (int child : childs[i]) {
+		for (String key : sti.keySet()) {
+			int idx = sti.get(key);
+			answer.append(key).append(" ").append(childs[idx].size()).append(" ");
+			for (int child : childs[idx]) {
 				answer.append(its.get(child)).append(" ");
 			}
 			answer.append("\n");
