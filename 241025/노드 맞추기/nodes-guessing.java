@@ -12,11 +12,11 @@ public class Main {
 		int[] indegree = new int[N];
 		Map<String, Integer> sti = new TreeMap<>();
 		Map<Integer, String> its = new HashMap<>();
-		List<Integer>[] childs = new ArrayList[N];
+		Queue<String>[] childs = new PriorityQueue[N];
 		
 		for (int i = 0; i < N; i++) {
 			edges[i] = new ArrayList<>();
-			childs[i] = new ArrayList<>();
+			childs[i] = new PriorityQueue<>();
 		}
 		
 		st = new StringTokenizer(br.readLine());
@@ -53,7 +53,7 @@ public class Main {
 			
 			for (int ad : edges[current]) {
 				if (--indegree[ad] == 0) {
-					childs[current].add(ad);
+					childs[current].add(its.get(ad));
 					queue.add(ad);
 				}
 			}
@@ -68,8 +68,8 @@ public class Main {
 		for (String key : sti.keySet()) {
 			int idx = sti.get(key);
 			answer.append(key).append(" ").append(childs[idx].size()).append(" ");
-			for (int child : childs[idx]) {
-				answer.append(its.get(child)).append(" ");
+			while (!childs[idx].isEmpty()) {
+				answer.append(childs[idx].poll()).append(" ");
 			}
 			answer.append("\n");
 		}
