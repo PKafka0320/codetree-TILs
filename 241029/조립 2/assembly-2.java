@@ -11,6 +11,7 @@ public class Main {
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 		int[] indegree = new int[N+1];
+		boolean[] visited = new boolean[N+1];
 		List<Integer>[] edge = new ArrayList[N+1];
 		Queue<Integer> queue = new LinkedList<>();
 		
@@ -36,6 +37,7 @@ public class Main {
 		for (int i = 0; i < L; i++) {
 			int l = Integer.parseInt(st.nextToken());
 			queue.add(l);
+			visited[l] = true;
 		}
 		
 		int count = 0;
@@ -46,7 +48,11 @@ public class Main {
 			parts.add(cur);
 			
 			for (int ad : edge[cur]) {
-				if (--indegree[ad] == 0 && !parts.contains(ad)) queue.add(ad);
+				if (visited[ad]) continue;
+				if (--indegree[ad] == 0) {
+					queue.add(ad);
+					visited[ad] = true;
+				}
 			}
 		}
 		Collections.sort(parts);
@@ -58,5 +64,4 @@ public class Main {
 		}
 		System.out.println(answer.toString());
 	}
-
 }
