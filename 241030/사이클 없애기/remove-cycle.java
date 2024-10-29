@@ -13,7 +13,6 @@ public class Main {
 		int M2 = Integer.parseInt(st.nextToken());
 		
 		int[] indegree = new int[N+1];
-		boolean[] visited = new boolean[N+1];
 		List<Integer>[] edges = new ArrayList[N+1];
 		
 		for (int i = 1; i <= N; i++) {
@@ -33,15 +32,12 @@ public class Main {
 			st = new StringTokenizer(br.readLine());
 			int from = Integer.parseInt(st.nextToken());
 			int to = Integer.parseInt(st.nextToken());
-			
-			edges[from].add(to);
 		}
 		
 		Queue<Integer> queue = new LinkedList<>();
 		for (int i = 1; i <= N; i++) {
 			if (indegree[i] == 0) {
 				queue.add(i);
-				visited[i] = true;
 			}
 		}
 		
@@ -51,9 +47,7 @@ public class Main {
 			count++;
 			
 			for (int ad : edges[cur]) {
-				if (visited[ad]) continue;
-				visited[ad] = true;
-				queue.add(ad);
+				if (--indegree[ad] == 0) queue.add(ad);
 			}
 		}
 		
