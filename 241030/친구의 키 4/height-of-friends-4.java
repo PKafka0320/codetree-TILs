@@ -25,6 +25,7 @@ public class Main {
 			int from = Integer.parseInt(st.nextToken());
 			int to = Integer.parseInt(st.nextToken());
 			
+			if (edges[from].contains(to)) continue;
 			edges[from].add(to);
 			
 			if (cycle(to)) {
