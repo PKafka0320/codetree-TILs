@@ -75,6 +75,11 @@ public class Main {
 					queue.add(next);
 				}
 			}
+			
+			if (queue.size() > 1) {
+				System.out.println("inf");
+				return;
+			}
 		}
 		
 		System.out.println(count == totalWordCount ? answer : -1);
