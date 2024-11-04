@@ -39,7 +39,7 @@ public class Main {
 			}
 		}
 
-		int answer = 0;
+		long answer = 0;
 		for (int i = 0; i < n; i++) {
 			if (i % 2 == 0) {
 				answer += maxHalfLen[i] / 2;
