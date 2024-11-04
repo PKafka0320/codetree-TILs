@@ -45,12 +45,15 @@ public class Main {
 		StringBuilder answer = new StringBuilder();
 		while (Q-- > 0) {
 			st = new StringTokenizer(br.readLine());
-			int left = 2*Integer.parseInt(st.nextToken()) - 1;
-			int right = 2*Integer.parseInt(st.nextToken()) - 1;
+			int leftStr = Integer.parseInt(st.nextToken());
+			int rightStr = Integer.parseInt(st.nextToken());
+			int left = 2*leftStr - 1;
+			int right = 2*rightStr - 1;
 			int mid = (left + right) / 2;
 			
-			answer.append(maxHalfLen[mid] == 0 ? "No\n" : "Yes\n");
+			answer.append((2*maxHalfLen[mid]+1)/2 >= rightStr - leftStr ? "Yes\n" : "No\n");
 		}
 		System.out.println(answer.toString());
+		
 	}
 }
