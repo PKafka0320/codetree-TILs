@@ -20,25 +20,25 @@ public class Main {
 		
 		while (M-- > 0) {
 			st = new StringTokenizer(br.readLine());
-			int from = Integer.parseInt(st.nextToken());
 			int to = Integer.parseInt(st.nextToken());
+			int from = Integer.parseInt(st.nextToken());
 			
 			edge[from].add(to);
 			indegree[to]++;
 		}
 		
-		Queue<Integer> pq = new PriorityQueue<>();
+		Queue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
 		
 		for (int i = 1; i <= N; i++) {
 			if (indegree[i] == 0) pq.add(i);
 		}
 		
 		int[] num = new int[N+1];
-		int currentNum = 1;
+		int currentNum = N;
 		int count = 0;
 		while (!pq.isEmpty()) {
 			int cur = pq.poll();
-			num[cur] = currentNum++;
+			num[cur] = currentNum--;
 			count++;
 			
 			for (int next : edge[cur]) {
