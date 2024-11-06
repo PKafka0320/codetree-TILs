@@ -39,6 +39,10 @@ public class Main {
 		for (int i = 1; i <= tLen - pLen; i++) {
 			tH = (tH * p - (toInt(text.charAt(i-1)) * pPow[pLen]) + toInt(text.charAt(i+pLen -1))) % m;
 			
+			if (tH < 0) {
+				tH += m;
+			}
+			
 			if (pH == tH) {
 				answer = i;
 				break;
