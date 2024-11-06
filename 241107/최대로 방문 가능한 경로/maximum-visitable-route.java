@@ -2,6 +2,20 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+	static class Pair implements Comparable<Pair> {
+		int node, count;
+
+		public Pair(int node, int count) {
+			super();
+			this.node = node;
+			this.count = count;
+		}
+		
+		@Override
+		public int compareTo(Pair o) {
+			return this.node - o.node;
+		}
+	}
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -29,17 +43,19 @@ public class Main {
 			edges[from].add(to);
 		}
 		
-		Queue<Integer> queue = new PriorityQueue<>();
-		queue.add(N);
+		Queue<Pair> queue = new PriorityQueue<>();
+		queue.add(new Pair(N, 1));
 		
 		while (!queue.isEmpty()) {
-			int cur = queue.poll();
+			Pair cur = queue.poll();
 			
-			for (int next : edges[cur]) {
-				if (maxCount[next] == -1 || maxCount[next] < maxCount[cur] + 1) {
-					maxCount[next] = maxCount[cur] + 1;
-					beforeNode[next] = cur;
-					queue.add(next);
+			if (cur.count != maxCount[cur.node]) continue;
+			
+			for (int next : edges[cur.node]) {
+				if (maxCount[next] == -1 || maxCount[next] < maxCount[cur.node] + 1) {
+					maxCount[next] = maxCount[cur.node] + 1;
+					beforeNode[next] = cur.node;
+					queue.add(new Pair(next, maxCount[next]));
 				}
 			}
 		}
