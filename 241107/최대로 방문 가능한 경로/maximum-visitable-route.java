@@ -31,8 +31,12 @@ public class Main {
 			indegree[to]++;
 		}
 		
-		Queue<Integer> queue = new PriorityQueue<>();
-		queue.add(N);
+		Queue<Integer> queue = new LinkedList<>();
+		for (int i = 1; i <= N; i++) {
+			if (indegree[i] == 0) {
+				queue.add(i);
+			}
+		}
 		
 		while (!queue.isEmpty()) {
 			int cur = queue.poll();
@@ -57,10 +61,11 @@ public class Main {
 		StringBuilder answer = new StringBuilder();
 		answer.append(maxCount[1]).append("\n");
 		int current = 1;
-		while (current != -1) {
+		while (current != N) {
 			answer.append(current).append(" ");
 			current = beforeNode[current];
 		}
+		answer.append(N);
 		System.out.println(answer.toString());
 	}
 }
