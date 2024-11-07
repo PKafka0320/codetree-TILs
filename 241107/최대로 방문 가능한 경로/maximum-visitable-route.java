@@ -42,9 +42,13 @@ public class Main {
 			int cur = queue.poll();
 
 			for (int next : edges[cur]) {
-				if (maxCount[cur] != -1 && maxCount[next] < maxCount[cur] + 1) {
-					maxCount[next] = maxCount[cur] + 1;
-					beforeNode[next] = cur;
+				if (maxCount[cur] != -1) {
+					if (maxCount[next] < maxCount[cur] + 1) {
+						maxCount[next] = maxCount[cur] + 1;
+						beforeNode[next] = cur;
+					} else if (maxCount[next] == maxCount[cur] + 1 && beforeNode[next] > cur) {
+						beforeNode[next] = cur;
+					}
 				}
 
 				if (--indegree[next] == 0) {
@@ -52,7 +56,7 @@ public class Main {
 				}
 			}
 		}
-		
+
 		if (maxCount[1] == -1) {
 			System.out.println(-1);
 			return;
