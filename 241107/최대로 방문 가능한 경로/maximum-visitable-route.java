@@ -31,7 +31,7 @@ public class Main {
 			indegree[to]++;
 		}
 		
-		Queue<Integer> queue = new LinkedList<>();
+		Queue<Integer> queue = new PriorityQueue<>();
 		for (int i = 1; i <= N; i++) {
 			if (indegree[i] == 0) {
 				queue.add(i);
