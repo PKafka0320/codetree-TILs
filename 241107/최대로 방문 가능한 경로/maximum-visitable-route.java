@@ -2,20 +2,6 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static class Pair implements Comparable<Pair> {
-		int node, count;
-
-		public Pair(int node, int count) {
-			super();
-			this.node = node;
-			this.count = count;
-		}
-		
-		@Override
-		public int compareTo(Pair o) {
-			return this.node - o.node;
-		}
-	}
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,6 +14,7 @@ public class Main {
 		List<Integer>[] edges = new ArrayList[N+1];
 		int[] maxCount = new int[N+1];
 		int[] beforeNode = new int[N+1];
+		int[] indegree = new int[N+1];
 		
 		for (int i = 0; i <= N; i++) {
 			edges[i] = new ArrayList<>();
@@ -41,21 +28,23 @@ public class Main {
 			int to = Integer.parseInt(st.nextToken());
 			int from = Integer.parseInt(st.nextToken());
 			edges[from].add(to);
+			indegree[to]++;
 		}
 		
-		Queue<Pair> queue = new PriorityQueue<>();
-		queue.add(new Pair(N, 1));
+		Queue<Integer> queue = new PriorityQueue<>();
+		queue.add(N);
 		
 		while (!queue.isEmpty()) {
-			Pair cur = queue.poll();
+			int cur = queue.poll();
 			
-			if (cur.count != maxCount[cur.node]) continue;
-			
-			for (int next : edges[cur.node]) {
-				if (maxCount[next] == -1 || maxCount[next] < maxCount[cur.node] + 1) {
-					maxCount[next] = maxCount[cur.node] + 1;
-					beforeNode[next] = cur.node;
-					queue.add(new Pair(next, maxCount[next]));
+			for (int next : edges[cur]) {
+				if (maxCount[next] < maxCount[cur] + 1) {
+					maxCount[next] = maxCount[cur] + 1;
+					beforeNode[next] = cur;
+				}
+				
+				if (--indegree[next] == 0) {
+					queue.add(next);
 				}
 			}
 		}
