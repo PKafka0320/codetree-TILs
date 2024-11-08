@@ -12,7 +12,7 @@ public class Main {
 		String S = st.nextToken();
 
 		int p = 31, m = (int) 1e9 + 7;
-		int[] pPow = new int[L + 1];
+		long[] pPow = new long[L + 1];
 		pPow[0] = 1;
 		for (int i = 1; i <= L; i++) {
 			pPow[i] = (pPow[i - 1] * p) % m;
