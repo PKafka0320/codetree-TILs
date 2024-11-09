@@ -11,24 +11,7 @@ public class Main {
 			this.num = num;
 		}
 	}
-
-	static class Hash {
-		long value;
-		int len;
-
-		public Hash(long value, int len) {
-			super();
-			this.value = value;
-			this.len = len;
-		}
-
-		@Override
-		public String toString() {
-			return "Hash [value=" + value + ", len=" + len + "]";
-		}
-	}
-
-	static int N, answer, patternLen, MOD, POWER, indegree[];
+	static int N, answer, patternLen, MOD, POWER, memo[];
 	static long patternHash, pPow[];
 	static String pattern;
 	static List<Path> edges[];
@@ -39,9 +22,9 @@ public class Main {
 
 		st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
-		indegree = new int[N + 1];
 		pattern = st.nextToken();
 		edges = new ArrayList[N + 1];
+		memo = new int[N + 1];
 		answer = 0;
 
 		for (int i = 1; i <= N; i++) {
@@ -55,7 +38,6 @@ public class Main {
 			char ch = st.nextToken().charAt(0);
 
 			edges[from].add(new Path(to, toInt(ch)));
-			indegree[to]++;
 		}
 
 		manacher();
@@ -78,40 +60,32 @@ public class Main {
 		for (int i = 0; i < patternLen; i++) {
 			patternHash = (patternHash + toInt(pattern.charAt(i)) * pPow[patternLen - 1 - i]) % MOD;
 		}
-
 //		System.out.println(patternHash);
 
-		Queue<Integer> queue = new LinkedList<>();
-		queue.add(1);
-
-		while (!queue.isEmpty()) {
-			int cur = queue.poll();
-
-			dfs(cur, 0, 0);
-
-			for (Path path : edges[cur]) {
-
-				if (--indegree[path.node] == 0) {
-					queue.add(path.node);
-				}
-			}
-		}
+		dfs(1, 0, 0);
 	}
 
-	private static void dfs(int node, int len, long hash) {
-		for (Path path : edges[node]) {
-			long newHash = (hash * POWER + path.num) % MOD;
-			if (newHash < 0) {
-				newHash += MOD;
+	private static void dfs(int node, int idx, long hash) {
+//		System.out.printf("node %d: %d -> ", node, hash);
+		if (idx == patternLen) {
+			for (int i = 0; i < patternLen; i++) {
+				hash = (hash + memo[i] * pPow[patternLen - 1 - i]) % MOD;
 			}
+		} else if (idx > patternLen) {
+			hash = ((hash * POWER) - (memo[idx - patternLen - 1] * pPow[patternLen]) + memo[idx - 1]) % MOD;
+			if (hash < 0) {
+				hash += MOD;
+			}
+		}
+//		System.out.println(hash);
+		
+		if (hash == patternHash) {
+			answer++;
+		}
 
-			if (len + 1 == patternLen) {
-				if (newHash == patternHash) {
-					answer++;
-				}
-			} else {
-				dfs(path.node, len + 1, newHash);
-			}
+		for (Path path : edges[node]) {
+			memo[idx] = path.num;
+			dfs(path.node, idx+1, hash);
 		}
 	}
 
