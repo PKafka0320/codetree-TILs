@@ -120,6 +120,7 @@ public class Main {
 					answer++;
 				}
 				hashes[cur].remove(i);
+				continue;
 			}
 
 			long hashValue = hash.value;
