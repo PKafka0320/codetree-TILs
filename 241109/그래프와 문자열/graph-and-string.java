@@ -31,7 +31,6 @@ public class Main {
 	static int N, answer, patternLen, MOD, POWER, indegree[];
 	static long patternHash, pPow[];
 	static String pattern;
-	static List<Hash> hashes[];
 	static List<Path> edges[];
 
 	public static void main(String[] args) throws IOException {
@@ -43,12 +42,10 @@ public class Main {
 		indegree = new int[N + 1];
 		pattern = st.nextToken();
 		edges = new ArrayList[N + 1];
-		hashes = new ArrayList[N + 1];
 		answer = 0;
 
 		for (int i = 1; i <= N; i++) {
 			edges[i] = new ArrayList<>();
-			hashes[i] = new ArrayList<>();
 		}
 
 		for (int i = 1; i < N; i++) {
@@ -81,7 +78,7 @@ public class Main {
 		for (int i = 0; i < patternLen; i++) {
 			patternHash = (patternHash + toInt(pattern.charAt(i)) * pPow[patternLen - 1 - i]) % MOD;
 		}
-		
+
 //		System.out.println(patternHash);
 
 		Queue<Integer> queue = new LinkedList<>();
@@ -90,19 +87,9 @@ public class Main {
 		while (!queue.isEmpty()) {
 			int cur = queue.poll();
 
-			preHashCheck(cur);
+			dfs(cur, 0, 0);
 
 			for (Path path : edges[cur]) {
-				hashes[path.node].add(new Hash(path.num, 1));
-
-				for (Hash hash : hashes[cur]) {
-					long nextHash = (hash.value + path.num) % MOD;
-					if (nextHash < 0) {
-						nextHash += MOD;
-					}
-
-					hashes[path.node].add(new Hash(nextHash, hash.len + 1));
-				}
 
 				if (--indegree[path.node] == 0) {
 					queue.add(path.node);
@@ -111,21 +98,20 @@ public class Main {
 		}
 	}
 
-	private static void preHashCheck(int cur) {
-//		System.out.println(cur + " : " + hashes[cur]);
-		for (int i = hashes[cur].size() - 1; i >= 0; i--) {
-			Hash hash = hashes[cur].get(i);
-			if (hash.len == patternLen) {
-				if (hash.value == patternHash) {
-					answer++;
-				}
-				hashes[cur].remove(i);
-				continue;
+	private static void dfs(int node, int len, long hash) {
+		for (Path path : edges[node]) {
+			long newHash = (hash * POWER + path.num) % MOD;
+			if (newHash < 0) {
+				newHash += MOD;
 			}
 
-			long hashValue = hash.value;
-			hashValue = (hashValue * POWER) % MOD;
-			hash.value = hashValue;
+			if (len + 1 == patternLen) {
+				if (newHash == patternHash) {
+					answer++;
+				}
+			} else {
+				dfs(path.node, len + 1, newHash);
+			}
 		}
 	}
 
