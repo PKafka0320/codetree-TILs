@@ -11,9 +11,7 @@ public class Main {
 
 		st = new StringTokenizer(br.readLine());
 		text = st.nextToken();
-		textLen = text.length();
-		text = "#" + text;
-		
+
 		StringBuilder answer = new StringBuilder();
 		int Q = Integer.parseInt(st.nextToken());
 		while (Q-- > 0) {
@@ -25,38 +23,42 @@ public class Main {
 	}
 
 	public static int kmp(String pattern) {
-		int count = 0, patternLen = pattern.length();
-		pattern = "#" + pattern;
+		int[] failure = makeFailure(pattern);
+		int count = 0;
 
-		int[] failure = makeFailure(pattern, patternLen);
-
+		int textLen = text.length();
+		int patternLen = pattern.length();
 		int j = 0;
-		for (int i = 1; i <= textLen; i++) {
-			while (j >= 0 && text.charAt(i) != pattern.charAt(j + 1)) {
-				j = failure[j];
+
+		for (int i = 0; i < textLen; i++) {
+			while (j > 0 && text.charAt(i) != pattern.charAt(j)) {
+				j = failure[j - 1];
 			}
 
-			if (++j == patternLen) {
-				count++;
-				j = failure[j];
+			if (text.charAt(i) == pattern.charAt(j)) {
+				if (++j == patternLen) {
+					count++;
+					j = failure[j - 1];
+				}
 			}
 		}
 
 		return count;
 	}
 
-	public static int[] makeFailure(String pattern, int patternLen) {
-		int[] failure = new int[patternLen+1];
-		failure[0] = -1;
+	public static int[] makeFailure(String pattern) {
+		int patternLen = pattern.length();
+		int[] failure = new int[patternLen];
+		int j = 0;
 
-		for (int i = 1; i <= patternLen; i++) {
-			int j = failure[i - 1];
-
-			while (j >= 0 && pattern.charAt(j + 1) != pattern.charAt(i)) {
-				j = failure[j];
+		for (int i = 1; i < patternLen; i++) {
+			while (j > 0 && pattern.charAt(j) != pattern.charAt(i)) {
+				j = failure[j - 1];
 			}
 
-			failure[i] = j + 1;
+			if (pattern.charAt(j) == pattern.charAt(i)) {
+				failure[i] = ++j;
+			}
 		}
 
 		return failure;
