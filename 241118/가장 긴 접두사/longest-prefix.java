@@ -18,15 +18,11 @@ public class Main {
 			String pattern = sb.reverse().toString();
 			
 			int[] failure = makeFailure(pattern);
-//			System.out.printf("pattern : %s%n", pattern);
-//			System.out.printf("failure : %s%n", Arrays.toString(failure));
 			
 			if (kmp(text, pattern, failure)) {
-//				System.out.println("find");
 				left = mid + 1;
 				result = mid;
 			} else {
-//				System.out.println("notfind");
 				right = mid - 1;
 			}
 		}
