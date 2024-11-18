@@ -9,45 +9,29 @@ public class Main {
 
 		String text = br.readLine();
 		
+		int left = 1, right = text.length();
 		int result = 1;
-		for (int i = text.length(); i >= 1; i--) {
-			StringBuffer sb = new StringBuffer(text.substring(0, i));
+		while (left <= right) {
+			int mid = (left + right) / 2;
+			
+			StringBuffer sb = new StringBuffer(text.substring(0, mid));
 			String pattern = sb.reverse().toString();
 			
 			int[] failure = makeFailure(pattern);
-			// System.out.printf("pattern : %s%n", pattern);
-			// System.out.printf("failure : %s%n", Arrays.toString(failure));
-			
-			if (kmp(text, pattern, failure)) {
-				result = i;
-				break;
-			}
-		}
-		System.out.println(result);
-		
-//		int left = 1, right = text.length();
-//		int result = 1;
-//		while (left <= right) {
-//			int mid = (left + right) / 2;
-//			
-//			StringBuffer sb = new StringBuffer(text.substring(0, mid));
-//			String pattern = sb.reverse().toString();
-//			
-//			int[] failure = makeFailure(pattern);
 //			System.out.printf("pattern : %s%n", pattern);
 //			System.out.printf("failure : %s%n", Arrays.toString(failure));
-//			
-//			if (kmp(text, pattern, failure)) {
+			
+			if (kmp(text, pattern, failure)) {
 //				System.out.println("find");
-//				left = mid + 1;
-//				result = mid;
-//			} else {
+				left = mid + 1;
+				result = mid;
+			} else {
 //				System.out.println("notfind");
-//				right = mid - 1;
-//			}
-//		}
+				right = mid - 1;
+			}
+		}
 
-//		System.out.println(result);
+		System.out.println(result);
 	}
 	
 	public static boolean kmp(String text, String pattern, int[] failure) {
