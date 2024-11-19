@@ -5,7 +5,7 @@ public class Main {
 	static String text, pattern;
 	static int textLen, patternLen;
 	static int[] failure;
-	static Queue<Integer> indexs;
+	static Stack<Integer> indexs;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -15,7 +15,7 @@ public class Main {
 		pattern = br.readLine();
 		textLen = text.length();
 		patternLen = pattern.length();
-		indexs = new LinkedList<>();
+		indexs = new Stack<>();
 
 		text = "#" + text;
 		pattern = "#" + pattern;
@@ -26,7 +26,7 @@ public class Main {
 		while (kmp()) {
 //			System.out.println(indexs);
 			while (!indexs.isEmpty()) {
-				int idx = indexs.poll();
+				int idx = indexs.pop();
 //				System.out.printf("text: %s -> ", text);
 				text = text.substring(0, idx) + text.substring(idx + patternLen);
 //				System.out.printf("%s%n", text);
@@ -46,7 +46,7 @@ public class Main {
 			}
 
 			if (++j == patternLen) {
-				indexs.add(i - patternLen + 1);
+				indexs.push(i - patternLen + 1);
 				j = 0;
 				deleted = true;
 			}
