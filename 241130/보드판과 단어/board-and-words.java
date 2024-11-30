@@ -48,16 +48,19 @@ public class Main {
 
 		int answer = 0;
 		
-		loop:
 		for (String text : texts) {
 			TrieNode node = root;
 			
+			boolean cannotMake = false;
 			for (int i = 0; i < text.length(); i++) {
 				if (node.children[text.charAt(i) - 'a'] == null) {
-					continue loop;
+					cannotMake = true;
+					break;
 				}
 				node = node.children[text.charAt(i) - 'a'];
 			}
+			
+			if (cannotMake) continue;
 			
 			answer = Math.max(answer, text.length());
 		}
