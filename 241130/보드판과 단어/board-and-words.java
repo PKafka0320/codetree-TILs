@@ -56,6 +56,7 @@ public class Main {
 				if (node.children[text.charAt(i) - 'a'] == null) {
 					continue loop;
 				}
+				node = node.children[text.charAt(i) - 'a'];
 			}
 			
 			answer = Math.max(answer, text.length());
@@ -76,8 +77,12 @@ public class Main {
 			int nr = r + dr[dir];
 			int nc = c + dc[dir];
 
-			if (outOfBoard(nr, nc) || visited[nr][nc])
+			if (outOfBoard(nr, nc)) {
 				continue;
+			}
+			if (visited[nr][nc]) {
+				continue;
+			}
 
 			visited[nr][nc] = true;
 			dfs(nr, nc, visited, node);
