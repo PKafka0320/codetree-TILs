@@ -36,17 +36,12 @@ public class Main {
 				board[r][c] = line.charAt(c);
 			}
 		}
-		System.out.println(1);
 
-		boolean[][] visited = new boolean[4][4];
 		for (int r = 0; r < 4; r++) {
 			for (int c = 0; c < 4; c++) {
-				visited[r][c] = true;
-				dfs(r, c, visited, root, 0);
-				visited[r][c] = false;
+				dfs(r, c, new boolean[4][4], root, 0);
 			}
 		}
-		System.out.println(2);
 
 		int answer = 0;
 
@@ -69,12 +64,18 @@ public class Main {
 	static int[] dc = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
 	public static void dfs(int r, int c, boolean[][] visited, TrieNode node, int depth) {
-		if (depth > 8)
+		if (depth > 6) {
+//			for (int rr = 0; rr < 4; rr++) {
+//				System.out.println(Arrays.toString(visited[rr]));
+//			}
+//			System.out.println();
 			return;
+		}
 
 		if (node.children[board[r][c] - 'a'] == null) {
 			node.children[board[r][c] - 'a'] = new TrieNode();
 		}
+		visited[r][c] = true;
 		node = node.children[board[r][c] - 'a'];
 
 		for (int dir = 0; dir < 8; dir++) {
