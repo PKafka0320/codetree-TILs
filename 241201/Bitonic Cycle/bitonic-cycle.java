@@ -47,7 +47,7 @@ public class Main {
 
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				dp[i][j] = (int) 1e9;
+				dp[i][j] = (long) 1e14;
 			}
 		}
 		dp[0][0] = 0;
@@ -63,10 +63,10 @@ public class Main {
 				dp[i][next] = Math.min(dp[i][next], dp[i][j] + dist[j][next]);
 			}
 		}
-		
-		long answer = (int) 1e9;
+
+		long answer = Long.MIN_VALUE - 1;
 		for (int i = 0; i < N; i++) {
-			answer = Math.min(answer, dp[i][N-1] + dist[i][N-1]);
+			answer = Math.min(answer, dp[i][N - 1] + dist[i][N - 1]);
 		}
 		System.out.println(answer);
 	}
