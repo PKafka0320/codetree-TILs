@@ -57,6 +57,7 @@ public class Main {
 		long answer = (long) 1e12;
 		for (int i = 1; i <= N; i++) {
 			answer = Math.min(answer, dp[i][N]);
+			answer = Math.min(answer, dp[N][i]);
 		}
 		System.out.println(answer);
 	}
