@@ -2,17 +2,12 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static class Position implements Comparable<Position> {
+	static class Position {
 		int x, y;
 
 		public Position(int x, int y) {
 			this.x = x;
 			this.y = y;
-		}
-
-		@Override
-		public int compareTo(Position o) {
-			return this.x - o.x;
 		}
 	}
 
@@ -21,58 +16,46 @@ public class Main {
 
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
-		Position[] positions = new Position[N + 1];
+		Position[] positions = new Position[N];
 
-		for (int i = 1; i <= N; i++) {
+		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			int x = Integer.parseInt(st.nextToken());
 			int y = Integer.parseInt(st.nextToken());
 
 			positions[i] = new Position(x, y);
 		}
-		Arrays.sort(positions, 1, N + 1);
+		Arrays.sort(positions, Comparator.comparingInt(p -> p.x));
 
-		long[][] distance = new long[N + 1][N + 1];
+		long[][] distance = new long[N][N];
 
-		for (int i = 1; i <= N; i++) {
-			for (int j = 1; j <= N; j++) {
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
 				distance[i][j] = getDistance(positions[i], positions[j]);
 			}
 		}
 
-		long[][][] dp = new long[N + 1][N + 1][2];
-		for (int i = 0; i <= N; i++) {
-			for (int j = 0; j <= N; j++) {
-				for (int m = 0; m <= 1; m++) {
-					dp[i][j][m] = (long) 1e14;
-				}
+		long[][] dp = new long[N][N];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				dp[i][j] = (long) 1e14;
 			}
 		}
-		dp[0][0][0] = 0;
+		dp[0][0] = 0;
 
-		for (int i = 0; i <= N; i++) {
-			for (int j = 0; j <= N; j++) {
-				for (int m = 0; m <= 1; m++) {
-					int next = i + 1;
+		for (int i = 1; i < N; i++) {
+			for (int j = 0; j < i; j++) {
+				dp[j][i] = dp[j][i - 1] + distance[i - 1][i];
 
-					if (next == N + 1)
-						continue;
-
-					dp[next][j][m] = Math.min(dp[next][j][m], dp[i][j][m] + distance[i][next]);
-					dp[i][next][m] = Math.min(dp[i][next][m], dp[i][j][m] + distance[j][next]);
-
-					if (m == 1)
-						continue;
-
-					dp[i][j][m + 1] = Math.min(dp[i][j][m + 1], dp[i][j][m]);
+				for (int k = 0; k < j; k++) {
+					dp[i][j] = Math.min(dp[i][j], dp[k][j] + distance[k][i]);
 				}
 			}
 		}
 
 		long answer = (long) 1e14;
-		for (int i = 0; i <= N; i++) {
-			answer = Math.min(answer, dp[i][N][1] + distance[i][N]);
-			answer = Math.min(answer, dp[N][i][1] + distance[i][N]);
+		for (int i = 0; i < N - 1; i++) {
+			answer = Math.min(answer, dp[i][N - 1] + distance[i][0]);
 		}
 		System.out.println(answer);
 	}
