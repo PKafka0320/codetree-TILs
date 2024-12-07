@@ -40,61 +40,43 @@ public class Main {
 			}
 		}
 
-		long[][][][] dp = new long[N + 1][N + 1][N + 1][2];
+		long[][][] dp = new long[N + 1][N + 1][2];
 		for (int i = 0; i <= N; i++) {
 			for (int j = 0; j <= N; j++) {
-				for (int k = 0; k <= N; k++) {
-					for (int m = 0; m <= 1; m++) {
-						dp[i][j][k][m] = (long) 1e14;
-					}
+				for (int m = 0; m <= 1; m++) {
+					dp[i][j][m] = (long) 1e14;
 				}
 			}
 		}
-		dp[0][0][0][0] = 0;
+		dp[0][0][0] = 0;
 
 		for (int i = 0; i <= N; i++) {
 			for (int j = 0; j <= N; j++) {
-				for (int k = 0; k <= N; k++) {
-					for (int m = 0; m <= 1; m++) {
-						int next = i + 1;
+				for (int m = 0; m <= 1; m++) {
+					int next = i + 1;
 
-						if (next == N + 1)
-							continue;
+					if (next == N + 1)
+						continue;
 
-						dp[next][next][k][m] = Math.min(dp[next][next][k][m], dp[i][j][k][m] + distance[j][next]);
-						dp[next][j][next][m] = Math.min(dp[next][j][next][m], dp[i][j][k][m] + distance[k][next]);
+					dp[next][j][m] = Math.min(dp[next][j][m], dp[i][j][m] + distance[i][next]);
+					dp[i][next][m] = Math.min(dp[i][next][m], dp[i][j][m] + distance[j][next]);
 
-						if (m == 1)
-							continue;
+					if (m == 1)
+						continue;
 
-						dp[next][j][k][m + 1] = Math.min(dp[next][j][k][m + 1], dp[i][j][k][m]);
-					}
+					dp[i][j][m + 1] = Math.min(dp[i][j][m + 1], dp[i][j][m]);
 				}
 			}
 		}
 
 		long answer = (long) 1e14;
-		for (int j = 0; j <= N; j++) {
-			for (int k = 0; k <= N; k++) {
-				long temp = dp[N][j][k][1];
-				
-				if (j != N) {
-					temp += distance[j][N];
-				} else {
-					temp += distance[1][N];
-				}
-				if (k != N) {
-					temp += distance[k][N];
-				} else {
-					temp += distance[1][N];
-				}
-				
-				answer = Math.min(answer, temp);
-			}
+		for (int i = 0; i <= N; i++) {
+			answer = Math.min(answer, dp[i][N][1] + distance[i][N]);
+			answer = Math.min(answer, dp[N][i][1] + distance[i][N]);
 		}
 		System.out.println(answer);
 	}
-	
+
 	public static long getDistance(Position p1, Position p2) {
 		return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
 	}
