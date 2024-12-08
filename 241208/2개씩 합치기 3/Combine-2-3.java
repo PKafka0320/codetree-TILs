@@ -2,15 +2,18 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+	static int N;
+	static int[] numbers;
+	static int[][] merged, dp;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
-		int[] numbers = new int[N + 1];
-		int[][] merged = new int[N + 1][N + 1];
-		int[][] dp = new int[N + 1][N + 1];
+		N = Integer.parseInt(st.nextToken());
+		numbers = new int[N + 1];
+		merged = new int[N + 1][N + 1];
+		dp = new int[N + 1][N + 1];
 
 		st = new StringTokenizer(br.readLine());
 		for (int i = 1; i <= N; i++) {
@@ -24,6 +27,39 @@ public class Main {
 			}
 		}
 
+//		tabulation();
+		memoization();
+	}
+
+	private static void memoization() {
+		for (int i = 1; i <= N; i++) {
+			for (int j = 1; j <= N; j++) {
+				dp[i][j] = -1;
+			}
+		}
+
+		System.out.println(findMin(1, N));
+	}
+
+	private static int findMin(int i, int j) {
+		if (dp[i][j] != -1) {
+			return dp[i][j];
+		}
+
+		if (i == j) {
+			return dp[i][j] = 0;
+		}
+
+		int best = (int) 1e9;
+		for (int k = i; k < j; k++) {
+			int cost = findMin(i, k) + findMin(k + 1, j) + merged[i][k] + merged[k + 1][j];
+			best = Math.min(best, cost);
+		}
+		
+		return dp[i][j] = best;
+	}
+
+	private static void tabulation() {
 		for (int i = 1; i <= N; i++) {
 			for (int j = 1; j <= N; j++) {
 				dp[i][j] = (int) 1e9;
