@@ -9,8 +9,7 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		int[] numbers = new int[N];
-		int[][][] dp = new int[N][N][10001];
-		boolean[][][] canMake = new boolean[N][N][10001];
+		Map<Integer, Integer>[][] dp = new HashMap[N][N];
 
 		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < N; i++) {
@@ -18,11 +17,15 @@ public class Main {
 		}
 
 		for (int i = 0; i < N; i++) {
-			canMake[i][i][numbers[i]] = true;
+			for (int j = 0; j < N; j++) {
+				dp[i][j] = new HashMap<>();
+			}
+		}
 
+		for (int i = 0; i < N; i++) {
+			dp[i][i].put(numbers[i], 0);
 			if (i + 1 != N) {
-				dp[i][i + 1][numbers[i] + numbers[i + 1]] = Math.abs(numbers[i] - numbers[i + 1]);
-				canMake[i][i + 1][numbers[i] + numbers[i + 1]] = true;
+				dp[i][i + 1].put(numbers[i] + numbers[i + 1], Math.abs(numbers[i] - numbers[i + 1]));
 			}
 		}
 
@@ -31,17 +34,17 @@ public class Main {
 				int j = i + gap - 1;
 
 				for (int k = i; k < j; k++) {
-					for (int x = 0; x <= 10000; x++) {
-						if (!canMake[i][k][x])
-							continue;
+					if (dp[i][k].isEmpty() || dp[k + 1][j].isEmpty()) {
+						continue;
+					}
 
-						for (int y = 0; y <= 10000; y++) {
-							if (!canMake[k + 1][j][y])
-								continue;
+					for (int left : dp[i][k].keySet()) {
+						for (int right : dp[k + 1][j].keySet()) {
+							int score = dp[i][k].get(left) + dp[k + 1][j].get(right) + Math.abs(left - right);
 
-							int score = dp[i][k][x] + dp[k + 1][j][y] + Math.abs(x - y);
-							canMake[i][j][x + y] = true;
-							dp[i][j][x + y] = Math.max(dp[i][j][x + y], score);
+							if (!dp[i][j].containsKey(left + right) || dp[i][j].get(left + right) < score) {
+								dp[i][j].put(left + right, score);
+							}
 						}
 					}
 				}
@@ -49,8 +52,9 @@ public class Main {
 		}
 
 		int ans = 0;
-		for (int x = 0; x <= 10000; x++)
-			ans = Math.max(ans, dp[0][N - 1][x]);
+		for (int key : dp[0][N - 1].keySet()) {
+			ans = Math.max(ans, dp[0][N - 1].get(key));
+		}
 		System.out.print(ans);
 	}
 }
