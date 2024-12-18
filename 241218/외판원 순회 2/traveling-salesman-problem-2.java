@@ -48,6 +48,10 @@ public class Main {
 		
 		int answer = (int) 1e9;
 		for (int i = 1; i < N; i++) {
+            if (costs[i][0] == 0) {
+                continue;
+            }
+
 			answer = Math.min(answer, dp[(1 << N) - 1][i] + costs[i][0]);
 		}
 		
