@@ -38,6 +38,7 @@ public class Main {
 		for (int i = 0; i <= 9; i++) {
 			answer += dp[N - 1][i][(1 << 10) - 1];
 		}
+		answer %= MOD;
 		System.out.println(answer);
 	}
 }
