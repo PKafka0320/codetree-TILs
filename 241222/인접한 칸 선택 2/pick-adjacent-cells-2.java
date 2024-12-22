@@ -7,16 +7,23 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
+		int N = Integer.parseInt(st.nextToken());
 
+		int[][] origin = new int[M][N];
 		int[][] grid = new int[N + 1][M];
 		int[][] dp = new int[N + 2][1 << M];
 
-		for (int i = 1; i <= N; i++) {
+		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < N; j++) {
+				origin[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+
+		for (int i = 1; i <= N; i++) {
 			for (int j = 0; j < M; j++) {
-				grid[i][j] = Integer.parseInt(st.nextToken());
+				grid[i][j] = origin[j][i - 1];
 			}
 		}
 
@@ -54,7 +61,7 @@ public class Main {
 
 		int answer = 0;
 		for (int mask = 0; mask < (1 << M); mask++) {
-			answer = Math.max(answer, dp[N+1][mask]);
+			answer = Math.max(answer, dp[N + 1][mask]);
 		}
 		System.out.println(answer);
 	}
