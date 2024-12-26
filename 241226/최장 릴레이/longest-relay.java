@@ -9,7 +9,7 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		int[][] grid = new int[N][N];
-		int[][] dp = new int[N][1 << N];
+		int[][] dp = new int[N][1 << N]; //[i][mask]: 마지막 선수가 i번째 사람이고 지금까지 선택한 사람의 bitmask가 j일때 A값
 
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
