@@ -18,11 +18,12 @@ public class Main {
 
 	static final long MAX_VALUE = (long) 1e15;
 	static Position[] arr;
+	static long[][] dists;
 	static long[][][] dp;
 
-	static long dist(int a, int b) {
-		long dy = Math.abs(arr[a].y - arr[b].y);
-		long dx = Math.abs(arr[a].x - arr[b].x);
+	static long getDist(Position a, Position b) {
+		long dy = Math.abs(a.y - b.y);
+		long dx = Math.abs(a.x - b.x);
 		return dy * dy + dx * dx;
 	}
 
@@ -32,6 +33,9 @@ public class Main {
 		int n = Integer.parseInt(st.nextToken());
 
 		arr = new Position[n + 1];
+		dists = new long[n + 1][n + 1];
+		dp = new long[n + 1][n + 1][2];
+		
 		for (int i = 1; i <= n; i++) {
 			st = new StringTokenizer(br.readLine());
 			int a = Integer.parseInt(st.nextToken());
@@ -39,8 +43,13 @@ public class Main {
 			arr[i] = new Position(a, b);
 		}
 		Arrays.sort(arr, 1, n + 1);
+		
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= n; j++) {
+				dists[i][j] = getDist(arr[i], arr[j]);
+			}
+		}
 
-		dp = new long[n + 1][n + 1][2];
 		for (int i = 0; i <= n; i++) {
 			for (int j = 0; j <= n; j++) {
 				Arrays.fill(dp[i][j], MAX_VALUE);
@@ -56,17 +65,17 @@ public class Main {
 					continue;
 				}
 
-				dp[k][j][0] = Math.min(dp[k][j][0], dp[i][j][0] + dist(i, k));
-				dp[i][k][0] = Math.min(dp[i][k][0], dp[i][j][0] + dist(j, k));
+				dp[k][j][0] = Math.min(dp[k][j][0], dp[i][j][0] + dists[i][k]);
+				dp[i][k][0] = Math.min(dp[i][k][0], dp[i][j][0] + dists[j][k]);
 
-				dp[k][j][1] = Math.min(dp[k][j][1], Math.min(dp[i][j][0], dp[i][j][1] + dist(i, k)));
-				dp[i][k][1] = Math.min(dp[i][k][1], Math.min(dp[i][j][0], dp[i][j][1] + dist(j, k)));
+				dp[k][j][1] = Math.min(dp[k][j][1], Math.min(dp[i][j][0], dp[i][j][1] + dists[i][k]));
+				dp[i][k][1] = Math.min(dp[i][k][1], Math.min(dp[i][j][0], dp[i][j][1] + dists[j][k]));
 			}
 		}
 
 		long ans = MAX_VALUE;
 		for (int i = 1; i < n; i++) {
-			ans = Math.min(ans, dp[i][n][1] + dist(i, n));
+			ans = Math.min(ans, dp[i][n][1] + dists[i][n]);
 			ans = Math.min(ans, dp[i][n][0]);
 		}
 
