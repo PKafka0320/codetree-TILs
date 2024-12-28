@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main5 {
+public class Main {
 	static class Position implements Comparable<Position> {
 		int x, y;
 
