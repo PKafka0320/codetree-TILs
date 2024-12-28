@@ -68,9 +68,11 @@ public class Main {
 		}
 
 		long answer = MAX_VALUE;
-		for (int i = 1; i < N; i++) {
+		for (int i = 1; i <= N; i++) {
 			answer = Math.min(answer, dp[i][N][0]);
 			answer = Math.min(answer, dp[i][N][1] + distance[1][N]);
+			answer = Math.min(answer, dp[N][i][0]);
+			answer = Math.min(answer, dp[N][i][1] + distance[1][N]);
 		}
 		System.out.println(answer);
 	}
