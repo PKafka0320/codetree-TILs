@@ -16,14 +16,15 @@ public class Main {
 		}
 	}
 
-	static long MAX_VALUE = (long) 1e15;
-
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		Position[] positions = new Position[N + 1];
+		long[][] distance = new long[N + 1][N + 1];
+		long[][][] dp = new long[N + 1][N + 1][2];
+		long MAX_VALUE = (long) 1e15;
 
 		for (int i = 1; i <= N; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -34,15 +35,12 @@ public class Main {
 		}
 		Arrays.sort(positions, 1, N + 1);
 
-		long[][] distance = new long[N + 1][N + 1];
-
 		for (int i = 1; i <= N; i++) {
 			for (int j = 1; j <= N; j++) {
 				distance[i][j] = getDistance(positions[i], positions[j]);
 			}
 		}
 
-		long[][][] dp = new long[N + 1][N + 1][2];
 		for (int i = 0; i <= N; i++) {
 			for (int j = 0; j <= N; j++) {
 				dp[i][j][0] = MAX_VALUE;
@@ -78,8 +76,8 @@ public class Main {
 	}
 
 	public static long getDistance(Position p1, Position p2) {
-		long dx = p1.x - p2.x;
-		long dy = p1.y - p2.y;
+		long dx = Math.abs(p1.x - p2.x);
+		long dy = Math.abs(p1.y - p2.y);
 		return dx * dx + dy * dy;
 	}
 }
