@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.*;
 
 public class Main {
@@ -9,75 +8,68 @@ public class Main {
 			this.x = x;
 			this.y = y;
 		}
-
+		
 		@Override
 		public int compareTo(Position o) {
 			return this.x - o.x;
 		}
 	}
+    static final long MAX_VALUE = (long) 1e15;
+    static List<Position> arr;
+    static long[][][] dp;
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static long dist(int a, int b) {
+        long dy = Math.abs(arr.get(a).y - arr.get(b).y);
+        long dx = Math.abs(arr.get(a).x - arr.get(b).x);
+        return dy * dy + dx * dx;
+    }
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
-		Position[] positions = new Position[N + 1];
-		long[][] distance = new long[N + 1][N + 1];
-		long[][][] dp = new long[N + 1][N + 1][2];
-		long MAX_VALUE = (long) 1e15;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
 
-		for (int i = 1; i <= N; i++) {
-			st = new StringTokenizer(br.readLine());
-			int x = Integer.parseInt(st.nextToken());
-			int y = Integer.parseInt(st.nextToken());
+        arr = new ArrayList<>();
+        arr.add(new Position(0, 0));
+        for (int i = 1; i <= n; i++) {
+            int a = scanner.nextInt();
+            int b = scanner.nextInt();
+            arr.add(new Position(a, b));
+        }
 
-			positions[i] = new Position(x, y);
-		}
-		Arrays.sort(positions, 1, N + 1);
+        arr.sort(Comparator.comparingInt(o -> o.x));
 
-		for (int i = 1; i <= N; i++) {
-			for (int j = 1; j <= N; j++) {
-				distance[i][j] = getDistance(positions[i], positions[j]);
-			}
-		}
+        dp = new long[n + 1][n + 1][2];
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= n; j++) {
+                Arrays.fill(dp[i][j], MAX_VALUE);
+            }
+        }
 
-		for (int i = 0; i <= N; i++) {
-			for (int j = 0; j <= N; j++) {
-				dp[i][j][0] = MAX_VALUE;
-				dp[i][j][1] = MAX_VALUE;
-			}
-		}
-		dp[1][1][0] = 0;
+        dp[1][1][0] = 0;
 
-		for (int i = 1; i <= N; i++) {
-			for (int j = 1; j <= N; j++) {
-				int next = Math.max(i, j) + 1;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                int k = Math.max(i, j) + 1;
+                if (k == n + 1) {
+                    continue;
+                }
 
-				if (next == N + 1) {
-					continue;
-				}
+                dp[k][j][0] = Math.min(dp[k][j][0], dp[i][j][0] + dist(i, k));
+                dp[i][k][0] = Math.min(dp[i][k][0], dp[i][j][0] + dist(j, k));
 
-				dp[next][j][0] = Math.min(dp[next][j][0], dp[i][j][0] + distance[i][next]);
-				dp[next][j][1] = Math.min(dp[next][j][1], Math.min(dp[i][j][0], dp[i][j][1] + distance[i][next]));
+                dp[k][j][1] = Math.min(dp[k][j][1], Math.min(dp[i][j][0], dp[i][j][1] + dist(i, k)));
+                dp[i][k][1] = Math.min(dp[i][k][1], Math.min(dp[i][j][0], dp[i][j][1] + dist(j, k)));
+            }
+        }
 
-				dp[i][next][0] = Math.min(dp[i][next][0], dp[i][j][0] + distance[j][next]);
-				dp[i][next][1] = Math.min(dp[i][next][1], Math.min(dp[i][j][0], dp[i][j][1] + distance[j][next]));
-			}
-		}
+        long ans = MAX_VALUE;
+        for (int i = 1; i <= n; i++) {
+            ans = Math.min(ans, dp[i][n][1] + dist(i, n));
+            ans = Math.min(ans, dp[i][n][0]);
+            ans = Math.min(ans, dp[n][i][1] + dist(i, n));
+            ans = Math.min(ans, dp[n][i][0]);
+        }
 
-		long answer = MAX_VALUE;
-		for (int i = 1; i <= N; i++) {
-			answer = Math.min(answer, dp[i][N][0]);
-			answer = Math.min(answer, dp[i][N][1] + distance[1][N]);
-			answer = Math.min(answer, dp[N][i][0]);
-			answer = Math.min(answer, dp[N][i][1] + distance[1][N]);
-		}
-		System.out.println(answer);
-	}
-
-	public static long getDistance(Position p1, Position p2) {
-		long dx = Math.abs(p1.x - p2.x);
-		long dy = Math.abs(p1.y - p2.y);
-		return dx * dx + dy * dy;
-	}
+        System.out.println(ans);
+    }
 }
