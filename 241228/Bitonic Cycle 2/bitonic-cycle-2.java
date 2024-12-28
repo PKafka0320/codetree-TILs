@@ -47,7 +47,7 @@ public class Main {
 		for (int i = 0; i <= N; i++) {
 			for (int j = 0; j <= N; j++) {
 				for (int m = 0; m <= 1; m++) {
-					dp[i][j][m] = (long) 1e14;
+					dp[i][j][m] = (long) 1e17;
 				}
 			}
 		}
@@ -99,7 +99,7 @@ public class Main {
 //		}
 //		System.out.println();
 
-		long answer = (long) 1e14;
+		long answer = (long) 1e17;
 		for (int i = 1; i < N; i++) {
 			answer = Math.min(answer, dp[i][N][0]);
 			answer = Math.min(answer, dp[i][N][1] + distance[1][N]);
