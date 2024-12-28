@@ -9,12 +9,13 @@ public class Main {
 			this.x = x;
 			this.y = y;
 		}
-		
+
 		@Override
 		public int compareTo(Position o) {
 			return this.x - o.x;
 		}
 	}
+
 	static long MAX_VALUE = (long) 1e15;
 
 	public static void main(String[] args) throws Exception {
@@ -48,7 +49,7 @@ public class Main {
 				dp[i][j][1] = MAX_VALUE;
 			}
 		}
-		dp[1][1][0] = 0; // 전체 거리
+		dp[1][1][0] = 0;
 
 		for (int i = 1; i <= N; i++) {
 			for (int j = 1; j <= N; j++) {
@@ -59,12 +60,10 @@ public class Main {
 				}
 
 				dp[next][j][0] = Math.min(dp[next][j][0], dp[i][j][0] + distance[i][next]);
-				dp[next][j][1] = Math.min(dp[next][j][1], dp[i][j][0]);
-				dp[next][j][1] = Math.min(dp[next][j][1], dp[i][j][1] + distance[i][next]);
+				dp[next][j][1] = Math.min(dp[next][j][1], Math.min(dp[i][j][0], dp[i][j][1] + distance[i][next]));
 
 				dp[i][next][0] = Math.min(dp[i][next][0], dp[i][j][0] + distance[j][next]);
-				dp[i][next][1] = Math.min(dp[i][next][1], dp[i][j][0]);
-				dp[i][next][1] = Math.min(dp[i][next][1], dp[i][j][1] + distance[j][next]);
+				dp[i][next][1] = Math.min(dp[i][next][1], Math.min(dp[i][j][0], dp[i][j][1] + distance[j][next]));
 			}
 		}
 
@@ -79,6 +78,6 @@ public class Main {
 	public static long getDistance(Position p1, Position p2) {
 		long dx = p1.x - p2.x;
 		long dy = p1.y - p2.y;
-		return dx*dx + dy*dy;
+		return dx * dx + dy * dy;
 	}
 }
